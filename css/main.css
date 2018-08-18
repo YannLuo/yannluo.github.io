@@ -1852,7 +1852,7 @@ img:hover {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ffcf2a;
+  background: #b425e4;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2957,12 +2957,4 @@ ul.breadcrumb li+li:last-child {
 .headband,
 .site-meta {
   background: #6a005f;
-}
-@font-face {
-  font-family: kaiti;
-  src: url("/fonts/kaiti.ttf");
-}
-.site-title {
-  font-family: kaiti;
-  font-size: 28px;
 }
