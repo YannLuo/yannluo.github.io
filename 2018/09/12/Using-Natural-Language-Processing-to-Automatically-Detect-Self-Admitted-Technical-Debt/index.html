@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Using Natural Language Processing to Automatically Detect Self-Admitted Technical Debt摘要本文提出使用自然语言处理技术自动化识别设计和需求自承认技术债务(SATD)的方法. 本文在10个项目上进行研究: Ant, ArgoUML, Columba, EMF, Hibernate, Jedit, JFreeChar">
+<meta name="keywords" content="nlp,software engineering">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Using Natural Language Processing to Automatically Detect Self-Admitted Technical Debt">
+<meta property="og:url" content="http://yoursite.com/2018/09/12/Using-Natural-Language-Processing-to-Automatically-Detect-Self-Admitted-Technical-Debt/index.html">
+<meta property="og:site_name" content="罗小米">
+<meta property="og:description" content="Using Natural Language Processing to Automatically Detect Self-Admitted Technical Debt摘要本文提出使用自然语言处理技术自动化识别设计和需求自承认技术债务(SATD)的方法. 本文在10个项目上进行研究: Ant, ArgoUML, Columba, EMF, Hibernate, Jedit, JFreeChar">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2018/09/11/5b9750c5c9e68.png">
+<meta property="og:image" content="https://i.loli.net/2018/09/11/5b975188c1642.png">
+<meta property="og:image" content="https://i.loli.net/2018/09/11/5b975c7d8ef30.png">
+<meta property="og:image" content="https://i.loli.net/2018/09/11/5b975d7c37e83.png">
+<meta property="og:image" content="https://i.loli.net/2018/09/11/5b978388dae53.png">
+<meta property="og:image" content="https://i.loli.net/2018/09/12/5b9873c92693a.png">
+<meta property="og:image" content="https://i.loli.net/2018/09/12/5b9878e9aff01.png">
+<meta property="og:image" content="https://i.loli.net/2018/09/12/5b98a1369e593.png">
+<meta property="og:image" content="https://i.loli.net/2018/09/12/5b98ac82f1840.png">
+<meta property="og:image" content="https://i.loli.net/2018/09/12/5b98aeb83f40b.png">
+<meta property="og:image" content="https://i.loli.net/2018/09/12/5b98b07d22c3c.png">
+<meta property="og:image" content="https://i.loli.net/2018/09/12/5b98b11f60e23.png">
+<meta property="og:updated_time" content="2018-09-12T06:35:37.291Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Using Natural Language Processing to Automatically Detect Self-Admitted Technical Debt">
+<meta name="twitter:description" content="Using Natural Language Processing to Automatically Detect Self-Admitted Technical Debt摘要本文提出使用自然语言处理技术自动化识别设计和需求自承认技术债务(SATD)的方法. 本文在10个项目上进行研究: Ant, ArgoUML, Columba, EMF, Hibernate, Jedit, JFreeChar">
+<meta name="twitter:image" content="https://i.loli.net/2018/09/11/5b9750c5c9e68.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/09/12/Using-Natural-Language-Processing-to-Automatically-Detect-Self-Admitted-Technical-Debt/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Using Natural Language Processing to Automatically Detect Self-Admitted Technical Debt | 罗小米</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">罗小米</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-关于我">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于我</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/12/Using-Natural-Language-Processing-to-Automatically-Detect-Self-Admitted-Technical-Debt/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="罗小米">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/yannluo.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="罗小米">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Using Natural Language Processing to Automatically Detect Self-Admitted Technical Debt
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-09-12 14:34:37 / 修改时间：14:35:37" itemprop="dateCreated datePublished" datetime="2018-09-12T14:34:37+08:00">2018-09-12</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/paper/" itemprop="url" rel="index"><span itemprop="name">paper</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Using-Natural-Language-Processing-to-Automatically-Detect-Self-Admitted-Technical-Debt"><a href="#Using-Natural-Language-Processing-to-Automatically-Detect-Self-Admitted-Technical-Debt" class="headerlink" title="Using Natural Language Processing to Automatically Detect Self-Admitted Technical Debt"></a>Using Natural Language Processing to Automatically Detect Self-Admitted Technical Debt</h1><h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>本文提出使用自然语言处理技术自动化识别设计和需求自承认技术债务(SATD)的方法. 本文在10个项目上进行研究: <code>Ant</code>, <code>ArgoUML</code>, <code>Columba</code>, <code>EMF</code>, <code>Hibernate</code>, <code>Jedit</code>, <code>JFreeChart</code>, <code>JMeter</code>, <code>JRuby</code>和<code>SQuirrel SQL</code>, 发现 1) 提出的方法能够准确检测SATD, 性能优于当前最好的基于关键词和短语的工具; 2) 与粗糙的代码和普通代码相关的词能够很好的指示设计债务; 3) 在分类性能上达到90%的准确度只需要23%的注释, 达到80%的准确度分别只需要9%和5%的注释.</p>
+<h2 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1 介绍"></a>1 介绍</h2><p>在实际开发中, 有些目标有挑战性, 因此为了暂时地权衡, 开发者采取权变措施. 这些措施在长期可能会产生消极影响. </p>
+<p>技术债务是一种短期内的局部最优解决方案. 这种解决方案从长远看来会引入代价.</p>
+<p>技术债务分为无意引入和故意引入的. 故意引入的技术债务是开发者具备相关经验引入的. 这种故意引入的技术债务称为自承认技术债务. 本文仅考虑此类技术债务.</p>
+<p>之前的研究有三个发现:</p>
+<ol>
+<li>有不同类型的技术债务, 如: 缺陷债务, 设计债务, 测试债务等;</li>
+<li>静态源码分析能够帮助检测技术债务;</li>
+<li>我们的工作发现能够通过源码中的注释识别技术债务.</li>
+</ol>
+<p>通过注释识别技术债务有两个主要优点:</p>
+<ol>
+<li>与源码分析相比更轻量级, 注释更容易提取;</li>
+<li>不依赖于基于代码异味的检测方法所需要设定的阈值.</li>
+</ol>
+<p>当前检测技术债务严重依赖于人工审查代码注释. 当前最好的方法使用了62种pattern匹配.</p>
+<p>使用最大熵分类器的优点:</p>
+<ol>
+<li>自动提取每个类的重要特征;</li>
+<li>除了找到有正面贡献的特征, 也能找到有负面贡献的特征.</li>
+</ol>
+<p>使用<em>leave-one-out cross-project</em>进行验证, 本文的方法效果是在检测设计债务效果上是最好结果的2.3倍, 在检测需求债务上是最好结果的6倍.</p>
+<p>本文贡献:</p>
+<ol>
+<li>提供了一个基于NLP的自动化检测设计和需求自承认技术债务的方法;</li>
+<li>检验报告了最能指示设计和需求自承认技术债务的词;</li>
+<li>本文提出的方法在小训练数据集上也能达到理想效果;</li>
+<li>开源数据集.</li>
+</ol>
+<h2 id="2-方法"><a href="#2-方法" class="headerlink" title="2 方法"></a>2 方法</h2><p>总体流程:</p>
+<ol>
+<li>提取10个项目中的注释;</li>
+<li>使用五种启发式方法过滤不相关的注释;</li>
+<li>将剩下的注释进行分类;</li>
+<li>使用标记好的数据训练最大熵分类器并进行测试.</li>
+</ol>
+<p><a href="https://i.loli.net/2018/09/11/5b9750c5c9e68.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/11/5b9750c5c9e68.png" alt="framework.PNG"></a></p>
+<h3 id="2-1-项目数据提取"><a href="#2-1-项目数据提取" class="headerlink" title="2.1 项目数据提取"></a>2.1 项目数据提取</h3><p>选取10个开源项目:</p>
+<p><a href="https://i.loli.net/2018/09/11/5b975188c1642.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/11/5b975188c1642.png" alt="details of projects.PNG"></a></p>
+<p>comments要求至少有一个合法字符, 也就是说不能全是空格或者代码段.</p>
+<h3 id="2-2-转换源码"><a href="#2-2-转换源码" class="headerlink" title="2.2 转换源码"></a>2.2 转换源码</h3><p>使用Eclipse插件<code>JDeodorand</code>提取注释.</p>
+<h3 id="2-3-过滤注释"><a href="#2-3-过滤注释" class="headerlink" title="2.3 过滤注释"></a>2.3 过滤注释</h3><p>使用5种启发式方法减少难以分类的注释.</p>
+<ol>
+<li><strong>License comments</strong>, 但是不删除包含任务标注(task annotation, 如<strong>TODO:</strong>, <strong>FIXME:</strong>或<strong>XXX:</strong>)的注释;</li>
+<li><strong>Long comments</strong>, 使用多个单行注释(Single line comments)而不是块注释(Block comments), 对使用机器读取产生阻碍;</li>
+<li><strong>源代码的注释</strong>;</li>
+<li><strong>自动生成的注释</strong>: 有固定的格式, 如<strong>Auto-generated constructor stub</strong>, <strong>Auto-generated method stub</strong>和<strong>Auto-generated catch stub</strong>;</li>
+<li><strong>Javadoc</strong>: 其中常常包含task annotation, 因此启发式的方法不考虑Javadoc类型, 除非他们包含一个task annotaion;</li>
+</ol>
+<h3 id="2-4-人工分类"><a href="#2-4-人工分类" class="headerlink" title="2.4 人工分类"></a>2.4 人工分类</h3><p>技术债务分类<code>architecture</code>, <code>build</code>, <code>code</code>, <code>defect</code>, <code>design</code>, <code>documentation</code>, <code>infrastructure</code>, <code>people</code>, <code>process</code>, <code>requirement</code>, <code>service</code>, <code>teest automation</code>和<code>test</code>债务. 本工作中仅识别<code>design</code>, <code>defect</code>, <code>documentation</code>, <code>requirement</code>和<code>test</code>债务.</p>
+<p>共62,566条注释, 分为5类. 分类流程花费共将近185小时, 由第一作者一人完成.</p>
+<p><strong><em>自承认设计债务</em></strong>: 表达设计有问题的注释, 这类问题可以通过重构解决, 或者重新实现已有代码.</p>
+<p><a href="https://i.loli.net/2018/09/11/5b975c7d8ef30.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/11/5b975c7d8ef30.png" alt="design debt.PNG"></a></p>
+<p><strong><em>自承认需求债务</em></strong>: 功能的需求没有完全实现.</p>
+<p><a href="https://i.loli.net/2018/09/11/5b975d7c37e83.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/11/5b975d7c37e83.png" alt="requirement debt.PNG"></a></p>
+<p>为了消除数据集的偏差, 从中提取了有统计上有显著意义的数据集, 用1小时时间告诉学生不同技术债务的类型和区别. 置信度达到99%, 置信区间5%, 从62566个注释中采样659个. 评价者间一致性程度(Cohen’s kappa coeffcient)达到0.81. 设计自承认债务一致性等级达到+0.75, 需求自承认债务的一致性等级达到+0.84. 研究表明只要大于+0.75就是非常一致. </p>
+<p>结果发现659个注释中, 609个(92%)不包含自承认技术债务, 29个(4%)包含设计债务, 5个(2%)包含需求债务, 2个(0.75%)包含测试债务, 1个(0.15%)包含文档债务.</p>
+<h3 id="2-5-NLP分类器"><a href="#2-5-NLP分类器" class="headerlink" title="2.5 NLP分类器"></a>2.5 NLP分类器</h3><p>Stanford Classifier, Java实现的最大熵分类器. </p>
+<p>为了防止仅在大小写有区别的特征重复, 如: Hack, hack, HACK, 或者前置/后置的标点符号, 如: “,hack”, “hack,”, 需要对注释进行预处理.</p>
+<ol>
+<li>去除标识注释的符号, 如: “//“. “/*“, “*/“;</li>
+<li>去除标点符号和空白符号, 如: ‘,’, ‘…’, ‘:’, ‘;’, ‘ ‘, ‘\t’, ‘\n’;</li>
+<li>最后将所有字符转成小写.</li>
+</ol>
+<p>感叹号和问号保留, 这些特殊的标点符号可以帮助识别自承认技术债务, 提供insightful的信息.</p>
+<h2 id="3-实验结果"><a href="#3-实验结果" class="headerlink" title="3 实验结果"></a>3 实验结果</h2><h3 id="RQ1-Is-it-possible-to-more-accurately-detect-self-admitted-technical-debt-using-NLP-techniques"><a href="#RQ1-Is-it-possible-to-more-accurately-detect-self-admitted-technical-debt-using-NLP-techniques" class="headerlink" title="RQ1. Is it possible to more accurately detect self-admitted technical debt using NLP techniques?"></a>RQ1. Is it possible to more accurately detect self-admitted technical debt using NLP techniques?</h3><p><strong>动机</strong>: 已有工作依赖于人工审查, 而且不区分具体的技术债务类型. </p>
+<p><strong>结果</strong>: 第一个baseline是使用62个pattern检测. 第二个baseline是随机猜.</p>
+<p><a href="https://i.loli.net/2018/09/11/5b978388dae53.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/11/5b978388dae53.png" alt="result1.PNG"></a></p>
+<p>在所有的项目上本文的方法远优于两个baseline. </p>
+<p>值得注意的是使用pattern的方法达到高精度, 但是召回率很低, 也就是说基于pattern的检测方法关注预测的准确性. 在预测需求债务上发现基于pattern的方法效果不好, 这可能是由于这个方法不能区分不同种类的技术债务.</p>
+<h3 id="RQ2-What-are-the-most-impactful-words-in-the-classification-of-self-admitted-technical-debt"><a href="#RQ2-What-are-the-most-impactful-words-in-the-classification-of-self-admitted-technical-debt" class="headerlink" title="RQ2. What are the most impactful words in the classification of self-admitted technical debt?"></a>RQ2. What are the most impactful words in the classification of self-admitted technical debt?</h3><p><strong>动机</strong>: 想要深入理解开发者如何表达技术债务. 最大熵模型给定每个类中的特征权值, 每个类中的特征权值相加取最大作为其类型.</p>
+<p><strong>结果</strong>: 表达草率的代码或平庸的源代码质量的词常用来表达设计债务. 对于需求债务, 重要的特征一般有要求完成需求的语义, 还有一些表达可能的未完成的需求.</p>
+<p><a href="https://i.loli.net/2018/09/12/5b9873c92693a.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/12/5b9873c92693a.png" alt="features.png"></a></p>
+<p><a href="https://i.loli.net/2018/09/12/5b9878e9aff01.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/12/5b9878e9aff01.png" alt="weight of features.png"></a></p>
+<h3 id="RQ3-How-much-training-data-is-required-to-effectively-detect-self-admitted-technical-debt"><a href="#RQ3-How-much-training-data-is-required-to-effectively-detect-self-admitted-technical-debt" class="headerlink" title="RQ3. How much training data is required to effectively detect self-admitted technical debt?"></a>RQ3. How much training data is required to effectively detect self-admitted technical debt?</h3><p><strong>动机</strong>: 构建训练数据集是耗费时间的任务, 因此需要知道多少训练数据保证分类器达到好的效果. </p>
+<p><strong>方法</strong>: 所有注释作为一个大数据集. 然后分为10个等大的数据集, 每个数据集包含相同比例的技术债务注释和非技术债务注释. 每次训练集以100为步长, 记录最高的f1-measure. </p>
+<p><strong>结果</strong>:</p>
+<p><em>对于设计债务</em>, 训练42700条数据时, f1达到最大值为0.824. 使用3900条数据能达到80%f1的最大值, 使用9700条数据能达到90%f1的最大值.</p>
+<p><em>对于需求债务</em>, 使用51300条数据时达到最高的f1值, 为0.753. 达到80%需要2600条数据, 达到90%需要1180条数据.</p>
+<p><a href="https://i.loli.net/2018/09/12/5b98a1369e593.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/12/5b98a1369e593.png" alt="result2.png"></a></p>
+<h2 id="4-讨论"><a href="#4-讨论" class="headerlink" title="4 讨论"></a>4 讨论</h2><h3 id="4-1-设计债务和需求债务的类内文本相似度"><a href="#4-1-设计债务和需求债务的类内文本相似度" class="headerlink" title="4.1 设计债务和需求债务的类内文本相似度"></a>4.1 设计债务和需求债务的类内文本相似度</h3><p>计算得到每个注释的tfidf向量, 计算两两间的cosine距离. 需求债务的中位数和上四分位高于设计债务. 为了证明这个差异是显著的, 使用<code>Wilcoxon</code>测试, p-value=2.2e-16.</p>
+<h3 id="4-2-区分技术债务和非技术债务"><a href="#4-2-区分技术债务和非技术债务" class="headerlink" title="4.2 区分技术债务和非技术债务"></a>4.2 区分技术债务和非技术债务</h3><p><a href="https://i.loli.net/2018/09/12/5b98ac82f1840.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/12/5b98ac82f1840.png" alt="result3.png"></a></p>
+<p>检测是否是设计或需求技术债务的性能优于分开分类的性能(0.636&gt;0.620且0.636&gt;0.403)</p>
+<h3 id="4-3-调查不同分类器在分类准确率上的影响"><a href="#4-3-调查不同分类器在分类准确率上的影响" class="headerlink" title="4.3 调查不同分类器在分类准确率上的影响"></a>4.3 调查不同分类器在分类准确率上的影响</h3><p>另外调查了三种分类器: Naive Bayes, Binary classifiers和Logistic Regression.</p>
+<p><a href="https://i.loli.net/2018/09/12/5b98aeb83f40b.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/12/5b98aeb83f40b.png" alt="result4.png"></a></p>
+<p>Naive Bayes分类器更关注recall.</p>
+<h3 id="4-4-调查注释中发现的技术债务和静态分析工具发现的技术债务之间的重叠部分"><a href="#4-4-调查注释中发现的技术债务和静态分析工具发现的技术债务之间的重叠部分" class="headerlink" title="4.4 调查注释中发现的技术债务和静态分析工具发现的技术债务之间的重叠部分"></a>4.4 调查注释中发现的技术债务和静态分析工具发现的技术债务之间的重叠部分</h3><p>关注3种代码异味: <code>Long Method</code>, <code>God Class</code>和<code>Feature Envy</code>.</p>
+<p><a href="https://i.loli.net/2018/09/12/5b98b07d22c3c.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/12/5b98b07d22c3c.png" alt="code smell.png"></a></p>
+<p><a href="https://i.loli.net/2018/09/12/5b98b11f60e23.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/12/5b98b11f60e23.png" alt="result5.png"></a></p>
+<p>实验发现分别有29.3%, 5.5%, 16.6%的文件包含这三种代码异味. 包含技术债务的文件中分别有65%, 20.7%和44.2%包含这三种代码异味. 这个发现说明使用代码注释识别技术债务是使用代码异味检测技术债务的一种补充.</p>
+<h2 id="5-相关工作"><a href="#5-相关工作" class="headerlink" title="5 相关工作"></a>5 相关工作</h2><h3 id="5-1-源代码注释"><a href="#5-1-源代码注释" class="headerlink" title="5.1 源代码注释"></a>5.1 源代码注释</h3><h3 id="5-2-技术债务"><a href="#5-2-技术债务" class="headerlink" title="5.2 技术债务"></a>5.2 技术债务</h3><h3 id="5-3-软件工程中的NLP"><a href="#5-3-软件工程中的NLP" class="headerlink" title="5.3 软件工程中的NLP"></a>5.3 软件工程中的NLP</h3><p>已有的软工领域的NLP主要用于需求的追溯, 程序理解和软件维护. 例如: 使用latent semantic indexing (LSI) 创建需求和测试用例和需求设计实现间的追溯性链接, 将需求链接到issue reports. 另外, 有使用基于NLP的工具自动识别冗余的issue reports, 发现2/3存在冗余. Canfora和Cerulo使用NLP技术联系<em>change request</em>和<em>相关的文件集</em>, 然后在4个开源项目上评价方法的性能.</p>
+<h2 id="6-效度威胁"><a href="#6-效度威胁" class="headerlink" title="6 效度威胁"></a>6 效度威胁</h2><ul>
+<li>构建效度</li>
+</ul>
+<blockquote>
+<p>本文工作的方法依赖于代码注释, 所以方法的结果会被注释的数量和质量影响. 考虑到故意的虚假陈述, 有良好注释的项目也有可能不包含技术债务. 当然是用注释来决定是否有技术债务也不能完全展现, 因为注释或代码有可能没有更新. </p>
+</blockquote>
+<ul>
+<li>可靠性效度</li>
+</ul>
+<blockquote>
+<p>是用的训练数据集依赖于人工分析, 都存在主观偏差. 为了减少偏差, 本文标注由研究生完成, 评论者间一致性达到了很高的标准.</p>
+</blockquote>
+<ul>
+<li>外部效度</li>
+</ul>
+<blockquote>
+<p>研究的泛化性. 本文选择了来自多个不同领域的开源项目. 本文工作可能不能泛化到其他语言的项目, 同时也可能不能泛化到没有注释或者注释很少的的项目和用其他语言注释的项目.</p>
+</blockquote>
+<h2 id="7-结论和未来工作"><a href="#7-结论和未来工作" class="headerlink" title="7 结论和未来工作"></a>7 结论和未来工作</h2>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nlp/" rel="tag"># nlp</a>
+          
+            <a href="/tags/software-engineering/" rel="tag"># software engineering</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/10/Sentiment-Polarity-Detection-for-Software-Development/" rel="next" title="Sentiment Polarity Detection for Software Development">
+                <i class="fa fa-chevron-left"></i> Sentiment Polarity Detection for Software Development
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/yannluo.png"
+                alt="罗小米" />
+            
+              <p class="site-author-name" itemprop="name">罗小米</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">5</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/ly941122/activities" target="_blank" title="知乎"><i class="fa fa-fw fa-address-card"></i>知乎</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yannluo@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Using-Natural-Language-Processing-to-Automatically-Detect-Self-Admitted-Technical-Debt"><span class="nav-text">Using Natural Language Processing to Automatically Detect Self-Admitted Technical Debt</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要"><span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-介绍"><span class="nav-text">1 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-方法"><span class="nav-text">2 方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-项目数据提取"><span class="nav-text">2.1 项目数据提取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-转换源码"><span class="nav-text">2.2 转换源码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-过滤注释"><span class="nav-text">2.3 过滤注释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-人工分类"><span class="nav-text">2.4 人工分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-NLP分类器"><span class="nav-text">2.5 NLP分类器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-实验结果"><span class="nav-text">3 实验结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RQ1-Is-it-possible-to-more-accurately-detect-self-admitted-technical-debt-using-NLP-techniques"><span class="nav-text">RQ1. Is it possible to more accurately detect self-admitted technical debt using NLP techniques?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RQ2-What-are-the-most-impactful-words-in-the-classification-of-self-admitted-technical-debt"><span class="nav-text">RQ2. What are the most impactful words in the classification of self-admitted technical debt?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RQ3-How-much-training-data-is-required-to-effectively-detect-self-admitted-technical-debt"><span class="nav-text">RQ3. How much training data is required to effectively detect self-admitted technical debt?</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-讨论"><span class="nav-text">4 讨论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-设计债务和需求债务的类内文本相似度"><span class="nav-text">4.1 设计债务和需求债务的类内文本相似度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-区分技术债务和非技术债务"><span class="nav-text">4.2 区分技术债务和非技术债务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-调查不同分类器在分类准确率上的影响"><span class="nav-text">4.3 调查不同分类器在分类准确率上的影响</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-调查注释中发现的技术债务和静态分析工具发现的技术债务之间的重叠部分"><span class="nav-text">4.4 调查注释中发现的技术债务和静态分析工具发现的技术债务之间的重叠部分</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-相关工作"><span class="nav-text">5 相关工作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-源代码注释"><span class="nav-text">5.1 源代码注释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-技术债务"><span class="nav-text">5.2 技术债务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-软件工程中的NLP"><span class="nav-text">5.3 软件工程中的NLP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-效度威胁"><span class="nav-text">6 效度威胁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-结论和未来工作"><span class="nav-text">7 结论和未来工作</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">罗小米</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
