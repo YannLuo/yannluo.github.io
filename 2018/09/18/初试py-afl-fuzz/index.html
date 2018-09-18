@@ -118,7 +118,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://i.loli.net/2018/09/18/5ba0bca2dae57.png">
 <meta property="og:image" content="https://i.loli.net/2018/09/18/5ba0bca2dcfa5.png">
-<meta property="og:updated_time" content="2018-09-18T09:11:54.945Z">
+<meta property="og:updated_time" content="2018-09-18T09:14:45.559Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初试py-afl-fuzz">
 <meta name="twitter:description" content="github: https://github.com/jwilk/python-afl 入门:  Taking a look at python-afl by Jussi Judin Introduction to Fuzzing in Python with AFL by Alex Gaynor  需要在/etc/environment中添加 12export AFL_I_DONT_CARE_A">
@@ -350,9 +350,13 @@
                 
               
 
-              <time title="创建时间：2018-09-18 17:11:54" itemprop="dateCreated datePublished" datetime="2018-09-18T17:11:54+08:00">2018-09-18</time>
+              <time title="创建时间：2018-09-18 17:11:54 / 修改时间：17:14:45" itemprop="dateCreated datePublished" datetime="2018-09-18T17:11:54+08:00">2018-09-18</time>
             
 
+            
+              
+
+              
             
           </span>
 
@@ -411,7 +415,7 @@
 <p>需要在<code>/etc/environment</code>中添加</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1</span><br><span class="line">export PYTHON_AFL_PERSISTENT=1</span><br></pre></td></tr></table></figure>
 <p>保证正常使用, 第一个是啥忘记了, 第二个是确认开启使用持久模式.</p>
-<p>最简单的用法是<code>py-afl-fuzz -i input_dir/ -o results_dir/ -- python3 script.py</code></p>
+<p>最简单的用法是<code>py-afl-fuzz -i input_dir/ -o results_dir/ -- python3 script.py</code>.</p>
 <p>其中, <code>inputs_dir</code>目录中给定的输入用例集合要尽可能<strong>小</strong>, 而且<strong>有趣</strong>, 这里有趣是指每个输入都应该能代表一类输入, 而非类似. </p>
 <p><code>results_dir</code>目录结构如下:</p>
 <blockquote>
