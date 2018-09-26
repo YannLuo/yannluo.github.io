@@ -123,7 +123,7 @@
 <meta property="og:image" content="https://i.loli.net/2018/09/25/5baa35a9f0973.png">
 <meta property="og:image" content="https://i.loli.net/2018/09/25/5baa3855a37bf.png">
 <meta property="og:image" content="https://i.loli.net/2018/09/26/5baadf408bac1.png">
-<meta property="og:updated_time" content="2018-09-26T03:09:37.713Z">
+<meta property="og:updated_time" content="2018-09-26T03:15:42.073Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Fuzzing - a survey">
 <meta name="twitter:description" content="Fuzzing: a survey介绍模糊测试的概念第一次在20世纪90年代提出. 多年来的实践中表明传统的模糊测试只能找到程序运行初期的简单的内存冲突bug. 除此之外, 模糊测试的随机性和盲目性导致找bug效率低. 传统易损点检测技术 静态分析 优点: 检测速度块 缺点: 有很高的错误率, 存在很多假正例   动态分析 优点: 精确度高 缺点: 1) 动态分析中分析, 运行目标程序的步骤需要人">
@@ -355,7 +355,7 @@
                 
               
 
-              <time title="创建时间：2018-09-26 11:08:33 / 修改时间：11:09:37" itemprop="dateCreated datePublished" datetime="2018-09-26T11:08:33+08:00">2018-09-26</time>
+              <time title="创建时间：2018-09-26 11:08:33 / 修改时间：11:15:42" itemprop="dateCreated datePublished" datetime="2018-09-26T11:08:33+08:00">2018-09-26</time>
             
 
             
@@ -468,14 +468,14 @@
 <li>低代码覆盖率</li>
 <li>通过输入合法性验证的挑战</li>
 </ol>
-<h3 id="基于覆盖率的模糊测试"><a href="#基于覆盖率的模糊测试" class="headerlink" title="基于覆盖率的模糊测试"></a>基于覆盖率的模糊测试</h3><h4 id="代码覆盖率计数"><a href="#代码覆盖率计数" class="headerlink" title="代码覆盖率计数"></a>代码覆盖率计数</h4><ul>
+<h2 id="基于覆盖率的模糊测试"><a href="#基于覆盖率的模糊测试" class="headerlink" title="基于覆盖率的模糊测试"></a>基于覆盖率的模糊测试</h2><h3 id="代码覆盖率计数"><a href="#代码覆盖率计数" class="headerlink" title="代码覆盖率计数"></a>代码覆盖率计数</h3><ul>
 <li>直接统计执行的基本块的个数</li>
 <li>统计基本块之间转换的个数</li>
 </ul>
 <p>给出一个例子:</p>
 <p><img src="https://i.loli.net/2018/09/25/5baa35a9f0973.png" alt="BBtransitions.png"></p>
 <p>若路径$BB_1\rightarrow BB_2\rightarrow BB_3\rightarrow BB_4$已经执行, 若仅考虑执行基本块的数量, 则四个基本块都已覆盖, 会遗失了$BB_1\rightarrow BB_3$和$BB_2\rightarrow BB_4$的信息.</p>
-<h4 id="基于覆盖的模糊测试工作流"><a href="#基于覆盖的模糊测试工作流" class="headerlink" title="基于覆盖的模糊测试工作流"></a>基于覆盖的模糊测试工作流</h4><p>然后是个AFL工作流程图, 看就完事了:</p>
+<h3 id="基于覆盖的模糊测试工作流"><a href="#基于覆盖的模糊测试工作流" class="headerlink" title="基于覆盖的模糊测试工作流"></a>基于覆盖的模糊测试工作流</h3><p>然后是个AFL工作流程图, 看就完事了:</p>
 <p><img src="https://i.loli.net/2018/09/25/5baa3855a37bf.png" alt="afl.png"></p>
 <p>AFL的工作Mutation过程中, 除了会随机变异还会使用额外的有名的有趣的输入字典, 如整数中的0, 1, INT_MAX等…</p>
 <h3 id="主要问题"><a href="#主要问题" class="headerlink" title="主要问题"></a>主要问题</h3><h4 id="1-如何生成初始输入"><a href="#1-如何生成初始输入" class="headerlink" title="1. 如何生成初始输入?"></a>1. 如何生成初始输入?</h4><p>好的初始输入应该另fuzzing高效且有效. 目前常用的方法是收集来自标准集, 网络上爬取和已有的字典的种子输入. </p>
@@ -489,19 +489,19 @@
 <li>最优化选择能够覆盖更深和更有可能出现异常的种子</li>
 </ol>
 <h4 id="4-如何有效测试应用"><a href="#4-如何有效测试应用" class="headerlink" title="4. 如何有效测试应用?"></a>4. 如何有效测试应用?</h4><p>创建和结束进程会耗费大量的cpu时间, 频繁地创建和结束进程会降低fuzz的效率. 传统系统特性和新特性用于优化过程. AFL使用<code>forkserver</code>的方法, 创建一个已加载的程序的克隆, 并在每个单独运行中重用.</p>
-<h3 id="集成在fuzzing中的技术"><a href="#集成在fuzzing中的技术" class="headerlink" title="集成在fuzzing中的技术"></a>集成在fuzzing中的技术</h3><p>smart fuzz收集程序的控制流和数据流, 并应用这些信息改进测试用例的生成, 使测试用例生成更有目的性. </p>
+<h2 id="集成在fuzzing中的技术"><a href="#集成在fuzzing中的技术" class="headerlink" title="集成在fuzzing中的技术"></a>集成在fuzzing中的技术</h2><p>smart fuzz收集程序的控制流和数据流, 并应用这些信息改进测试用例的生成, 使测试用例生成更有目的性. </p>
 <p><img src="https://i.loli.net/2018/09/26/5baadf408bac1.png" alt="smart fuzz.png"></p>
 <p>接下来选择两个重要阶段介绍如何改进fuzzing: 测试用例生成阶段和程序执行阶段.</p>
-<h4 id="测试用例生成阶段"><a href="#测试用例生成阶段" class="headerlink" title="测试用例生成阶段"></a>测试用例生成阶段</h4><p>在fuzzing生成阶段, 根据输入数据格式的知识生成测试用例. 尽管已有一些常用的文件格式开源提供, 但是更多地格式并没有提供. 如何获取这些输入的格式知识是个主要问题. 已有工作使用循环神经网络(RNN)解决这个问题.</p>
+<h3 id="测试用例生成阶段"><a href="#测试用例生成阶段" class="headerlink" title="测试用例生成阶段"></a>测试用例生成阶段</h3><p>在fuzzing生成阶段, 根据输入数据格式的知识生成测试用例. 尽管已有一些常用的文件格式开源提供, 但是更多地格式并没有提供. 如何获取这些输入的格式知识是个主要问题. 已有工作使用循环神经网络(RNN)解决这个问题.</p>
 <p>很多已有的模糊测试工具使用基于变异的策略. 如何确定修改的位置和修改的值是另一个主要挑战. 微软的研究者使用DNN预测变异的字节和变异为什么值, 使用LSTM, 由于LSTM可以.</p>
-<h4 id="程序执行阶段"><a href="#程序执行阶段" class="headerlink" title="程序执行阶段"></a>程序执行阶段</h4><p>如何指导fuzzing过程和如何开发新路径.</p>
+<h3 id="程序执行阶段"><a href="#程序执行阶段" class="headerlink" title="程序执行阶段"></a>程序执行阶段</h3><p>如何指导fuzzing过程和如何开发新路径.</p>
 <p>fuzzing过程以覆盖更多代码和在短时间内发现更多 bug 为指导.</p>
 <p>以是否提供源代码为依据分类, 可以分为编译内插桩和外部插桩.</p>
 <p>使用静态分析技术收集控制流信息, 如: 路径深度.</p>
 <p>通过插桩收集到的路径执行信息可以帮助指导fuzzing 过程.</p>
 <p>使用符号执行技术可以获得达到程序点所需满足的约束.</p>
 <p>已有研究也使用具体执行(concolic execution)技术绕过条件判断以找到更深的 bug.</p>
-<h3 id="面向不同应用的Fuzzing"><a href="#面向不同应用的Fuzzing" class="headerlink" title="面向不同应用的Fuzzing"></a>面向不同应用的Fuzzing</h3><h3 id="文件格式-fuzzing"><a href="#文件格式-fuzzing" class="headerlink" title="文件格式 fuzzing"></a>文件格式 fuzzing</h3><h4 id="核-fuzzing"><a href="#核-fuzzing" class="headerlink" title="核 fuzzing"></a>核 fuzzing</h4><ol>
+<h2 id="面向不同应用的Fuzzing"><a href="#面向不同应用的Fuzzing" class="headerlink" title="面向不同应用的Fuzzing"></a>面向不同应用的Fuzzing</h2><h3 id="文件格式-fuzzing"><a href="#文件格式-fuzzing" class="headerlink" title="文件格式 fuzzing"></a>文件格式 fuzzing</h3><h3 id="核-fuzzing"><a href="#核-fuzzing" class="headerlink" title="核 fuzzing"></a>核 fuzzing</h3><ol>
 <li>核fuzzing 在 crash 后会使整个系统崩溃, 如何抓取crash 是一个开放问题</li>
 <li>系统的权力机制导致系统是一个相对封闭的环境, 如何与核交互是一个主要问题</li>
 <li>广泛使用的核比如Windows核和MacOS 核是闭源的, 增加了插桩的难度.</li>
@@ -511,19 +511,19 @@
 <li>核 API 的参数都有固定的规格</li>
 <li>核 API 的调用顺序应该是合理的</li>
 </ol>
-<h4 id="协议-fuzzing"><a href="#协议-fuzzing" class="headerlink" title="协议 fuzzing"></a>协议 fuzzing</h4><p>两个主要挑战:</p>
+<h3 id="协议-fuzzing"><a href="#协议-fuzzing" class="headerlink" title="协议 fuzzing"></a>协议 fuzzing</h3><p>两个主要挑战:</p>
 <ol>
 <li>服务可能定义它们自己的通信协议, 很难得到具体的协议标准</li>
 <li>即使是文档化的协议, 往往也很难完全遵循规格</li>
 </ol>
-<h3 id="fuzzing-的新趋势"><a href="#fuzzing-的新趋势" class="headerlink" title="fuzzing 的新趋势"></a>fuzzing 的新趋势</h3><ol>
+<h2 id="fuzzing-的新趋势"><a href="#fuzzing-的新趋势" class="headerlink" title="fuzzing 的新趋势"></a>fuzzing 的新趋势</h2><ol>
 <li><p>smart fuzzing 提供了改进 fuzzing 效果的可能性, 即使用执行程序的反馈信息指导测试用例生成balabala…</p>
 </li>
 <li><p>新技术帮助改进 fuzzing, 如 ML 和 DL 技术.</p>
 </li>
 <li>考虑使用新的系统特性和硬件特性.</li>
 </ol>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这篇文章概括了近几年的 fuzzing 进展. 首先, 本文将 fuzzing 与其他攻击点发现技术作比较, 然后介绍了 fuzzing 的技概念和主要挑战. 之后主要介绍了最先进的基于覆盖的 fuzzing 技术. 最后, 总结了 fuzzing 的继承技术, 和今后新的发展趋势.</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这篇文章概括了近几年的 fuzzing 进展. 首先, 本文将 fuzzing 与其他攻击点发现技术作比较, 然后介绍了 fuzzing 的技概念和主要挑战. 之后主要介绍了最先进的基于覆盖的 fuzzing 技术. 最后, 总结了 fuzzing 的继承技术, 和今后新的发展趋势.</p>
 
       
     </div>
@@ -745,7 +745,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Fuzzing-a-survey"><span class="nav-text">Fuzzing: a survey</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#传统易损点检测技术"><span class="nav-text">传统易损点检测技术</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模糊测试"><span class="nav-text">模糊测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模糊测试的工作流"><span class="nav-text">模糊测试的工作流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模糊测试器的类型"><span class="nav-text">模糊测试器的类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-以生成方式分类"><span class="nav-text">1. 以生成方式分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-以对于程序源代码的依赖程度分类"><span class="nav-text">2. 以对于程序源代码的依赖程度分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-根据探索程序的策略分类"><span class="nav-text">3. 根据探索程序的策略分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-根据是否利用反馈信息分类"><span class="nav-text">4. 根据是否利用反馈信息分类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模糊测试的主要挑战"><span class="nav-text">模糊测试的主要挑战</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于覆盖率的模糊测试"><span class="nav-text">基于覆盖率的模糊测试</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码覆盖率计数"><span class="nav-text">代码覆盖率计数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基于覆盖的模糊测试工作流"><span class="nav-text">基于覆盖的模糊测试工作流</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主要问题"><span class="nav-text">主要问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-如何生成初始输入"><span class="nav-text">1. 如何生成初始输入?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-如何生成测试用例"><span class="nav-text">2. 如何生成测试用例?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-如何从种子池中选择种子"><span class="nav-text">3. 如何从种子池中选择种子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-如何有效测试应用"><span class="nav-text">4. 如何有效测试应用?</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#集成在fuzzing中的技术"><span class="nav-text">集成在fuzzing中的技术</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#测试用例生成阶段"><span class="nav-text">测试用例生成阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#程序执行阶段"><span class="nav-text">程序执行阶段</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#面向不同应用的Fuzzing"><span class="nav-text">面向不同应用的Fuzzing</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件格式-fuzzing"><span class="nav-text">文件格式 fuzzing</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#核-fuzzing"><span class="nav-text">核 fuzzing</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#协议-fuzzing"><span class="nav-text">协议 fuzzing</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fuzzing-的新趋势"><span class="nav-text">fuzzing 的新趋势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Fuzzing-a-survey"><span class="nav-text">Fuzzing: a survey</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#传统易损点检测技术"><span class="nav-text">传统易损点检测技术</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模糊测试"><span class="nav-text">模糊测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模糊测试的工作流"><span class="nav-text">模糊测试的工作流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模糊测试器的类型"><span class="nav-text">模糊测试器的类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-以生成方式分类"><span class="nav-text">1. 以生成方式分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-以对于程序源代码的依赖程度分类"><span class="nav-text">2. 以对于程序源代码的依赖程度分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-根据探索程序的策略分类"><span class="nav-text">3. 根据探索程序的策略分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-根据是否利用反馈信息分类"><span class="nav-text">4. 根据是否利用反馈信息分类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模糊测试的主要挑战"><span class="nav-text">模糊测试的主要挑战</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于覆盖率的模糊测试"><span class="nav-text">基于覆盖率的模糊测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码覆盖率计数"><span class="nav-text">代码覆盖率计数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于覆盖的模糊测试工作流"><span class="nav-text">基于覆盖的模糊测试工作流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主要问题"><span class="nav-text">主要问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-如何生成初始输入"><span class="nav-text">1. 如何生成初始输入?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-如何生成测试用例"><span class="nav-text">2. 如何生成测试用例?</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-如何从种子池中选择种子"><span class="nav-text">3. 如何从种子池中选择种子</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-如何有效测试应用"><span class="nav-text">4. 如何有效测试应用?</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#集成在fuzzing中的技术"><span class="nav-text">集成在fuzzing中的技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#测试用例生成阶段"><span class="nav-text">测试用例生成阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#程序执行阶段"><span class="nav-text">程序执行阶段</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#面向不同应用的Fuzzing"><span class="nav-text">面向不同应用的Fuzzing</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件格式-fuzzing"><span class="nav-text">文件格式 fuzzing</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#核-fuzzing"><span class="nav-text">核 fuzzing</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#协议-fuzzing"><span class="nav-text">协议 fuzzing</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fuzzing-的新趋势"><span class="nav-text">fuzzing 的新趋势</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a></li></ol></li></ol></div>
             
 
           </div>
