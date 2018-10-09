@@ -128,7 +128,7 @@
 <meta property="og:image" content="https://i.loli.net/2018/09/12/5b98aeb83f40b.png">
 <meta property="og:image" content="https://i.loli.net/2018/09/12/5b98b07d22c3c.png">
 <meta property="og:image" content="https://i.loli.net/2018/09/12/5b98b11f60e23.png">
-<meta property="og:updated_time" content="2018-10-09T12:17:23.262Z">
+<meta property="og:updated_time" content="2018-10-09T12:37:17.633Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Using Natural Language Processing to Automatically Detect Self-Admitted Technical Debt">
 <meta name="twitter:description" content="Using Natural Language Processing to Automatically Detect Self-Admitted Technical Debt摘要本文提出使用自然语言处理技术自动化识别设计和需求自承认技术债务(SATD)的方法. 本文在10个项目上进行研究: Ant, ArgoUML, Columba, EMF, Hibernate, Jedit, JFreeChar">
@@ -377,7 +377,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-10-09 20:17:23" itemprop="dateModified" datetime="2018-10-09T20:17:23+08:00">2018-10-09</time>
+                <time title="修改时间：2018-10-09 20:37:17" itemprop="dateModified" datetime="2018-10-09T20:37:17+08:00">2018-10-09</time>
               
             
           </span>
@@ -483,7 +483,7 @@
 <p><a href="https://i.loli.net/2018/09/11/5b975c7d8ef30.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/11/5b975c7d8ef30.png" alt="design debt.PNG"></a></p>
 <p><strong><em>自承认需求债务</em></strong>: 功能的需求没有完全实现.</p>
 <p><a href="https://i.loli.net/2018/09/11/5b975d7c37e83.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/11/5b975d7c37e83.png" alt="requirement debt.PNG"></a></p>
-<p>为了消除数据集的偏差, 从中提取了有统计上有显著意义的数据集, 用1小时时间告诉学生不同技术债务的类型和区别. 置信度达到99%, 置信区间5%, 从62566个注释中采样659个. 评价者间一致性程度(Cohen’s kappa coeffcient)达到0.81. 设计自承认债务一致性等级达到+0.75, 需求自承认债务的一致性等级达到+0.84. 研究表明只要大于+0.75就是非常一致. </p>
+<p>为了消除数据集的偏差, 从中提取了有统计上有显著意义的数据集, 用1小时时间告诉学生不同技术债务的类型和区别. 置信度达到99%, 置信区间5%, 从62566个注释中采样659个. 评价者间一致性程度(Cohen’s kappa coefficient)达到0.81. 设计自承认债务一致性等级达到+0.75, 需求自承认债务的一致性等级达到+0.84. 研究表明只要大于+0.75就是非常一致. </p>
 <p>结果发现659个注释中, 609个(92%)不包含自承认技术债务, 29个(4%)包含设计债务, 5个(2%)包含需求债务, 2个(0.75%)包含测试债务, 1个(0.15%)包含文档债务.</p>
 <h3 id="2-5-NLP分类器"><a href="#2-5-NLP分类器" class="headerlink" title="2.5 NLP分类器"></a>2.5 NLP分类器</h3><p>Stanford Classifier, Java实现的最大熵分类器. </p>
 <p>为了防止仅在大小写有区别的特征重复, 如: Hack, hack, HACK, 或者前置/后置的标点符号, 如: “,hack”, “hack,”, 需要对注释进行预处理.</p>
