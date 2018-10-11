@@ -128,7 +128,7 @@
 <meta property="og:image" content="https://i.loli.net/2018/09/12/5b98aeb83f40b.png">
 <meta property="og:image" content="https://i.loli.net/2018/09/12/5b98b07d22c3c.png">
 <meta property="og:image" content="https://i.loli.net/2018/09/12/5b98b11f60e23.png">
-<meta property="og:updated_time" content="2018-10-09T12:37:17.633Z">
+<meta property="og:updated_time" content="2018-10-11T07:29:06.960Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Using Natural Language Processing to Automatically Detect Self-Admitted Technical Debt">
 <meta name="twitter:description" content="Using Natural Language Processing to Automatically Detect Self-Admitted Technical Debt摘要本文提出使用自然语言处理技术自动化识别设计和需求自承认技术债务(SATD)的方法. 本文在10个项目上进行研究: Ant, ArgoUML, Columba, EMF, Hibernate, Jedit, JFreeChar">
@@ -377,7 +377,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-10-09 20:37:17" itemprop="dateModified" datetime="2018-10-09T20:37:17+08:00">2018-10-09</time>
+                <time title="修改时间：2018-10-11 15:29:06" itemprop="dateModified" datetime="2018-10-11T15:29:06+08:00">2018-10-11</time>
               
             
           </span>
@@ -503,10 +503,10 @@
 <p><a href="https://i.loli.net/2018/09/12/5b9873c92693a.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/12/5b9873c92693a.png" alt="features.png"></a></p>
 <p><a href="https://i.loli.net/2018/09/12/5b9878e9aff01.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/12/5b9878e9aff01.png" alt="weight of features.png"></a></p>
 <h3 id="RQ3-How-much-training-data-is-required-to-effectively-detect-self-admitted-technical-debt"><a href="#RQ3-How-much-training-data-is-required-to-effectively-detect-self-admitted-technical-debt" class="headerlink" title="RQ3. How much training data is required to effectively detect self-admitted technical debt?"></a>RQ3. How much training data is required to effectively detect self-admitted technical debt?</h3><p><strong>动机</strong>: 构建训练数据集是耗费时间的任务, 因此需要知道多少训练数据保证分类器达到好的效果. </p>
-<p><strong>方法</strong>: 所有注释作为一个大数据集. 然后分为10个等大的数据集, 每个数据集包含相同比例的技术债务注释和非技术债务注释. 每次训练集以100为步长, 记录最高的f1-measure. </p>
+<p><strong>方法</strong>: 所有注释作为一个大数据集. 然后进行十折交叉验证, 每个数据集包含相同比例的技术债务注释和非技术债务注释. 每次训练集以100为步长, 记录最高的f1-measure. </p>
 <p><strong>结果</strong>:</p>
 <p><em>对于设计债务</em>, 训练42700条数据时, f1达到最大值为0.824. 使用3900条数据能达到80%f1的最大值, 使用9700条数据能达到90%f1的最大值.</p>
-<p><em>对于需求债务</em>, 使用51300条数据时达到最高的f1值, 为0.753. 达到80%需要2600条数据, 达到90%需要1180条数据.</p>
+<p><em>对于需求债务</em>, 使用51300条数据时达到最高的f1值, 为0.753. 达到80%需要2600条数据, 达到90%需要11800条数据.</p>
 <p><a href="https://i.loli.net/2018/09/12/5b98a1369e593.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/12/5b98a1369e593.png" alt="result2.png"></a></p>
 <h2 id="4-讨论"><a href="#4-讨论" class="headerlink" title="4 讨论"></a>4 讨论</h2><h3 id="4-1-设计债务和需求债务的类内文本相似度"><a href="#4-1-设计债务和需求债务的类内文本相似度" class="headerlink" title="4.1 设计债务和需求债务的类内文本相似度"></a>4.1 设计债务和需求债务的类内文本相似度</h3><p>计算得到每个注释的tfidf向量, 计算两两间的cosine距离. 需求债务的中位数和上四分位高于设计债务. 为了证明这个差异是显著的, 使用<code>Wilcoxon</code>测试, p-value=2.2e-16.</p>
 <h3 id="4-2-区分技术债务和非技术债务"><a href="#4-2-区分技术债务和非技术债务" class="headerlink" title="4.2 区分技术债务和非技术债务"></a>4.2 区分技术债务和非技术债务</h3><p><a href="https://i.loli.net/2018/09/12/5b98ac82f1840.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/12/5b98ac82f1840.png" alt="result3.png"></a></p>
