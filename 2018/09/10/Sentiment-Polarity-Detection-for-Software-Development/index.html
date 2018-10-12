@@ -124,7 +124,7 @@
 <meta property="og:image" content="https://i.loli.net/2018/09/10/5b9650cc56d3e.png">
 <meta property="og:image" content="https://i.loli.net/2018/09/10/5b96565a12339.png">
 <meta property="og:image" content="https://i.loli.net/2018/09/10/5b9672c1145d4.png">
-<meta property="og:updated_time" content="2018-09-11T01:59:49.730Z">
+<meta property="og:updated_time" content="2018-10-12T06:50:41.500Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Sentiment Polarity Detection for Software Development">
 <meta name="twitter:description" content="Sentiment Polarity Detection for Software Development摘要在开发者交流频道的数据集上训练的专用分类器Senti4SD (4SD = for software developers?). 1 介绍现成的(off-the-shelf)情感分类工具与用户表达的观点不一致,甚至相悖. 另一个挑战是解决错误将中性文本分类为消极文本.”What is the">
@@ -373,7 +373,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-09-11 09:59:49" itemprop="dateModified" datetime="2018-09-11T09:59:49+08:00">2018-09-11</time>
+                <time title="修改时间：2018-10-12 14:50:41" itemprop="dateModified" datetime="2018-10-12T14:50:41+08:00">2018-10-12</time>
               
             
           </span>
@@ -436,7 +436,7 @@
 <h3 id="3-2-基于SentiStrength的情感极性检测"><a href="#3-2-基于SentiStrength的情感极性检测" class="headerlink" title="3.2 基于SentiStrength的情感极性检测"></a>3.2 基于<code>SentiStrength</code>的情感极性检测</h3><blockquote>
 <p><code>SentiStrength</code></p>
 <p>将每个词进行打分<br>积极：[+2,+5]<br>中性：{-1,+1}<br>消极：[-5,-2]</p>
-<p>最后求代数和,输出整体的情感极性(positive - 1,neutral - 0,negative - -1).</p>
+<p>最后分别找到两种极性的最大值, 代数加和, 输出整体的情感极性(positive - 1,neutral - 0,negative - -1).</p>
 </blockquote>
 <h3 id="3-3-Distributional-Semantic-Models-DSM"><a href="#3-3-Distributional-Semantic-Models-DSM" class="headerlink" title="3.3 Distributional Semantic Models (DSM)"></a>3.3 Distributional Semantic Models (DSM)</h3><p>DSM是在高维向量空间上表征一个数学点的模型.</p>
 <p>最传统的就是用词频表示一维,然后进行降维,降维用LSA处理,LSA是将现有高维特征进行奇异值(SVD)分解.</p>
