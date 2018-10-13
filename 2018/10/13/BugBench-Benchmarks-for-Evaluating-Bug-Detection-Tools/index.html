@@ -108,31 +108,31 @@
 
 
 
-  <meta name="description" content="Sentiment Analysis for Software Engineering: How Far Can We Go?1. 介绍已有的情感分类工具不是用来分析软件项目中文本相关的情感。从本质上说，没有银弹，只有可能是在软工相关的数据集上进行了定制训练。 近年来使用定制化的情感分析工具在软工数据集上工作。最常用的： SentiStrength：检视每个句子中的每个词，给每个词一个得分然后加起">
-<meta name="keywords" content="nlp,software engineering">
+  <meta name="description" content="摘要本文介绍构建bug benchmark suite BugBench的过程.  选择有代表性bug benchmark的标准 选择收集有bug的应用 初步研究这些应用和bug的特征 在benchmark上评价已有的bug检测工具  1 介绍1.1 动机研究者需要一个统一的研究方法展示检测工具的好坏. 构建benchmark增强了社区内的合作, 帮助社区对于面临的问题形参共识. 1.2 我们的工">
+<meta name="keywords" content="software testing">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Sentiment Analysis for Software Engineering">
-<meta property="og:url" content="http://yoursite.com/2018/09/07/Sentiment-Analysis-for-Software-Engineering/index.html">
+<meta property="og:title" content="BugBench: Benchmarks for Evaluating Bug Detection Tools">
+<meta property="og:url" content="http://yoursite.com/2018/10/13/BugBench-Benchmarks-for-Evaluating-Bug-Detection-Tools/index.html">
 <meta property="og:site_name" content="罗小米">
-<meta property="og:description" content="Sentiment Analysis for Software Engineering: How Far Can We Go?1. 介绍已有的情感分类工具不是用来分析软件项目中文本相关的情感。从本质上说，没有银弹，只有可能是在软工相关的数据集上进行了定制训练。 近年来使用定制化的情感分析工具在软工数据集上工作。最常用的： SentiStrength：检视每个句子中的每个词，给每个词一个得分然后加起">
+<meta property="og:description" content="摘要本文介绍构建bug benchmark suite BugBench的过程.  选择有代表性bug benchmark的标准 选择收集有bug的应用 初步研究这些应用和bug的特征 在benchmark上评价已有的bug检测工具  1 介绍1.1 动机研究者需要一个统一的研究方法展示检测工具的好坏. 构建benchmark增强了社区内的合作, 帮助社区对于面临的问题形参共识. 1.2 我们的工">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://i.loli.net/2018/09/07/5b921f1c4b79f.png">
-<meta property="og:image" content="https://i.loli.net/2018/09/07/5b9222c1098e2.png">
-<meta property="og:image" content="https://i.loli.net/2018/09/07/5b922b319c7e1.png">
-<meta property="og:image" content="https://i.loli.net/2018/09/07/5b922ec1bfd01.png">
-<meta property="og:image" content="https://i.loli.net/2018/09/07/5b922fce9cc6a.png">
-<meta property="og:updated_time" content="2018-09-10T14:03:28.375Z">
+<meta property="og:image" content="https://i.loli.net/2018/10/13/5bc156ba1348d.png">
+<meta property="og:image" content="https://i.loli.net/2018/10/13/5bc159c7afdc3.png">
+<meta property="og:image" content="https://i.loli.net/2018/10/13/5bc15c45a6236.png">
+<meta property="og:image" content="https://i.loli.net/2018/10/13/5bc15cd5d20e3.png">
+<meta property="og:image" content="https://i.loli.net/2018/10/13/5bc1606bb69fa.png">
+<meta property="og:updated_time" content="2018-10-13T03:22:31.656Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Sentiment Analysis for Software Engineering">
-<meta name="twitter:description" content="Sentiment Analysis for Software Engineering: How Far Can We Go?1. 介绍已有的情感分类工具不是用来分析软件项目中文本相关的情感。从本质上说，没有银弹，只有可能是在软工相关的数据集上进行了定制训练。 近年来使用定制化的情感分析工具在软工数据集上工作。最常用的： SentiStrength：检视每个句子中的每个词，给每个词一个得分然后加起">
-<meta name="twitter:image" content="https://i.loli.net/2018/09/07/5b921f1c4b79f.png">
+<meta name="twitter:title" content="BugBench: Benchmarks for Evaluating Bug Detection Tools">
+<meta name="twitter:description" content="摘要本文介绍构建bug benchmark suite BugBench的过程.  选择有代表性bug benchmark的标准 选择收集有bug的应用 初步研究这些应用和bug的特征 在benchmark上评价已有的bug检测工具  1 介绍1.1 动机研究者需要一个统一的研究方法展示检测工具的好坏. 构建benchmark增强了社区内的合作, 帮助社区对于面临的问题形参共识. 1.2 我们的工">
+<meta name="twitter:image" content="https://i.loli.net/2018/10/13/5bc156ba1348d.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/07/Sentiment-Analysis-for-Software-Engineering/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/10/13/BugBench-Benchmarks-for-Evaluating-Bug-Detection-Tools/"/>
 
 
 
@@ -142,7 +142,7 @@
   };
 </script>
 
-  <title>Sentiment Analysis for Software Engineering | 罗小米</title>
+  <title>BugBench: Benchmarks for Evaluating Bug Detection Tools | 罗小米</title>
   
 
 
@@ -311,7 +311,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/07/Sentiment-Analysis-for-Software-Engineering/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/13/BugBench-Benchmarks-for-Evaluating-Bug-Detection-Tools/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="罗小米">
@@ -328,7 +328,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Sentiment Analysis for Software Engineering
+          <h1 class="post-title" itemprop="name headline">BugBench: Benchmarks for Evaluating Bug Detection Tools
               
             
           </h1>
@@ -353,24 +353,12 @@
                 
               
 
-              <time title="创建时间：2018-09-07 16:37:07" itemprop="dateCreated datePublished" datetime="2018-09-07T16:37:07+08:00">2018-09-07</time>
+              <time title="创建时间：2018-10-13 11:21:55 / 修改时间：11:22:31" itemprop="dateCreated datePublished" datetime="2018-10-13T11:21:55+08:00">2018-10-13</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-09-10 22:03:28" itemprop="dateModified" datetime="2018-09-10T22:03:28+08:00">2018-09-10</time>
               
             
           </span>
@@ -421,63 +409,90 @@
       
 
       
-        <h1 id="Sentiment-Analysis-for-Software-Engineering-How-Far-Can-We-Go"><a href="#Sentiment-Analysis-for-Software-Engineering-How-Far-Can-We-Go" class="headerlink" title="Sentiment Analysis for Software Engineering: How Far Can We Go?"></a>Sentiment Analysis for Software Engineering: How Far Can We Go?</h1><h2 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1. 介绍"></a>1. 介绍</h2><p>已有的情感分类工具不是用来分析软件项目中文本相关的情感。从本质上说，没有银弹，只有可能是在软工相关的数据集上进行了定制训练。</p>
-<p>近年来使用定制化的情感分析工具在软工数据集上工作。<br>最常用的：</p>
-<p><code>SentiStrength</code>：检视每个句子中的每个词，给每个词一个得分然后加起来求得句子的情感。</p>
-<p>作者识图通过<em>Stack Overflow</em>上对于软件库的众包只是来推荐合适的软件库，一个重要的组件就是一个可靠的情感分析工具。需要使用<code>Stack Overflow</code>上的内容定制情感分类工具，使用效果最好的递归神经网络模型，能够分析句子组成的语法结构。实际得到的结果并不好。</p>
-<p>于是作者使用已有的情感分析工具在不同的数据集上进行情感分析，结果显示待测的分类工具没有一个能够在他们构建的<code>Stack Overflow</code>的数据集上提供可靠且精确的结果。</p>
-<p>本文的主要目的是说明尽管在软工的情感分析上投入了大量的经理，但是在使用这些工具的过程中依然存在许多问题。</p>
-<h2 id="2-相关工作"><a href="#2-相关工作" class="headerlink" title="2. 相关工作"></a>2. 相关工作</h2><h3 id="2-1"><a href="#2-1" class="headerlink" title="2.1"></a>2.1</h3><p>已有的情感分析工具：</p>
+        <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>本文介绍构建bug benchmark suite <code>BugBench</code>的过程.</p>
 <ol>
-<li><code>SentiStrength</code></li>
-<li><code>NLTK</code></li>
-<li><code>Stanford CoreNLP</code></li>
-<li><code>EmoTxt</code></li>
+<li>选择有代表性bug benchmark的标准</li>
+<li>选择收集有bug的应用</li>
+<li>初步研究这些应用和bug的特征</li>
+<li>在benchmark上评价已有的bug检测工具</li>
 </ol>
-<h3 id="2-2"><a href="#2-2" class="headerlink" title="2.2"></a>2.2</h3><ol>
-<li>有更多分布团队的项目情感的积极性更高；</li>
-<li>周一写得评论注释倾向于表达负面情绪；</li>
-<li>周二表达的情绪最负面；</li>
-<li>560k JIRA的评论显示积极正面的评论能够帮助issue的修复；</li>
-<li>CI中表达的情感可能影响构建的结果；</li>
-<li>app评价的情感极性会影响手机应用的演化；</li>
-<li>使用ASUM技术从app评论中提取表现用户对于app的看法；</li>
-<li>使用NB分类器给app的用户评论情感分类；</li>
-<li>使用细粒度的模型分析开发团队的愤怒级别；</li>
-<li>讨论安全问题时，开发者的情感最负面；</li>
-<li>OSS项目开发者不活跃，当他们在issue tacker中表达强烈的积极或负面情绪。</li>
+<h1 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1 介绍"></a>1 介绍</h1><h2 id="1-1-动机"><a href="#1-1-动机" class="headerlink" title="1.1 动机"></a>1.1 动机</h2><p>研究者需要一个统一的研究方法展示检测工具的好坏.</p>
+<p>构建benchmark增强了社区内的合作, 帮助社区对于面临的问题形参共识.</p>
+<h2 id="1-2-我们的工作"><a href="#1-2-我们的工作" class="headerlink" title="1.2 我们的工作"></a>1.2 我们的工作</h2><p>开源本文收集的bug应用到研究者社区.</p>
+<ol>
+<li>bug benchmark的挑选标准和评价指标</li>
+<li><code>BugBench</code>: c/c++ bug benchmark suit</li>
+<li>在benchmark和bug特征上进行初步研究</li>
+<li>初步评价已有工具</li>
 </ol>
-<h3 id="2-3"><a href="#2-3" class="headerlink" title="2.3"></a>2.3</h3><p>没有研究关心情感分类的准确性。Tourani使用<code>SentiStrength</code>在<code>Tomcat</code>和<code>Ant</code>两个项目上从开发者和用户邮件中提取情感信息。效果精确度很差，积极语句29.56%，消极语句13.10%。Jongeling使用<code>SentiStrength</code>、<code>NLTK</code>、<code>Stanford CoreNLP</code>和<code>AlchemyAPI</code>在Murgia研究的数据集上进行测试。发现没有一个工具能够提供令人满意的结果，不同工具间存在巨大分歧。</p>
-<p>普通情感分析工具在SE文本上效果不佳，Islam和Zibran基于<code>SentiStrength</code>开发了<code>SentiStrength-SE</code>解决SE领域的情感分级问题。</p>
-<h2 id="3-方法"><a href="#3-方法" class="headerlink" title="3 方法"></a>3 方法</h2><p><a href="https://i.loli.net/2018/09/07/5b921f1c4b79f.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/07/5b921f1c4b79f.png" alt="framework.png"></a></p>
-<p>流程：</p>
-<p>1&amp;2. 从Maven中收集Java项目的 i) 项目名; ii) 描述; iii) 相关的jar包; iv) 协议; v) 使用客户的数量和列表，保存到数据库中；</p>
-<p>3&amp;4&amp;5. 从Stack Overflow上爬取相关描述和评论存储到数据库中；</p>
-<p>6&amp;7. 进行情感分类，储存到数据库中；</p>
-<p>8&amp;9. 用户通过前端输入对于库的描述和非功能性要求（性能，安全，社区支持等），后端返回最适合的库的列表。</p>
-<h3 id="3-1-从软工数据集中挖掘情感"><a href="#3-1-从软工数据集中挖掘情感" class="headerlink" title="3.1 从软工数据集中挖掘情感"></a>3.1 从软工数据集中挖掘情感</h3><p>分析每个单词的情感是不够的，需要从构建语句的语法结构层面分析其情感。需要在组成句子的语法结构的每个节点上都知道其情感极性。</p>
-<p><a href="https://i.loli.net/2018/09/07/5b9222c1098e2.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/07/5b9222c1098e2.png" alt="example of labeling.png"></a></p>
-<p>基于这个原因，实验使用<code>Stanford CoreNLP</code>工具进行情感分类，但是和之前研究表明在电影评论数据集上训练的情感分类模型用在软工问题上是没有意义的。</p>
-<p>使用<code>Stanford CoreNLP</code>在276,629个讨论中抽取了5,073,452个句子。随机选择其中1500句进行人工标注。</p>
-<p>花费90小时进行人工标注，共标注了39,924个节点。解决了279个冲突句子的分类，2,199个冲突的节点。人工解决123个强冲突节点（两个评价者打分差&gt;2），其余2,076个取平均。</p>
-<h2 id="4-不好的结果"><a href="#4-不好的结果" class="headerlink" title="4 不好的结果"></a>4 不好的结果</h2><p><a href="https://i.loli.net/2018/09/07/5b922b319c7e1.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/07/5b922b319c7e1.png" alt="result.png"></a></p>
-<p>positive和negative的precision和recall都低于40%。</p>
-<h2 id="5-在SE上评价情感分析工具"><a href="#5-在SE上评价情感分析工具" class="headerlink" title="5 在SE上评价情感分析工具"></a>5 在SE上评价情感分析工具</h2><h3 id="5-1"><a href="#5-1" class="headerlink" title="5.1"></a>5.1</h3><p>RQ1：目前最好的情感分析工具和<code>Stanford CoreNLP SO</code>相比效果如何？<br>RO2：不同的软件相关数据集影响语法分析工具的效果吗？ i) QA论坛，如<code>Stack Overflow</code>上的讨论; ii) app市场的评论; iii) issue tracker，JIRA issue评论。</p>
-<p><a href="https://i.loli.net/2018/09/07/5b922ec1bfd01.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/07/5b922ec1bfd01.png" alt="dataset.png"></a></p>
-<p><a href="https://i.loli.net/2018/09/07/5b922fce9cc6a.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/07/5b922fce9cc6a.png" alt="result.png"></a></p>
-<h3 id="5-2"><a href="#5-2" class="headerlink" title="5.2"></a>5.2</h3><p>在预测positive和negative的效果很好，但是预测neutral情感的效果不理想。所以只包含少量neutral数据点的数据集会引入大量偏差。</p>
-<h2 id="6-效度威胁"><a href="#6-效度威胁" class="headerlink" title="6 效度威胁"></a>6 效度威胁</h2><h2 id="7-习得经验"><a href="#7-习得经验" class="headerlink" title="7 习得经验"></a>7 习得经验</h2><ol>
-<li>至今没有工具能够很好的解决软工问题上的情感分类问题；</li>
-<li>需要依据应用场景重新练模型，但是没有银弹；</li>
-<li>在应用上的情感分析更简单。因为应用评论大多清晰地包含了用户的态度；</li>
-<li>人工打标签依然存在分歧，不能指望机器达到100%正确率；</li>
-<li>情感分类工具只报告positive或negative是不够的。</li>
+<h1 id="2-已有工作的经验"><a href="#2-已有工作的经验" class="headerlink" title="2 已有工作的经验"></a>2 已有工作的经验</h1><h2 id="2-1-其他领域的Benchmark"><a href="#2-1-其他领域的Benchmark" class="headerlink" title="2.1 其他领域的Benchmark"></a>2.1 其他领域的Benchmark</h2><ul>
+<li><strong>SPEC</strong>: Standard Performance Evaluation Cooperative. <ol>
+<li>候选项目在各自的领域有广泛的使用</li>
+<li>候选项目在不同架构平台上测试可移植性</li>
 </ol>
-<h2 id="8-结论"><a href="#8-结论" class="headerlink" title="8 结论"></a>8 结论</h2><ol>
-<li>机器学习，甚至更先进的方法，依然是黑盒，不能预估黑盒里会发生什么；</li>
-<li>尽管可以反驳在<code>Stack Overflow</code>这种QA论坛是交流技术而非表达情感，但是文中评价的情感分类方法在另外两个数据及上依然表现不尽如人意，从方法的内在上存在问题；</li>
-<li><em>we are not dismissing opinion mining in software engineering as impractical, but rather as not mature enough yet</em>，不是说在软工上做情感挖掘不实际，而是这个研究方向仍不成熟。</li>
+</li>
+<li><strong>TPC</strong>: Transaction Processing Council. 用于比较数据库管理系统. 与<strong>SPEC</strong>类似, <strong>TPC</strong>要求项目有代表性, 多样性和可移植性. </li>
+</ul>
+<h2 id="2-2-软工和Bug检测领域的已有Benchmark"><a href="#2-2-软工和Bug检测领域的已有Benchmark" class="headerlink" title="2.2 软工和Bug检测领域的已有Benchmark"></a>2.2 软工和Bug检测领域的已有Benchmark</h2><ul>
+<li><p><strong>CppETS</strong>: 用于逆向工程. 提供一系列cpp程序, 每个关联一个问题文件. 每个检测工具需要回答问题, 然后计算得分. 这个得分代表了检测工具的性能.</p>
+</li>
+<li><p><strong>Siemens benchmark</strong>: 用于bug检测.</p>
+</li>
+<li><strong>PEST</strong>: 用于软件测试.</li>
+</ul>
+<p>越好的测试工具能够检测更多的bug版本. 尽管这些benchmark suites提供了很大的bug池, 但是许多bugs只是语义相关的bugs. 与内存相关和多线程相关的bugs几乎不存在. 此外, 这些benchmark应用的项目非常小, 有些甚至少于100行代码.</p>
+<p>最近, IBM Haifa提出构建一个多线程程序的benchmark. 但是效果不好, 因为他们依赖于学生故意生成有bug的程序, 而不是使用真实的bug.</p>
+<h1 id="Benchmark构建指南"><a href="#Benchmark构建指南" class="headerlink" title="Benchmark构建指南"></a>Benchmark构建指南</h1><h2 id="3-1-软件bug的分类"><a href="#3-1-软件bug的分类" class="headerlink" title="3.1 软件bug的分类"></a>3.1 软件bug的分类</h2><ul>
+<li><p>内存相关bug</p>
+<ol>
+<li><p>buffer overflow: 非法获取超过buffer范围</p>
+</li>
+<li><p>stack smashing: 非法重写函数返回地址</p>
+</li>
+<li>Memory leak: 动态分配的内存没有引用它的指针, 但是这块空间没有被释放</li>
+<li>uninitialized read: 在初始化之前读取内存数据</li>
+<li>double free: 一块内存释放了两次</li>
 </ol>
+</li>
+<li><p>并发bug</p>
+<ol>
+<li>data race bugs: 并发线程之间对于共享数据的冲突访问</li>
+<li>atomicity-related bugs: 一个线程上的一系列操作被另一个线程的冲突操作中断</li>
+<li>deadlock: 多个进程争夺多个资源</li>
+</ol>
+</li>
+<li><p>语义bug</p>
+<p>检测这些信息往往需要语义信息</p>
+</li>
+</ul>
+<h2 id="3-2-bug检测工具的分类"><a href="#3-2-bug检测工具的分类" class="headerlink" title="3.2 bug检测工具的分类"></a>3.2 bug检测工具的分类</h2><p><img src="https://i.loli.net/2018/10/13/5bc156ba1348d.png" alt="QQ截图20181013102121.png"></p>
+<ol>
+<li><strong>Programming-rule based tools</strong>: 使用编程时必须遵循的规则, 如: 数组指针不能越界</li>
+<li><strong>statistic-rule based tools</strong>: 从成功运行的程序中学习统计正确的规则</li>
+<li><strong>annotation-based</strong>: 使用annotations进行语法检查</li>
+</ol>
+<h2 id="3-3-Benchmark选择标准"><a href="#3-3-Benchmark选择标准" class="headerlink" title="3.3 Benchmark选择标准"></a>3.3 Benchmark选择标准</h2><ol>
+<li>有代表性: 能够代表真实的bug应用. </li>
+<li>多样性: bug类型多, bug的复杂性, 动态运行特征</li>
+<li>可移植性</li>
+<li>可获取性/可访问性</li>
+<li>公平: 不偏向于某个具体的检测工具</li>
+</ol>
+<h2 id="3-4-评价指标"><a href="#3-4-评价指标" class="headerlink" title="3.4 评价指标"></a>3.4 评价指标</h2><p><img src="https://i.loli.net/2018/10/13/5bc159c7afdc3.png" alt="QQ截图20181013103436.png"></p>
+<p>大多数度量评价数量, 如<code>pinpoint root cause</code>, 就是通过从bug root cause到检测到bug位置的距离来量化. </p>
+<p>不同类型的工具使用不同的指标. 如静态工具只考虑<code>static analysis time</code>, 动态工具考虑<code>training overhead</code>和<code>dynamic detection overhead</code>.</p>
+<h1 id="4-Benchmark"><a href="#4-Benchmark" class="headerlink" title="4 Benchmark"></a>4 Benchmark</h1><h2 id="4-1-Benchmark-Suite"><a href="#4-1-Benchmark-Suite" class="headerlink" title="4.1 Benchmark Suite"></a>4.1 Benchmark Suite</h2><p>收集17个存在bug的项目, 13个包含内存相关bug, 4个包含并发bug, 2个包含语义bug.</p>
+<p><img src="https://i.loli.net/2018/10/13/5bc15c45a6236.png" alt="QQ截图20181013104518.png"></p>
+<h2 id="4-2-初步特征分析"><a href="#4-2-初步特征分析" class="headerlink" title="4.2 初步特征分析"></a>4.2 初步特征分析</h2><p><img src="https://i.loli.net/2018/10/13/5bc15cd5d20e3.png" alt="QQ截图20181013104736.png"></p>
+<p>每百万个插桩, 内存分配的频率为[0 ,769], 分配大小从[0, 6.0M]. 一般来说内存分配次数越多, 工具承受的负载越大. 每个插桩的内存访问数为[0.479, 0.848], 堆使用率0%~99%.</p>
+<p>为了评价bug复杂度, 这里使用临床症状和crash latency评价. <code>Crash latency</code>是指造成bug的根本原因到应用由于bug传播最终crash的位置的距离. 如果<code>Crash latency</code>很短, bug就很好找到; 但是如果bug在一长串的error传播之后才报出, 检测bug的根本原因就变得困难.</p>
+<h1 id="5-初步评价"><a href="#5-初步评价" class="headerlink" title="5 初步评价"></a>5 初步评价</h1><p><img src="https://i.loli.net/2018/10/13/5bc1606bb69fa.png" alt="QQ截图20181013110300.png"></p>
+<p>使用<code>Benchmark</code>评价3个bug检测工具:<code>Valgrind</code>, <code>Purify</code>, <code>CCured</code>. 这三个工具都是用来检测内存相关的bug. 所以这里选择了8个内存相关的应用.</p>
+<p>CCured负载最小, 因为它在运行前进行了静态分析, 而且发现了所有bug. 尽管它的表现最好, 但是代价是高度依赖于人工预处理代码, 在使用CCured检测BC前用了3到4天学习BC代码和CCured规则去满足CCured语言的要求.</p>
+<p>Valgrind和Purify没有找到NCOM和COMP的bug. Valgrind在POLY, GZIP和MAN上存在很大的<code>detect latency</code>.</p>
+<h1 id="6-当前状态和未来工作"><a href="#6-当前状态和未来工作" class="headerlink" title="6 当前状态和未来工作"></a>6 当前状态和未来工作</h1><p>Benchmark包括应用及其对应的文档和输入集合.</p>
+<p>目前正在设计工具从bug数据库(如 Bugzilla)自动提取bug, 这样做不但可以获取很多真实bug, 而且可以获取更深的insight. </p>
+<p>接下来的工作会在<code>BugBench</code>上评价更多地bug检测工具. 同时也会考虑添加辅助工具, 比如程序标注的静态工具, 并发bug检测工具的调度和记录-重放工具.</p>
 
       
     </div>
@@ -498,9 +513,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/nlp/" rel="tag"># nlp</a>
-          
-            <a href="/tags/software-engineering/" rel="tag"># software engineering</a>
+            <a href="/tags/software-testing/" rel="tag"># software testing</a>
           
         </div>
       
@@ -513,8 +526,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/08/18/初窥Kaggle竞赛/" rel="next" title="初窥Kaggle竞赛">
-                <i class="fa fa-chevron-left"></i> 初窥Kaggle竞赛
+              <a href="/2018/09/27/20180927/" rel="next" title="20180927">
+                <i class="fa fa-chevron-left"></i> 20180927
               </a>
             
           </div>
@@ -522,10 +535,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/10/Sentiment-Polarity-Detection-for-Software-Development/" rel="prev" title="Sentiment Polarity Detection for Software Development">
-                Sentiment Polarity Detection for Software Development <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -705,7 +714,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Sentiment-Analysis-for-Software-Engineering-How-Far-Can-We-Go"><span class="nav-text">Sentiment Analysis for Software Engineering: How Far Can We Go?</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-介绍"><span class="nav-text">1. 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-相关工作"><span class="nav-text">2. 相关工作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1"><span class="nav-text">2.1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2"><span class="nav-text">2.2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3"><span class="nav-text">2.3</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-方法"><span class="nav-text">3 方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-从软工数据集中挖掘情感"><span class="nav-text">3.1 从软工数据集中挖掘情感</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-不好的结果"><span class="nav-text">4 不好的结果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-在SE上评价情感分析工具"><span class="nav-text">5 在SE上评价情感分析工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1"><span class="nav-text">5.1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2"><span class="nav-text">5.2</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-效度威胁"><span class="nav-text">6 效度威胁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-习得经验"><span class="nav-text">7 习得经验</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-结论"><span class="nav-text">8 结论</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要"><span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-介绍"><span class="nav-text">1 介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-动机"><span class="nav-text">1.1 动机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-我们的工作"><span class="nav-text">1.2 我们的工作</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-已有工作的经验"><span class="nav-text">2 已有工作的经验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-其他领域的Benchmark"><span class="nav-text">2.1 其他领域的Benchmark</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-软工和Bug检测领域的已有Benchmark"><span class="nav-text">2.2 软工和Bug检测领域的已有Benchmark</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Benchmark构建指南"><span class="nav-text">Benchmark构建指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-软件bug的分类"><span class="nav-text">3.1 软件bug的分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-bug检测工具的分类"><span class="nav-text">3.2 bug检测工具的分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Benchmark选择标准"><span class="nav-text">3.3 Benchmark选择标准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-评价指标"><span class="nav-text">3.4 评价指标</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Benchmark"><span class="nav-text">4 Benchmark</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-Benchmark-Suite"><span class="nav-text">4.1 Benchmark Suite</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-初步特征分析"><span class="nav-text">4.2 初步特征分析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-初步评价"><span class="nav-text">5 初步评价</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-当前状态和未来工作"><span class="nav-text">6 当前状态和未来工作</span></a></li></ol></div>
             
 
           </div>
