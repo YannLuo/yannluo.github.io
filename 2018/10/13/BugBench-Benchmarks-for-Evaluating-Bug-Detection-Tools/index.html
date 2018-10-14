@@ -121,7 +121,7 @@
 <meta property="og:image" content="https://i.loli.net/2018/10/13/5bc15c45a6236.png">
 <meta property="og:image" content="https://i.loli.net/2018/10/13/5bc15cd5d20e3.png">
 <meta property="og:image" content="https://i.loli.net/2018/10/13/5bc1606bb69fa.png">
-<meta property="og:updated_time" content="2018-10-13T03:22:31.656Z">
+<meta property="og:updated_time" content="2018-10-14T11:02:57.169Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BugBench: Benchmarks for Evaluating Bug Detection Tools">
 <meta name="twitter:description" content="摘要本文介绍构建bug benchmark suite BugBench的过程.  选择有代表性bug benchmark的标准 选择收集有bug的应用 初步研究这些应用和bug的特征 在benchmark上评价已有的bug检测工具  1 介绍1.1 动机研究者需要一个统一的研究方法展示检测工具的好坏. 构建benchmark增强了社区内的合作, 帮助社区对于面临的问题形参共识. 1.2 我们的工">
@@ -353,12 +353,24 @@
                 
               
 
-              <time title="创建时间：2018-10-13 11:21:55 / 修改时间：11:22:31" itemprop="dateCreated datePublished" datetime="2018-10-13T11:21:55+08:00">2018-10-13</time>
+              <time title="创建时间：2018-10-13 11:21:55" itemprop="dateCreated datePublished" datetime="2018-10-13T11:21:55+08:00">2018-10-13</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-10-14 19:02:57" itemprop="dateModified" datetime="2018-10-14T19:02:57+08:00">2018-10-14</time>
               
             
           </span>
@@ -442,7 +454,7 @@
 </ul>
 <p>越好的测试工具能够检测更多的bug版本. 尽管这些benchmark suites提供了很大的bug池, 但是许多bugs只是语义相关的bugs. 与内存相关和多线程相关的bugs几乎不存在. 此外, 这些benchmark应用的项目非常小, 有些甚至少于100行代码.</p>
 <p>最近, IBM Haifa提出构建一个多线程程序的benchmark. 但是效果不好, 因为他们依赖于学生故意生成有bug的程序, 而不是使用真实的bug.</p>
-<h1 id="Benchmark构建指南"><a href="#Benchmark构建指南" class="headerlink" title="Benchmark构建指南"></a>Benchmark构建指南</h1><h2 id="3-1-软件bug的分类"><a href="#3-1-软件bug的分类" class="headerlink" title="3.1 软件bug的分类"></a>3.1 软件bug的分类</h2><ul>
+<h1 id="3-Benchmark构建指南"><a href="#3-Benchmark构建指南" class="headerlink" title="3 Benchmark构建指南"></a>3 Benchmark构建指南</h1><h2 id="3-1-软件bug的分类"><a href="#3-1-软件bug的分类" class="headerlink" title="3.1 软件bug的分类"></a>3.1 软件bug的分类</h2><ul>
 <li><p>内存相关bug</p>
 <ol>
 <li><p>buffer overflow: 非法获取超过buffer范围</p>
@@ -714,7 +726,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要"><span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-介绍"><span class="nav-text">1 介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-动机"><span class="nav-text">1.1 动机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-我们的工作"><span class="nav-text">1.2 我们的工作</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-已有工作的经验"><span class="nav-text">2 已有工作的经验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-其他领域的Benchmark"><span class="nav-text">2.1 其他领域的Benchmark</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-软工和Bug检测领域的已有Benchmark"><span class="nav-text">2.2 软工和Bug检测领域的已有Benchmark</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Benchmark构建指南"><span class="nav-text">Benchmark构建指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-软件bug的分类"><span class="nav-text">3.1 软件bug的分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-bug检测工具的分类"><span class="nav-text">3.2 bug检测工具的分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Benchmark选择标准"><span class="nav-text">3.3 Benchmark选择标准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-评价指标"><span class="nav-text">3.4 评价指标</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Benchmark"><span class="nav-text">4 Benchmark</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-Benchmark-Suite"><span class="nav-text">4.1 Benchmark Suite</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-初步特征分析"><span class="nav-text">4.2 初步特征分析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-初步评价"><span class="nav-text">5 初步评价</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-当前状态和未来工作"><span class="nav-text">6 当前状态和未来工作</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要"><span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-介绍"><span class="nav-text">1 介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-动机"><span class="nav-text">1.1 动机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-我们的工作"><span class="nav-text">1.2 我们的工作</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-已有工作的经验"><span class="nav-text">2 已有工作的经验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-其他领域的Benchmark"><span class="nav-text">2.1 其他领域的Benchmark</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-软工和Bug检测领域的已有Benchmark"><span class="nav-text">2.2 软工和Bug检测领域的已有Benchmark</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Benchmark构建指南"><span class="nav-text">3 Benchmark构建指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-软件bug的分类"><span class="nav-text">3.1 软件bug的分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-bug检测工具的分类"><span class="nav-text">3.2 bug检测工具的分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Benchmark选择标准"><span class="nav-text">3.3 Benchmark选择标准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-评价指标"><span class="nav-text">3.4 评价指标</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Benchmark"><span class="nav-text">4 Benchmark</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-Benchmark-Suite"><span class="nav-text">4.1 Benchmark Suite</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-初步特征分析"><span class="nav-text">4.2 初步特征分析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-初步评价"><span class="nav-text">5 初步评价</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-当前状态和未来工作"><span class="nav-text">6 当前状态和未来工作</span></a></li></ol></div>
             
 
           </div>
