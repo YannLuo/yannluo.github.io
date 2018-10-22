@@ -108,25 +108,28 @@
 
 
 
-  <meta name="description" content="构造辅助公式 $T_1 = 1 - 1 + 1 - 1 + \dots + 1 - 1$ 和 $T_2 = 1 - 2 + 3 - 4 + \dots$.  T_1 = 1 - 1 + 1 - 1 + \dots \\ T_2 = 1 - 2 + 3 - 4 + \dots \\ T = \sum_i^n i = 1 + 2 + 3 + \dots显然, $T_1$的值求得为0.  \begin{">
-<meta name="keywords" content="Hello World">
+  <meta name="description" content="PerfFuzz: Automatically Generating Pathological Inputs1 介绍已有的检测性能问题的研究大多数假设已有一定规模的输入。这些输入来源包括：  人工编写的性能测试 benchmark 在使用过程中常用的输入 用户遇到的触发性能问题的输入  往往这些输入引发的问题已经发现或修复，不能发现新的性能问题。 Pathological inputs：造成最坏算">
+<meta name="keywords" content="software testing,fuzz testing">
 <meta property="og:type" content="article">
-<meta property="og:title" content="所有正整数之和为-1&#x2F;12的证明">
-<meta property="og:url" content="http://yoursite.com/2018/09/22/所有正整数之和为-1-12的证明/index.html">
+<meta property="og:title" content="PerfFuzz - Automatically Generating Pathological Inputs">
+<meta property="og:url" content="http://yoursite.com/2018/10/20/PerfFuzz-Automatically-Generating-Pathological-Inputs/index.html">
 <meta property="og:site_name" content="罗小米">
-<meta property="og:description" content="构造辅助公式 $T_1 = 1 - 1 + 1 - 1 + \dots + 1 - 1$ 和 $T_2 = 1 - 2 + 3 - 4 + \dots$.  T_1 = 1 - 1 + 1 - 1 + \dots \\ T_2 = 1 - 2 + 3 - 4 + \dots \\ T = \sum_i^n i = 1 + 2 + 3 + \dots显然, $T_1$的值求得为0.  \begin{">
+<meta property="og:description" content="PerfFuzz: Automatically Generating Pathological Inputs1 介绍已有的检测性能问题的研究大多数假设已有一定规模的输入。这些输入来源包括：  人工编写的性能测试 benchmark 在使用过程中常用的输入 用户遇到的触发性能问题的输入  往往这些输入引发的问题已经发现或修复，不能发现新的性能问题。 Pathological inputs：造成最坏算">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-09-22T06:04:54.108Z">
+<meta property="og:image" content="https://i.loli.net/2018/10/20/5bcad116eb701.png">
+<meta property="og:image" content="https://i.loli.net/2018/10/20/5bcad37db30c7.png">
+<meta property="og:updated_time" content="2018-10-22T05:25:55.029Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="所有正整数之和为-1&#x2F;12的证明">
-<meta name="twitter:description" content="构造辅助公式 $T_1 = 1 - 1 + 1 - 1 + \dots + 1 - 1$ 和 $T_2 = 1 - 2 + 3 - 4 + \dots$.  T_1 = 1 - 1 + 1 - 1 + \dots \\ T_2 = 1 - 2 + 3 - 4 + \dots \\ T = \sum_i^n i = 1 + 2 + 3 + \dots显然, $T_1$的值求得为0.  \begin{">
+<meta name="twitter:title" content="PerfFuzz - Automatically Generating Pathological Inputs">
+<meta name="twitter:description" content="PerfFuzz: Automatically Generating Pathological Inputs1 介绍已有的检测性能问题的研究大多数假设已有一定规模的输入。这些输入来源包括：  人工编写的性能测试 benchmark 在使用过程中常用的输入 用户遇到的触发性能问题的输入  往往这些输入引发的问题已经发现或修复，不能发现新的性能问题。 Pathological inputs：造成最坏算">
+<meta name="twitter:image" content="https://i.loli.net/2018/10/20/5bcad116eb701.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/22/所有正整数之和为-1-12的证明/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/10/20/PerfFuzz-Automatically-Generating-Pathological-Inputs/"/>
 
 
 
@@ -136,7 +139,7 @@
   };
 </script>
 
-  <title>所有正整数之和为-1/12的证明 | 罗小米</title>
+  <title>PerfFuzz - Automatically Generating Pathological Inputs | 罗小米</title>
   
 
 
@@ -305,7 +308,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/22/所有正整数之和为-1-12的证明/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/20/PerfFuzz-Automatically-Generating-Pathological-Inputs/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="罗小米">
@@ -322,7 +325,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">所有正整数之和为-1/12的证明
+          <h1 class="post-title" itemprop="name headline">PerfFuzz - Automatically Generating Pathological Inputs
               
             
           </h1>
@@ -347,12 +350,24 @@
                 
               
 
-              <time title="创建时间：2018-09-22 13:56:56 / 修改时间：14:04:54" itemprop="dateCreated datePublished" datetime="2018-09-22T13:56:56+08:00">2018-09-22</time>
+              <time title="创建时间：2018-10-20 15:40:18" itemprop="dateCreated datePublished" datetime="2018-10-20T15:40:18+08:00">2018-10-20</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-10-22 13:25:55" itemprop="dateModified" datetime="2018-10-22T13:25:55+08:00">2018-10-22</time>
               
             
           </span>
@@ -369,7 +384,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Hello-World/" itemprop="url" rel="index"><span itemprop="name">Hello World</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/paper/" itemprop="url" rel="index"><span itemprop="name">paper</span></a></span>
 
                 
                 
@@ -403,43 +418,64 @@
       
 
       
-        <p>构造辅助公式 $T_1 = 1 - 1 + 1 - 1 + \dots + 1 - 1$ 和 $T_2 = 1 - 2 + 3 - 4 + \dots$.</p>
+        <h1 id="PerfFuzz-Automatically-Generating-Pathological-Inputs"><a href="#PerfFuzz-Automatically-Generating-Pathological-Inputs" class="headerlink" title="PerfFuzz: Automatically Generating Pathological Inputs"></a>PerfFuzz: Automatically Generating Pathological Inputs</h1><h2 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1 介绍"></a>1 介绍</h2><p>已有的检测性能问题的研究大多数假设已有一定规模的输入。这些输入来源包括：</p>
+<ol>
+<li>人工编写的性能测试</li>
+<li>benchmark</li>
+<li>在使用过程中常用的输入</li>
+<li>用户遇到的触发性能问题的输入</li>
+</ol>
+<p>往往这些输入引发的问题已经发现或修复，不能发现新的性能问题。</p>
+<p><em>Pathological inputs</em>：造成最坏算法复杂度的输入</p>
+<p>本文提出<strong>PERFFUZZ</strong>，基于反馈导向的变异fuzzing生成输入。实验结果表明在4个C语言项目中，<strong>PERFFUZZ</strong>找到最多执行的程序分支是基于覆盖率fuzzing（AFL）的2X~39X。</p>
+<p>与SlowFuzz相比，最多执行程序分支的5X~69X，最长执行路径的1.9X~24.7X。</p>
+<p>本文贡献：</p>
+<ol>
+<li>提出<strong>PERFFUZZ</strong>，并<a href="https://github.com/carolemieux/perffuzz" target="_blank" rel="noopener">开源</a></li>
+<li>与传统基于覆盖率的fuzzing工具（AFL）进行比较</li>
+<li>与相似的反馈导向的fuzzing工具（SlowFuzz）进行比较</li>
+<li>人工分析<strong>PERFFUZZ</strong>发现的<code>hot spots</code>，并描述<em>insight</em></li>
+</ol>
+<h2 id="2-概览"><a href="#2-概览" class="headerlink" title="2 概览"></a>2 概览</h2><h3 id="2-1-一个例子"><a href="#2-1-一个例子" class="headerlink" title="2.1 一个例子"></a>2.1 一个例子</h3><p><img src="https://i.loli.net/2018/10/20/5bcad116eb701.png" alt="QQ截图20181020142817.png"></p>
+<h3 id="2-2-性能fuzzing"><a href="#2-2-性能fuzzing" class="headerlink" title="2.2 性能fuzzing"></a>2.2 性能fuzzing</h3><p>目标是最大化控制流图中每条边的执行次数生成测试用例。实验中需要一个或多个种子输入开始，这些种子输入用例验证程序的正确性。实验中往往只需要1个种子输入就够了，最多只需要4个。</p>
+<p><strong>PERFFUZZ</strong>的流程：</p>
+<ol>
+<li>初始化输入，称为<em>parent inputs</em>，包括<em>seed inputs</em></li>
+<li>从<em>parent inputs</em>中选择一个最大化程序执行数的输入</li>
+<li>从选择的输入中生成更多地输入，称为<em>child inputs</em>。变异策略包括：1) 翻转输入比特 2) 删除比特序列 或3)随机提取其他输入的一部分拼接到当前输入</li>
+<li>所有<em>child inputs</em>中，若该孩子输入是程序执行了更多次，则把他加入到<em>parent inputs</em></li>
+<li>重复2-4直到时间限制</li>
+</ol>
+<h2 id="3-PERFFUZZ算法"><a href="#3-PERFFUZZ算法" class="headerlink" title="3 PERFFUZZ算法"></a>3 PERFFUZZ算法</h2><p><img src="https://i.loli.net/2018/10/20/5bcad37db30c7.png" alt="QQ截图20181020150422.png"></p>
+<p>流程如上2.2所述。</p>
+<p><em>program components</em>: </p>
+<ol>
+<li><code>malloc</code>语句分配字节数</li>
+<li>cache misses或page faults数</li>
+<li>I/O操作数</li>
+<li>…</li>
+</ol>
+<p><strong>Definition 1</strong>：<em>performance map</em>是一个函数$\mathit{perfmap}: \mathcal{K}\rightarrow \mathcal{V}$，其中$\mathcal{K}$表示<em>program components</em>对应的相关的键值，$\mathcal{V}$表示根据性能值（执行次数？）排序的集合。</p>
+<p><strong>Definition 2</strong>：位于时间戳<em>t</em>的<em>cumulative maximum map</em>是函数$\mathit{cumulmax_t}: \mathcal{K}\rightarrow \mathcal{V}$。</p>
 <script type="math/tex; mode=display">
-T_1 = 1 - 1 + 1 - 1 + \dots \\
-T_2 = 1 - 2 + 3 - 4 + \dots \\
-T = \sum_i^n i = 1 + 2 + 3 + \dots</script><p>显然, $T_1$的值求得为0.</p>
+\forall k\in\mathcal{K}: \mathit{cumulmax_t}(k)=max_{i\in\mathcal{I_t}}\mathcal{perfmap_i}(k)</script><p>大致意思就是求对于某个<em>program components</em>的执行次数最大值。</p>
+<p><strong>Definition 3</strong>: <em>NEWMAX</em>在输入<em>i</em>位于某个时间戳<em>t</em>满足以下条件时返回<em>true</em>。</p>
 <script type="math/tex; mode=display">
-\begin{aligned}
-1 - T_1 &= 1 - (1 - 1 + 1 - 1 + \dots) \\
-&= 1 - 1 + 1 - 1 + \dots \\
-&= T_1\\
-\\
-2T_1 &= 1 \\
-T_1 &= \frac{1}{2}
-\end{aligned}</script><p>接下来, 计算$T_2 + T_2$, 将第二个$T_2$向后移一位.</p>
+\exists k\in\mathcal{K}\ s.t.\ \mathit{perfmap_i}(k) \gt \mathcal{cumulmax_t}(k)</script><p>大致就是这个时间点的输入i的执行次数大于之前所有执行次数的最大值。这个输入<em>i</em>让程序执行了更多次，更可能引发性能问题。</p>
+<p><strong>Definition 4</strong>: 输入<em>i</em>最大化组件<em>k</em>性能值当且仅当性能属性注册了目前观测到的最大值：</p>
 <script type="math/tex; mode=display">
-\begin{aligned}
-T_2 + T_2 &= 1 - 2 + 3 - 4 + \dots + (n-1) - n + \\
-          &\ \ \ \ \ \ \ \ \ \ \ \ 1 - 2 + 3 - 4 + \dots + (n-1) - n \\
-          &= 1 - (2 - 1) + (3 - 2) - (4 - 3) + \dots \\
-          &= 1 - 1 + 1 - 1 + \dots \\
-          &= T_1 \\
-\\
-2T_2 &= \frac{1}{2} \\
-T_2 &= \frac{1}{4}
-\end{aligned}</script><p>最后计算$T - T_2$:</p>
+\mathcal{maximizes_t}(i,k)\Leftrightarrow \mathcal{perfmap_i}(k)=\mathcal{cumulmax_t}(k)</script><p><strong>Definition 5</strong>: 输入<em>i</em>被<em>favored</em>当且仅当满足以下条件：</p>
 <script type="math/tex; mode=display">
-\begin{aligned}
-T - T_2 &= 1 + 2 + 3 + \dots \\
-& - (1 - 2 + 3 - 4 + \dots) \\
-&= 4 + 8 + 12 + 16 + \dots \\
-&= 4(1 + 2 + 3 + \dots) \\
-&= 4T \\
-\\
-3T &= -T_2 \\
-T &= -\frac{1}{12}
-\end{aligned}</script><p>由此证得, $1 + 2 + 3 + \dots = -\frac{1}{12} $.</p>
-
+\mathcal{favored_t}(i)\Leftrightarrow \exists k\in\mathcal{K}\ s.t.\ \mathcal{maximizes_t}(i, k)</script><p>也就是输入<em>i</em>使某个组件$\mathcal{K}$的执行次数达到最大。</p>
+<p><strong>Definition 6</strong>: 选择概率：</p>
+<script type="math/tex; mode=display">
+FUZZPROB_t(i)=1\ if\ favored_t(i)\ else\ \alpha</script><p>$\alpha$默认为0.01。</p>
+<h2 id="4-实现"><a href="#4-实现" class="headerlink" title="4 实现"></a>4 实现</h2><p>上面说的差不多了</p>
+<h2 id="5-评价"><a href="#5-评价" class="headerlink" title="5 评价"></a>5 评价</h2><h3 id="5-1-与SlowFuzz比较"><a href="#5-1-与SlowFuzz比较" class="headerlink" title="5.1 与SlowFuzz比较"></a>5.1 与SlowFuzz比较</h3><h3 id="5-2-与基于覆盖率的fuzzing进行比较"><a href="#5-2-与基于覆盖率的fuzzing进行比较" class="headerlink" title="5.2 与基于覆盖率的fuzzing进行比较"></a>5.2 与基于覆盖率的fuzzing进行比较</h3><p>这里使用AFL作为baseline</p>
+<h3 id="5-3-Case-Studies"><a href="#5-3-Case-Studies" class="headerlink" title="5.3 Case Studies"></a>5.3 Case Studies</h3><h2 id="6-效度威胁"><a href="#6-效度威胁" class="headerlink" title="6 效度威胁"></a>6 效度威胁</h2><p><strong>PERFFUZZ</strong>依赖于启发式的方法产生输入来完成测试目的，这也是和其他算法模型的输入生成技术相似的。</p>
+<p>这里使用CFG边的执行次数而非总体执行时间衡量计算复杂度。</p>
+<p>这个方法解决了在非凸性能空间上陷入局部最大的问题。</p>
+<h2 id="7-相关工作"><a href="#7-相关工作" class="headerlink" title="7 相关工作"></a>7 相关工作</h2>
       
     </div>
 
@@ -459,7 +495,9 @@ T &= -\frac{1}{12}
       
         <div class="post-tags">
           
-            <a href="/tags/Hello-World/" rel="tag"># Hello World</a>
+            <a href="/tags/software-testing/" rel="tag"># software testing</a>
+          
+            <a href="/tags/fuzz-testing/" rel="tag"># fuzz testing</a>
           
         </div>
       
@@ -472,8 +510,8 @@ T &= -\frac{1}{12}
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/18/初试py-afl-fuzz/" rel="next" title="初试py-afl-fuzz">
-                <i class="fa fa-chevron-left"></i> 初试py-afl-fuzz
+              <a href="/2018/10/13/BugBench-Benchmarks-for-Evaluating-Bug-Detection-Tools/" rel="next" title="BugBench: Benchmarks for Evaluating Bug Detection Tools">
+                <i class="fa fa-chevron-left"></i> BugBench: Benchmarks for Evaluating Bug Detection Tools
               </a>
             
           </div>
@@ -481,10 +519,6 @@ T &= -\frac{1}{12}
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/26/Fuzzing-a-survey/" rel="prev" title="Fuzzing - a survey">
-                Fuzzing - a survey <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -529,8 +563,17 @@ T &= -\frac{1}{12}
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -645,6 +688,22 @@ T &= -\frac{1}{12}
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#PerfFuzz-Automatically-Generating-Pathological-Inputs"><span class="nav-text">PerfFuzz: Automatically Generating Pathological Inputs</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-介绍"><span class="nav-text">1 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-概览"><span class="nav-text">2 概览</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-一个例子"><span class="nav-text">2.1 一个例子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-性能fuzzing"><span class="nav-text">2.2 性能fuzzing</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-PERFFUZZ算法"><span class="nav-text">3 PERFFUZZ算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-实现"><span class="nav-text">4 实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-评价"><span class="nav-text">5 评价</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-与SlowFuzz比较"><span class="nav-text">5.1 与SlowFuzz比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-与基于覆盖率的fuzzing进行比较"><span class="nav-text">5.2 与基于覆盖率的fuzzing进行比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-Case-Studies"><span class="nav-text">5.3 Case Studies</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-效度威胁"><span class="nav-text">6 效度威胁</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-相关工作"><span class="nav-text">7 相关工作</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
