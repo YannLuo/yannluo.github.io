@@ -118,7 +118,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://i.loli.net/2018/09/18/5ba0bca2dae57.png">
 <meta property="og:image" content="https://i.loli.net/2018/09/18/5ba0bca2dcfa5.png">
-<meta property="og:updated_time" content="2018-10-25T13:39:44.839Z">
+<meta property="og:updated_time" content="2018-10-29T05:46:17.274Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初试py-afl-fuzz">
 <meta name="twitter:description" content="github: https://github.com/jwilk/python-afl 入门:  Taking a look at python-afl by Jussi Judin Introduction to Fuzzing in Python with AFL by Alex Gaynor  需要在/etc/environment中添加 12export AFL_I_DONT_CARE_A">
@@ -367,7 +367,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-10-25 21:39:44" itemprop="dateModified" datetime="2018-10-25T21:39:44+08:00">2018-10-25</time>
+                <time title="修改时间：2018-10-29 13:46:17" itemprop="dateModified" datetime="2018-10-29T13:46:17+08:00">2018-10-29</time>
               
             
           </span>
@@ -428,7 +428,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1</span><br><span class="line">export PYTHON_AFL_PERSISTENT=1</span><br></pre></td></tr></table></figure>
 <p>保证正常使用, 第一个是啥忘记了, 第二个是确认开启使用持久模式.</p>
 <p>最简单的用法是<code>py-afl-fuzz -i input_dir/ -o results_dir/ -- python3 script.py</code>.</p>
-<p>使用<code>-C</code>选项就可以实现不用生成种子输入开始随机fuzzing了，不过需要在<code>input_dir/</code>下生成一个只有一个空格<code>`的文件</code>input0.txt`.</p>
+<p>使用<code>-C</code>选项就可以实现不用生成种子输入开始随机fuzzing了，不过需要在<code>input_dir/</code>下生成一个只有一个空格的文件<code>input0.txt</code>.</p>
 <p>其中, <code>inputs_dir</code>目录中给定的输入用例集合要尽可能<strong>小</strong>, 而且<strong>有趣</strong>, 这里有趣是指每个输入都应该能代表一类输入, 而非类似. </p>
 <p><code>results_dir</code>目录结构如下:</p>
 <blockquote>
