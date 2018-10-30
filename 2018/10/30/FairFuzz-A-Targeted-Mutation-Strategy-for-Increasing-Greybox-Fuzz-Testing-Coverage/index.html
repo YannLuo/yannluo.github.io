@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="FairFuzz: A Targeted Mutation Strategy for Increasing Greybox Fuzz Testing Coverage摘要本文提出了FAIRFUZZ，从两个方面改进AFL：  自动化识别很少被输入hit的分支 提出创新的mutation mask创造算法，使生成的输入能够hit给定的rare branch  1 介绍本文的主要贡献：  提出一个新颖的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FairFuzz: A Targeted Mutation Strategy for Increasing Greybox Fuzz Testing Coverage">
+<meta property="og:url" content="http://yoursite.com/2018/10/30/FairFuzz-A-Targeted-Mutation-Strategy-for-Increasing-Greybox-Fuzz-Testing-Coverage/index.html">
+<meta property="og:site_name" content="罗小米">
+<meta property="og:description" content="FairFuzz: A Targeted Mutation Strategy for Increasing Greybox Fuzz Testing Coverage摘要本文提出了FAIRFUZZ，从两个方面改进AFL：  自动化识别很少被输入hit的分支 提出创新的mutation mask创造算法，使生成的输入能够hit给定的rare branch  1 介绍本文的主要贡献：  提出一个新颖的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2018/10/30/5bd7e9186d486.png">
+<meta property="og:image" content="https://i.loli.net/2018/10/30/5bd8143182e24.png">
+<meta property="og:image" content="https://i.loli.net/2018/10/30/5bd81d613519c.png">
+<meta property="og:image" content="https://s1.ax1x.com/2018/10/30/iRC6vn.png">
+<meta property="og:image" content="https://i.loli.net/2018/10/30/5bd853b10766b.png">
+<meta property="og:updated_time" content="2018-10-30T13:08:38.218Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FairFuzz: A Targeted Mutation Strategy for Increasing Greybox Fuzz Testing Coverage">
+<meta name="twitter:description" content="FairFuzz: A Targeted Mutation Strategy for Increasing Greybox Fuzz Testing Coverage摘要本文提出了FAIRFUZZ，从两个方面改进AFL：  自动化识别很少被输入hit的分支 提出创新的mutation mask创造算法，使生成的输入能够hit给定的rare branch  1 介绍本文的主要贡献：  提出一个新颖的">
+<meta name="twitter:image" content="https://i.loli.net/2018/10/30/5bd7e9186d486.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/30/FairFuzz-A-Targeted-Mutation-Strategy-for-Increasing-Greybox-Fuzz-Testing-Coverage/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>FairFuzz: A Targeted Mutation Strategy for Increasing Greybox Fuzz Testing Coverage | 罗小米</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">罗小米</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-关于我">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于我</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/30/FairFuzz-A-Targeted-Mutation-Strategy-for-Increasing-Greybox-Fuzz-Testing-Coverage/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="罗小米">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/yannluo.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="罗小米">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">FairFuzz: A Targeted Mutation Strategy for Increasing Greybox Fuzz Testing Coverage
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-10-30 21:08:38" itemprop="dateCreated datePublished" datetime="2018-10-30T21:08:38+08:00">2018-10-30</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="FairFuzz-A-Targeted-Mutation-Strategy-for-Increasing-Greybox-Fuzz-Testing-Coverage"><a href="#FairFuzz-A-Targeted-Mutation-Strategy-for-Increasing-Greybox-Fuzz-Testing-Coverage" class="headerlink" title="FairFuzz: A Targeted Mutation Strategy for Increasing Greybox Fuzz Testing Coverage"></a>FairFuzz: A Targeted Mutation Strategy for Increasing Greybox Fuzz Testing Coverage</h1><h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>本文提出了<strong>FAIRFUZZ</strong>，从两个方面改进AFL：</p>
+<ol>
+<li>自动化识别很少被输入hit的分支</li>
+<li>提出创新的<em>mutation mask</em>创造算法，使生成的输入能够hit给定的<em>rare branch</em></li>
+</ol>
+<h2 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1 介绍"></a>1 介绍</h2><p>本文的主要贡献：</p>
+<ol>
+<li>提出一个新颖的<em>mutation mask</em>策略来增加hit rare branch的概率</li>
+<li>基于AFL，将上述策略集成到AFL上，实现FAIRFUZZ并开源</li>
+<li>以AFL为baseline，将<em>FAIRFUZZ</em>与之进行比较评价效果</li>
+</ol>
+<h2 id="2-概览"><a href="#2-概览" class="headerlink" title="2 概览"></a>2 概览</h2><h3 id="2-1-AFL概览"><a href="#2-1-AFL概览" class="headerlink" title="2.1 AFL概览"></a>2.1 AFL概览</h3><p><img src="https://i.loli.net/2018/10/30/5bd7e9186d486.png" alt="QQ截图20181030051537.png"></p>
+<p>主体流程：</p>
+<ol>
+<li>生成种子输入$Seeds$，传递给队列$Queue$</li>
+<li>$Queue$中取出一个$input$</li>
+<li>若该输入不值得fuzzing，则回到2</li>
+<li>否则为这个输入进行打分，得到$score$</li>
+<li>对于$input$的长度$|input|$（byte长度），根据所有不同的确定性变异策略进行变异（策略包括翻转bit，翻转byte，整数值的算术加和减，用感兴趣的整数值，如0，MAX_INT等替换bytes等），在新输入上运行测试用例，保存运行结果，若产生了新的覆盖，则把输入加到$Queue$中</li>
+<li>根据得到的$score$，对输入进行$\textit{MUTATEHAVOC}$变异，$\textit{MUTATEHAVOC}$是在$[1,256]$中采样一个变异次数$num$，使用随机变异策略在$input$的随机位置上进行变异（策略包括设置bytes为随机值，删除或拷贝输入的子序列等），执行$num$次，在新输入上得到运行结果</li>
+<li>重复步骤2~6</li>
+</ol>
+<h3 id="2-2-AFL覆盖率计算"><a href="#2-2-AFL覆盖率计算" class="headerlink" title="2.2 AFL覆盖率计算"></a>2.2 AFL覆盖率计算</h3><p>AFL使用基本块作为基本单位，然后使用一个唯一的$ID$记录这个基本块，基本块之间的转换$A\rightarrow B$关系用下式表示</p>
+<script type="math/tex; mode=display">
+ID(A\rightarrow B) = _{def} (ID(A)\gg 1)\oplus ID(B)</script><h3 id="2-3-AFL的局限性"><a href="#2-3-AFL的局限性" class="headerlink" title="2.3 AFL的局限性"></a>2.3 AFL的局限性</h3><h3 id="2-4-FAIRFUZZ概览"><a href="#2-4-FAIRFUZZ概览" class="headerlink" title="2.4 FAIRFUZZ概览"></a>2.4 FAIRFUZZ概览</h3><p>从直觉上来说，被少数输入击中的分支守卫代码比被大量生产的输入命中的分支保护的代码更不可能被彻底探索。</p>
+<p>主要识别输入中不可变异的部分以击中很少执行的分支，使输入保持满足很少执行分支的条件。</p>
+<h2 id="3-FAIRFUZZ算法"><a href="#3-FAIRFUZZ算法" class="headerlink" title="3 FAIRFUZZ算法"></a>3 FAIRFUZZ算法</h2><h3 id="3-1-变异Masking"><a href="#3-1-变异Masking" class="headerlink" title="3.1 变异Masking"></a>3.1 变异Masking</h3><p><strong>Definition 1.</strong> 一个变异用二元组$(c, m)$表示，含义为m个字节被变异影响，c是变异的种类：</p>
+<ul>
+<li>O：重写从位置k开始的m个字节</li>
+<li>I：在位置k插入m个字节</li>
+<li>D：在位置k删除m个字节</li>
+</ul>
+<p><strong>Definition 2.</strong> 已有输入x和测试目标T，函数$mask_{x, T}$定义为$mask_{x, T}: \mathcal{N}\rightarrow\mathcal{P}(\{O, I, D\})$，输入为输入x中的位置i，输出返回$\{O, I, D\}$的子集。若$satisfies(mutate(x, (c, 1), i), T)$，则$c\in mask_{x, T}(i)$。对于$mask_{x, T}(i)$中的c，在采取策略c变异后依然能够满足T：</p>
+<script type="math/tex; mode=display">
+\mathit{OK\_TO\_MUTATE(mask_{x, T}, \mu, k)}=\wedge_{i=k}^{k+m-1}c\in mask_{x,T}(i)</script><p>大致意思就是改变输入x的$[k, k+m-1]$这个区间后，依然能使T满足的变异种类，那么这个种类c就是<strong>OK_TO_MUTATE</strong>的。</p>
+<p><img src="https://i.loli.net/2018/10/30/5bd8143182e24.png" alt="QQ截图20181030161949.png"></p>
+<h3 id="3-2-稀有分支导向"><a href="#3-2-稀有分支导向" class="headerlink" title="3.2 稀有分支导向"></a>3.2 稀有分支导向</h3><h4 id="3-2-1-选择变异的输入"><a href="#3-2-1-选择变异的输入" class="headerlink" title="3.2.1 选择变异的输入"></a>3.2.1 选择变异的输入</h4><p><strong>Definition 3.</strong> $hits(x, b)$表示输入x经过分支b的次数</p>
+<p><strong>Definition 4.</strong> $\mathcal{I}$表示由fuzzing产生的输入。那么分支b的hit count为：</p>
+<script type="math/tex; mode=display">
+numHits[b] = |\{x\in\mathcal{I}: hits(x, b)\}|</script><p>一开始的想法是指定阈值和选择少于$p\%$的输入作为<strong>rare</strong>。但是初步试验后，拒绝了这个方法：</p>
+<ul>
+<li>设阈值为5，但是最少的分支也有20和15000输入hit</li>
+<li>这些阈值根据不同的benchmark需要修改，不能动态调整</li>
+</ul>
+<p><strong>Definition 5.</strong> 另$B$为程序中所有分支的集合，$B_v = \{b\in B: numHits[b]\gt 0\}$。那么一个分支b如果是<strong>rare branch</strong>应该满足：</p>
+<script type="math/tex; mode=display">
+numHits[b]\leq rarity\_cutoff</script><p>其中：</p>
+<script type="math/tex; mode=display">
+rarity\_cutoff = 2^i\ such\ that\ 2^{i-1}\lt min_{b'\in B_v}(numHits[b'])\leq 2^i</script><p><strong>Definition 6.</strong> 另$branches(x) = \{b\in B:hits(x, b)\}$。那么输入x击中路径中的击中次数最少的称为<strong>rarest branch</strong>，记为$b^*$。</p>
+<script type="math/tex; mode=display">
+b^* = argmin_{b\in branches(x)}numHits[b]</script><p><em>FAIRFUZZ</em>的选择只选择输入中<em>rarest branch</em>是<em>rare branch</em>的进行变异（算法2中的第5行）</p>
+<p>虽然只使用上述策略，<em>FAIRFUZZ</em>也会使用AFL的默认策略运行几个cycle。</p>
+<h4 id="3-2-2-计算变异mask"><a href="#3-2-2-计算变异mask" class="headerlink" title="3.2.2 计算变异mask"></a>3.2.2 计算变异mask</h4><p><img src="https://i.loli.net/2018/10/30/5bd81d613519c.png" alt="QQ截图20181030165902.png"></p>
+<h3 id="3-3-测试目标导向的输入剪枝"><a href="#3-3-测试目标导向的输入剪枝" class="headerlink" title="3.3 测试目标导向的输入剪枝"></a>3.3 测试目标导向的输入剪枝</h3><p>AFL采取两个技术保持输入的简短：</p>
+<ol>
+<li>短输入优先选择</li>
+<li>在变异前进行剪枝</li>
+</ol>
+<p>剪枝后的输入最小化需要变异的输入，约束是最小化后的输入需要击中相同的路径。</p>
+<p>但是使用这个约束来减短输入的长度并不够理想，放宽了这个约束可能会让输入更简短。</p>
+<p>所以<em>FAIRFUZZ</em>的做法是不需要经过相同的路径，而是只要与原始输入达到相同的目标分支即可。</p>
+<h2 id="4-实现和评价"><a href="#4-实现和评价" class="headerlink" title="4 实现和评价"></a>4 实现和评价</h2><p>基于AFL加了600行C代码实现了FAIRFUZZ，一篇CCS。。这个不能让老板看到。。</p>
+<p>在9个benchmark上实验。</p>
+<h3 id="4-1-与之前技术的覆盖率比较"><a href="#4-1-与之前技术的覆盖率比较" class="headerlink" title="4.1 与之前技术的覆盖率比较"></a>4.1 与之前技术的覆盖率比较</h3><p><code>AFL</code>，<code>FidgetyAFL</code>和<code>AFLFast.new</code>作为baseline。</p>
+<p>每个benchmark上跑24h，重复20次。</p>
+<h4 id="4-1-1-总体分支覆盖"><a href="#4-1-1-总体分支覆盖" class="headerlink" title="4.1.1 总体分支覆盖"></a>4.1.1 总体分支覆盖</h4><p><em>Why branch coverage?</em>。除了基本块转换覆盖（如branches），另一个常用的度量是评价路径覆盖。由于AFL事先问题，只有分支覆盖这个度量是鲁棒的。</p>
+<p>举个栗子，有俩分支$b_1$和$b_2$，A hits $b_1$，B hits $b_2$，C hits both $b_1$和$b_2$。若输入的顺序是A，B，C，那么路径$p_A=\{(b_1, 1)\}$，$p_B = \{(b_2, 1)\}$，$p_C = \{(b_1, 1), (b_2, 1)\}$，找到的路径计数为2；若输入的顺序是C，A，B，那么路径的计数只有1。branches的计数总为2。</p>
+<p><img src="https://s1.ax1x.com/2018/10/30/iRC6vn.png" alt="iRC6vn.png"></p>
+<p><em>结果</em>。除了<code>c++filt</code>的其他8个项目都是FAIRFUZZ效果最好。</p>
+<h4 id="4-1-2-覆盖差异的详细分析"><a href="#4-1-2-覆盖差异的详细分析" class="headerlink" title="4.1.2 覆盖差异的详细分析"></a>4.1.2 覆盖差异的详细分析</h4><h3 id="4-2-masking是否可以有效地导向分支？"><a href="#4-2-masking是否可以有效地导向分支？" class="headerlink" title="4.2 masking是否可以有效地导向分支？"></a>4.2 masking是否可以有效地导向分支？</h3><p>在FAIRFUZZ中添加<em>shadow mode</em>。该模式直接进行所有种类的变异而不考虑mask。</p>
+<p>下表显示了使用确定算法变异和havoc变异阶段，目标分支的百分比：</p>
+<p><img src="https://i.loli.net/2018/10/30/5bd853b10766b.png" alt="QQ截图20181030205050.png"></p>
+<p>结果显示mask大大提升了变异输入hit target branch的百分比。</p>
+<p>mask技术可以用来导向需要测试的函数所在的分支，或者代码最近修改或容易引发bug的片段等，这些场景下可以通过mutation mask来定位目标分支。</p>
+<h2 id="5-讨论"><a href="#5-讨论" class="headerlink" title="5 讨论"></a>5 讨论</h2><p>本工作的评价可能不适合泛化到其他项目</p>
+<p>此方法不能以任何AFL到达不了的分支做目标，这很显然。。</p>
+<p>FAIRFUZZ在<code>xmllint</code>这个benchmark上找关键词序列时很有效。这是因为<code>parser.c</code>使用<code>CMPn</code>这个宏，结构上和<em>byte-by-byte</em>比较相同，每匹配到一个新字符就会产生一个新的覆盖。</p>
+<h2 id="6-其他相关工作"><a href="#6-其他相关工作" class="headerlink" title="6 其他相关工作"></a>6 其他相关工作</h2>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/26/Evaluating-Fuzz-Testing/" rel="next" title="Evaluating Fuzz Testing">
+                <i class="fa fa-chevron-left"></i> Evaluating Fuzz Testing
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/yannluo.png"
+                alt="罗小米" />
+            
+              <p class="site-author-name" itemprop="name">罗小米</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/ly941122/activities" target="_blank" title="知乎"><i class="fa fa-fw fa-address-card"></i>知乎</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yannluo@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#FairFuzz-A-Targeted-Mutation-Strategy-for-Increasing-Greybox-Fuzz-Testing-Coverage"><span class="nav-text">FairFuzz: A Targeted Mutation Strategy for Increasing Greybox Fuzz Testing Coverage</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要"><span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-介绍"><span class="nav-text">1 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-概览"><span class="nav-text">2 概览</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-AFL概览"><span class="nav-text">2.1 AFL概览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-AFL覆盖率计算"><span class="nav-text">2.2 AFL覆盖率计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-AFL的局限性"><span class="nav-text">2.3 AFL的局限性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-FAIRFUZZ概览"><span class="nav-text">2.4 FAIRFUZZ概览</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-FAIRFUZZ算法"><span class="nav-text">3 FAIRFUZZ算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-变异Masking"><span class="nav-text">3.1 变异Masking</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-稀有分支导向"><span class="nav-text">3.2 稀有分支导向</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1-选择变异的输入"><span class="nav-text">3.2.1 选择变异的输入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-计算变异mask"><span class="nav-text">3.2.2 计算变异mask</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-测试目标导向的输入剪枝"><span class="nav-text">3.3 测试目标导向的输入剪枝</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-实现和评价"><span class="nav-text">4 实现和评价</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-与之前技术的覆盖率比较"><span class="nav-text">4.1 与之前技术的覆盖率比较</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-1-总体分支覆盖"><span class="nav-text">4.1.1 总体分支覆盖</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-2-覆盖差异的详细分析"><span class="nav-text">4.1.2 覆盖差异的详细分析</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-masking是否可以有效地导向分支？"><span class="nav-text">4.2 masking是否可以有效地导向分支？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-讨论"><span class="nav-text">5 讨论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-其他相关工作"><span class="nav-text">6 其他相关工作</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">罗小米</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
