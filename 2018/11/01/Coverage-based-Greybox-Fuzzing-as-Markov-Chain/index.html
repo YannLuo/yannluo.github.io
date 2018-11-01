@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Coverage-based Greybox Fuzzing as Markov Chain1 介绍现有fuzzer最主要的挑战是：许多fuzz执行少数相同路径。举个栗子，fuzzing一张有效的图片文件，那么变异后的图片有90%的可能性执行拒绝无效图片文件的路径$\pi$。fuzzing一张无效的图片文件，有99.999%的概率变异之后的文件执行相同的路径$\pi$。我们称路径$\pi$为hig">
+<meta name="keywords" content="software testing,fuzz testing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Coverage-based Greybox Fuzzing as Markov Chain">
+<meta property="og:url" content="http://yoursite.com/2018/11/01/Coverage-based-Greybox-Fuzzing-as-Markov-Chain/index.html">
+<meta property="og:site_name" content="罗小米">
+<meta property="og:description" content="Coverage-based Greybox Fuzzing as Markov Chain1 介绍现有fuzzer最主要的挑战是：许多fuzz执行少数相同路径。举个栗子，fuzzing一张有效的图片文件，那么变异后的图片有90%的可能性执行拒绝无效图片文件的路径$\pi$。fuzzing一张无效的图片文件，有99.999%的概率变异之后的文件执行相同的路径$\pi$。我们称路径$\pi$为hig">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2018/10/31/5bd9a576ce192.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/01/5bda5780ed53d.png">
+<meta property="og:updated_time" content="2018-11-01T06:32:39.187Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Coverage-based Greybox Fuzzing as Markov Chain">
+<meta name="twitter:description" content="Coverage-based Greybox Fuzzing as Markov Chain1 介绍现有fuzzer最主要的挑战是：许多fuzz执行少数相同路径。举个栗子，fuzzing一张有效的图片文件，那么变异后的图片有90%的可能性执行拒绝无效图片文件的路径$\pi$。fuzzing一张无效的图片文件，有99.999%的概率变异之后的文件执行相同的路径$\pi$。我们称路径$\pi$为hig">
+<meta name="twitter:image" content="https://i.loli.net/2018/10/31/5bd9a576ce192.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/01/Coverage-based-Greybox-Fuzzing-as-Markov-Chain/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Coverage-based Greybox Fuzzing as Markov Chain | 罗小米</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">罗小米</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-关于我">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于我</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/01/Coverage-based-Greybox-Fuzzing-as-Markov-Chain/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="罗小米">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/yannluo.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="罗小米">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Coverage-based Greybox Fuzzing as Markov Chain
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-01 14:32:39" itemprop="dateCreated datePublished" datetime="2018-11-01T14:32:39+08:00">2018-11-01</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/paper/" itemprop="url" rel="index"><span itemprop="name">paper</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Coverage-based-Greybox-Fuzzing-as-Markov-Chain"><a href="#Coverage-based-Greybox-Fuzzing-as-Markov-Chain" class="headerlink" title="Coverage-based Greybox Fuzzing as Markov Chain"></a>Coverage-based Greybox Fuzzing as Markov Chain</h1><h2 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1 介绍"></a>1 介绍</h2><p>现有fuzzer最主要的挑战是：许多fuzz执行少数相同路径。举个栗子，fuzzing一张有效的图片文件，那么变异后的图片有90%的可能性执行拒绝无效图片文件的路径$\pi$。fuzzing一张无效的图片文件，有99.999%的概率变异之后的文件执行相同的路径$\pi$。我们称路径$\pi$为<em>high-frequency</em>路径。</p>
+<p>所以本文工作提出一些策略来帮助在相同的fuzz次数下探索<em>low-frequency</em>路径。实验结果表明我们的AFL工具在GUN binutils中发现9个漏洞，他们被在US National漏洞数据库中列为CVEs（Common Vulnerabilities &amp; Exposures，常见的漏洞和风险)。AFLFAST发现6个CVEs的速度是AFL的14倍，发现3个在8次运行24小时的fuzz中AFL没发现的CVEs。</p>
+<p>AFLFast的核心思想（似乎？）是对初始化的种子非常低的能量，每当种子被选择后（TM看不懂。。）主要实现了一个power schedule，慢慢看吧。。</p>
+<p>AFL实现的power schedule总是给予高能量（<em>high energy</em>）。给初始化种子大量的能量能够帮助发现更多近邻，这些近邻执行<em>low-frequency</em>路径。举个栗子，fuzz一张有效的图来生成更多有效的图<em>make sense</em>。而且赋值给这些近邻也很<em>make sense</em>。但是执行一段时间后，发现了更多种子，这些种子会执行<em>high-frequency</em>路径，导致若最新的种子是无效图片文件，生成合法图片文件的概率显著降低。</p>
+<p>而AFLFAST给<em>high-frequency</em>路径低能量，给<em>low-frequency</em>路径高能量。为了估计fuzzer执行路径$i$的概率，AFLFAST使用最大似然估计$\hat{p}_i=f(i)/n$，$f(i)$是fuzz执行$i$的次数，$n$是fuzz生成所有测试用例经过路径的总数。</p>
+<p>同时发现power schedule和search strategies仅仅改变了AFL的效率（单位时间内发现的路径数），并没改变性能（发现路径的数量）。也就是说在发现漏洞的能力上和AFL相同，只是发现的更快。</p>
+<p>本文以KLEE这个符号执行器作为baseline进行漏洞检测比较。在KLEE-benchmark上9个error中的6个error，KLEE发现的速度比AFLFAST快，但是AFLFAST找到了5个新的bug。考虑代码覆盖率，AFLFAST比KLEE稍好，AFLFAST平均覆盖82%的代码，KLEE平均覆盖78%。</p>
+<p>本文贡献：</p>
+<ol>
+<li><strong>Markov Chain Model.</strong> 把基于覆盖的灰盒fuzzing建模成一个有状态空间的<em>Markov chian</em>的系统探索模型</li>
+<li><strong>Power Schedule.</strong> 提高较少执行路径执行的可能性</li>
+<li><p><strong>Search Strategies.</strong> </p>
+</li>
+<li><p><strong>Comparison to Symbolic Execution.</strong></p>
+</li>
+<li><strong>Tool.</strong> <a href="https://github.com/mboehme/aflfast" target="_blank" rel="noopener">AFLFAST</a></li>
+</ol>
+<h2 id="2-背景"><a href="#2-背景" class="headerlink" title="2 背景"></a>2 背景</h2><h3 id="2-1-CGF-Coverage-based-Greybox-Fuzzing"><a href="#2-1-CGF-Coverage-based-Greybox-Fuzzing" class="headerlink" title="2.1 CGF(Coverage-based Greybox Fuzzing)"></a>2.1 CGF(Coverage-based Greybox Fuzzing)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cur_location = &lt;COMPILE_TIME_RANDOM&gt;;</span><br><span class="line">shared_mem[cur_location ^ prev_location]++;</span><br><span class="line">prev_location = cur_locationi &gt;&gt; 1;</span><br></pre></td></tr></table></figure>
+<p>左移1位是为了区分基本块A和B的顺序的影响。另<code>ID(A) ^ (ID(B)&gt;&gt;1) ≠ (ID(A)&gt;&gt;1) ^ ID(B)</code>。</p>
+<p><em>Fuzzing stages.</em> AFL对种子输入进行fuzz，随机选择一系列的变异策略并应用到种子输入的随机位置。在确定性变异策略阶段，AFL在输入的每个字节上进行某些变异策略。我们可以认为首次被选到的种子输入有很高的能量。</p>
+<p><em>Binary instrumentation.</em> </p>
+<p><em>Modifications.</em> 本工作只关注<strong>CHOOSENEXT</strong>实现的搜索策略和<strong>ASSIGNENERGY</strong>实现的power schedules策略。</p>
+<h3 id="2-2-马尔科夫链"><a href="#2-2-马尔科夫链" class="headerlink" title="2.2 马尔科夫链"></a>2.2 马尔科夫链</h3><p>一个<em>Markov chain</em>是一个随机变量的序列$\{X_0, X_1, \dots, X_n\}$，$X_i$表示在时间$i$时的状态，状态的集合为$S=\{1, 2, \dots, N\}, N\in\mathbb{N}, X_i\in S$。马尔科夫链以状态$i$为初始状态的初始分布为$\mathbb{P}(X_0=i)$。</p>
+<p>概率矩阵为$\mathbf{P}=(p_{ij})$，若$|S|=N$，那么$\mathbf{P}$为$N\times N$的矩阵，每行的和为1。其中$p_{ij}=\mathbb{P}(X_{t+1}=j|X_t=i)$。</p>
+<p>另$\mathbb{\pi}$表示马尔科夫链的<em>stationary distribution（这是<strong>固有分布</strong>我终于看懂了哈哈哈哈哈哈哈哈）</em>，那么$\forall j\in S$满足：</p>
+<script type="math/tex; mode=display">
+0\leq \pi_j\leq 1 \\
+1 = \sum_{i\in S}\pi_i \\
+\pi_j = \sum_{i\in S}\pi_ip_{ij}</script><h2 id="3-马尔科夫链模型"><a href="#3-马尔科夫链模型" class="headerlink" title="3 马尔科夫链模型"></a>3 马尔科夫链模型</h2><h3 id="3-1-Coverage-based-Fuzzing-as-Markov-Chain"><a href="#3-1-Coverage-based-Fuzzing-as-Markov-Chain" class="headerlink" title="3.1 Coverage-based Fuzzing as Markov Chain"></a>3.1 Coverage-based Fuzzing as Markov Chain</h3><p><em>Time-in homogeneous model.</em> 假如fuzzer的初始化种子输入$t_0$执行路径0，输入$t_i$执行路径$i$之后马上探索到路径$i+1$。那么转换概率$p_{ij}$定义为生成的输入执行了路径$j$若它是由上一个输入$t_i$执行了路径$i$变异得到的。但是$p_{ij}$依赖于状态$i$到达的路径。假如一个输入$t_i’$也经过了路径$i$，那么$p_{ij}$执行路径$j$的概率会很不一样。也就是说这个马尔科夫链不是时间同构的。</p>
+<p><em>Time-homogeneous model.</em> 给定种子$T$，$S^+$表示由$T$执行到的路径集合，$S^-\nsubseteq S^+$表示由fuzzer变异得到的输入执行到的路径。那么马尔科夫链的状态集合就是</p>
+<script type="math/tex; mode=display">
+S = S^+\cup S^-</script><p>状态矩阵$\mathbf{P}=(p_{ij})$可以表示为：若$i\in S^+$，$p_{ij}$就是由种子$t_i$变异后的输入执行路径$j$的概率；否则若$i\in S^-$，那么$p_{ii}=1-\sum_{t_j\in T}p_{ji}$，其中$p_{ij}=p_{ji}, \forall\ t_j\in T$。这里有俩假设：</p>
+<ol>
+<li>从种子$t_i$变异得到输入执行路径$j$与从种子$t_j$执行路径$i$相似</li>
+<li>$i\in S^-$没有其他的未发现邻居</li>
+</ol>
+<p>根据大数定律，当执行步数$N$趋向于无穷大时，执行状态$i$的比例会趋向于固有分布$\pi_i$。</p>
+<p>我们称$\pi$的一个$high-density\ region$是一个路径的近邻$I$满足$\mu_{i\in I}(\pi_i)\gt\mu_{t_j\in T}(\pi_j)$，其中$\mu$是算术平均。$low-density\ region$同理。路径$i$和$j$在同个邻居中若$p_{ij}+p_{ji}\geq\epsilon$，其中$\epsilon$是一个算术常数。</p>
+<p><em>Sequence of chains.</em> 看自闭了。。</p>
+<p><em>Energy &amp; power schedules.</em> 让所有$s\in S^+$有一个能量。状态$i$的能量决定了应该由种子$t_i$变异生成的输入数量。一个状态的能量由预定义的<em>power schedule</em>决定。相当于<strong>FAIRFUZZ</strong>论文给出算法中的$score$。</p>
+<p><em>Long tails.</em> 固有分布中有很大数量的<em>very-low-density regions</em>和一小部分数量的<em>very-high-density regions</em>。</p>
+<p><img src="https://i.loli.net/2018/10/31/5bd9a576ce192.png" alt="QQ截图20181031205144.png"></p>
+<p>由图可知，大概30%的路径在简单的变异后就能执行到（185到280这一段），10%的路径需要生成1k到100k的测试用例后才能执行到（超过平均值的部分，0到30这一段）。也就是说，大多输入执行了少部分<em>high-frequency paths</em>。这些输入常常是不合法的。</p>
+<p><em>Rapid mixing.</em> </p>
+<p><em>Benefits.</em> 马尔科夫模型探索了程序的数值属性的有效近似，如最坏情况，平均执行时间和能量消耗。</p>
+<h3 id="3-2-运行实例"><a href="#3-2-运行实例" class="headerlink" title="3.2 运行实例"></a>3.2 运行实例</h3><h3 id="3-3-基于覆盖的Fuzzers的挑战"><a href="#3-3-基于覆盖的Fuzzers的挑战" class="headerlink" title="3.3 基于覆盖的Fuzzers的挑战"></a>3.3 基于覆盖的Fuzzers的挑战</h3><p>fuzzer通过<em>CHOOSENEXT</em>选择下一个输入$t\in T$，然后根据<code>p=ASSIGNENERGY(t)</code>决定生成变异输入的数量。通常$p\lt M,\ M\in \mathbb{N}$，M是变异生成输入的上界，在AFL中，$M\approx 160k$。</p>
+<p><em>More Energy Than Needed.</em> 设$i\in S^+$，$t_i$是执行状态$i$的种子输入。$X_{ij}$表示$t_i$通过变异发现新路径$j\in S^-$所需的变异次数，那么有以下式子：</p>
+<script type="math/tex; mode=display">
+\mathbb{E}[X_{ij}] = p_{ij}+(\mathbb{E}[X_{ij}+1])(1-p_{ij}) \\
+\mathbb{E}[X_{ij}] = \frac{1}{p_{ij}}</script><p><em>Example.</em> <img src="https://i.loli.net/2018/11/01/5bda5780ed53d.png" alt="QQ截图20181101093126.png"></p>
+<p>设当$t_i$被选中时，状态$i$的能量为$p(i)=2^{16}=64k$。那么当从状态****的输入$t_0$变异了$2^{16}$次后，会有几个输入找到状态b***。</p>
+<p><em>Excessive Energy for Hign-Density Regions.</em> 若保留下来的输入执行<em>high-density regions</em>，会有一个趋势—会有太多的能量赋予这些状态。通过定义可知，若马尔科夫链中的状态$i$的固有分布密度越高，fuzzing $t_i$ 生成的输入会执行<em>high-frequency paths</em>。</p>
+<p><em>Example.</em> 栗子就不说了，主要抛出了两个挑战，AFL的power schedules：</p>
+<ol>
+<li>可能赋予过多的能量，超过了需求，给与新且有趣的路径</li>
+<li>可能赋予太多的能量给了<em>high-density regions</em>，给予<em>low-density regions</em>的能量不够</li>
+</ol>
+<h2 id="4-改进灰盒fuzzing"><a href="#4-改进灰盒fuzzing" class="headerlink" title="4 改进灰盒fuzzing"></a>4 改进灰盒fuzzing</h2><p>本文提出更有效的基于覆盖的灰盒测试fuzzers发现<em>low-density region</em>未发现的状态，同时分配最少的总能量。</p>
+<ol>
+<li><strong>Search Strategy.</strong> fuzzer选择$i\in S^+$，使得$\exists j\in S^-$另$\pi_j$is low且$\mathbb{E}[X_{ij}]$最小。</li>
+<li><strong>Power Schedule.</strong> fuzzer赋值的能量函数$p(i)=\mathbb{E}[X_{ij}]$给状态$i$，使得fuzzing发现<em>low-density region</em>时间达到最小</li>
+</ol>
+<p>本文提出同构power schedules首先赋值低能量，然后根据选择的次数增加能量。同时，power schedules赋予状态的能量与状态固有分布的密度成反比。若状态$i$存在于<em>low-density region</em>，fuzzer可以分配更多能量来找这个区域中状态$i$的neighborhood。</p>
+<h3 id="4-1-Power-Schedules"><a href="#4-1-Power-Schedules" class="headerlink" title="4.1 Power Schedules"></a>4.1 Power Schedules</h3><p>$s(i)$表示种子$t_i$之前从队列$T$中选到的次数。$f(i)$表示执行状态$i$的生成输入的数量。能量函数$p(i)$就是关于$s(i)$和$p(i)$的函数。$f(i)/n$是最大似然估计。接下来讨论几种power schedules：</p>
+<p><strong>exploitation-based constant schedule(EXPLOIT)</strong>：$p(i)=\alpha(i)$，其中$\alpha(i)$是算法中<code>assignEnergy</code>的实现。AFL根据执行时间，块转换覆盖率，$t_i$的构造时间来计算$\alpha(i)$。</p>
+<p><strong>exploration-based constant schedule(EXPLORE)</strong>：和<strong>EXPLOIT</strong>差不多$p(i)=\frac{\alpha (i)}{\beta}$，其中$\beta\gt 1$。</p>
+<p><strong>Cut-Off Exponential(COE)</strong>：</p>
+<script type="math/tex; mode=display">
+\begin{equation}
+p(i)=\left\{
+\begin{array}{lcl}
+0 && {\text{if}\ f(i)>\mu}\\
+min(\frac{\alpha (i)}{\beta}\cdot 2^{s(i)}, M) && {\text{otherwise.}}
+\end{array} \right.
+\end{equation}</script><p>其中$\mu = \frac{\sum_{i\in S^+}f(i)}{|S^+|}$，也就是说说$\mu$是探索到的所有路径后生成数目数量的均值。</p>
+<p><strong>exponential schedule(FAST)</strong>：</p>
+<script type="math/tex; mode=display">
+p(i)=min(\frac{\alpha (i)}{\beta}\cdot \frac{2^{s(i)}}{f(i)}, M)</script><p>$s(i)$放在指数部分的直觉理由：本文提出的方法，期望的种子队列$T$本质上需要一个维护一个探索$low-density region$的输入序列，所以如果$s(i)$越大，直接含义上表示从输入队列中选择$t_i$输入的次数越多，也就是说状态$i$达到的路径数越少，状态$i$是个<em>low-density region</em>，所以放在指数上，$t_i$选取越多，就给它高能量值多变异变异。。。（太强大了，激动地说不出话_(:з」∠)_）</p>
+<p><strong>linear schedule(LINEAR)</strong>：</p>
+<script type="math/tex; mode=display">
+p(i) = min(\frac{\alpha(i)}{\beta}\cdot\frac{s(i)}{f(i)}, M)</script><p><strong>quadratic schedule(QUAD)</strong>：</p>
+<script type="math/tex; mode=display">
+p(i) = min(\frac{\alpha(i)}{\beta}\cdot\frac{s(i)^2}{f(i)}, M)</script><h3 id="4-2-Search-Strategies"><a href="#4-2-Search-Strategies" class="headerlink" title="4.2 Search Strategies"></a>4.2 Search Strategies</h3><p>搜索策略下一个选啥种子，这个也hin重要。这个决策依赖于种子之前被fuzz过的次数和fuzz相同路径的种子的数量决定。本文认为一个好的基于灰盒测试的fuzzer应该给<em>low-frequency paths</em>高优先级。</p>
+<p><strong>小$s(i)$优先</strong>：$s(i)$表示种子$t_i$之前在队列中选到的次数。</p>
+<p><strong>小$f(i)$优先</strong>：$f(i)$表示执行状态为$i$的生成的输入的数量。</p>
+<h2 id="5-评价：VANILLA（香草？理解为原生的）-VS-BOOSTED-CGF"><a href="#5-评价：VANILLA（香草？理解为原生的）-VS-BOOSTED-CGF" class="headerlink" title="5 评价：VANILLA（香草？理解为原生的） VS BOOSTED CGF"></a>5 评价：VANILLA（香草？理解为原生的） VS BOOSTED CGF</h2><h3 id="5-1-实现：AFLFAST-1-94b"><a href="#5-1-实现：AFLFAST-1-94b" class="headerlink" title="5.1 实现：AFLFAST 1.94b"></a>5.1 实现：AFLFAST 1.94b</h3><h3 id="5-2-漏洞"><a href="#5-2-漏洞" class="headerlink" title="5.2 漏洞"></a>5.2 漏洞</h3><p>这里要区别一下漏洞（vulnerability）和bug：<a href="https://yq.aliyun.com/ziliao/589078" target="_blank" rel="noopener">https://yq.aliyun.com/ziliao/589078</a></p>
+<p>大致意思就是bug一般指电脑系统的硬件或软件出错，漏洞一般指在软件，硬件，协议的具体实现或系统安全策略上存在缺陷（也就是说漏洞一般和安全相关？）</p>
+<h3 id="5-3-一般结果"><a href="#5-3-一般结果" class="headerlink" title="5.3 一般结果"></a>5.3 一般结果</h3><h3 id="5-4-Power-Schedules比较"><a href="#5-4-Power-Schedules比较" class="headerlink" title="5.4 Power Schedules比较"></a>5.4 Power Schedules比较</h3><p>结果：AFLFAST中实现的的<em>exponential schedule</em>表现好于其他schedules。<em>cut-off exponential schedule(coe)</em>效果略差于AFLFAST。24小时的实验后，所有schedules发现的unique crashes比其他三种（linear，quad，explore）多50%。</p>
+<h3 id="5-5-搜索策略的比较"><a href="#5-5-搜索策略的比较" class="headerlink" title="5.5 搜索策略的比较"></a>5.5 搜索策略的比较</h3><p>结果：两种策略的结合比各自使用策略效果更好。前12小时其他策略表现相似，24小时后策略1（改变了选favorite的策略）比策略2更有效。策略2（改变了从队列中选取测试输入的顺序）似乎效果不明显。用这个策略和不使用这个策略的AFLFAST效果相似。总之，AFLFAST集成两个策略后找到的unique crashes是原生AFLFAST或集成策略1找到unique crashes数量的2倍。</p>
+<h3 id="5-6-结果总结"><a href="#5-6-结果总结" class="headerlink" title="5.6 结果总结"></a>5.6 结果总结</h3><p>在GUN binutils v2.26上评价了AFLFAST和几种搜索/调度策略。exponential schedule比其他schedules效果更好。8次6小时的执行中，以工具nm和c++filt作为benchmark，集成了exponential schedule的AFLFAST比AFL找到多找到了1个数量级的unique crashes。在8次24小时的运行中，AFLFAST6个nm中的漏洞，速度是AFL的7倍，并找到了3个AFL没有找到的漏洞。AFLFAST发现nm中的2个bug，速度是AFL的7倍，且找到了一个AFL没有找到的bug。平均来说，AFLFAST找error的速度是AFL的17倍，并且7个error是AFL没找到的。</p>
+<h2 id="6-基于符号执行的白盒fuzzing-VS-基于覆盖的灰盒fuzzing"><a href="#6-基于符号执行的白盒fuzzing-VS-基于覆盖的灰盒fuzzing" class="headerlink" title="6 基于符号执行的白盒fuzzing VS 基于覆盖的灰盒fuzzing"></a>6 基于符号执行的白盒fuzzing VS 基于覆盖的灰盒fuzzing</h2><p>结论：在KLEE的benchmark bugs上进行评价比较</p>
+<ol>
+<li>在效率上，KLEE比AFLFAST好</li>
+<li>在效果上，1个小时的timeout内，AFLFAST的效果比KLEE好</li>
+</ol>
+<p>为了检测漏洞，KLEE需要基于约束的漏洞检测机制和假设约束编码的完整性和环境建模，而AFLFAST仅仅需要执行程序报告任何crashes。</p>
+<p>考虑代码覆盖率，AFLFAST比KLEE稍好。当然，结合起来使用效果更好，使用它们各自的强项来减弱对方的弱点。</p>
+<h2 id="7-在AFL-2-33B上部署"><a href="#7-在AFL-2-33B上部署" class="headerlink" title="7 在AFL 2.33B上部署"></a>7 在AFL 2.33B上部署</h2><h2 id="8-相关工作"><a href="#8-相关工作" class="headerlink" title="8 相关工作"></a>8 相关工作</h2><h2 id="9-结论"><a href="#9-结论" class="headerlink" title="9 结论"></a>9 结论</h2><p>符号执行器的扩展性不如黑盒或灰盒的fuzzers。</p>
+<p>本文提出一个方法改进AFL工具产生crash的效率。AFLFAST在单位时间内可以发现比AFL更多的unique crashes而且可以发现AFL不能发现的漏洞，其他的漏洞AFLFAST发现的比AFL早。</p>
+<p>更重要的是，本文提供了通过把CGF建模为Markov chain探索状态空间的尝试。本文的方法会尝试隐藏在<em>low-density region</em>上更多的状态和在<em>high-density region</em>上生成更少的输入。</p>
+<p>一篇paper看两天。。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/software-testing/" rel="tag"># software testing</a>
+          
+            <a href="/tags/fuzz-testing/" rel="tag"># fuzz testing</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/30/FairFuzz-A-Targeted-Mutation-Strategy-for-Increasing-Greybox-Fuzz-Testing-Coverage/" rel="next" title="FairFuzz: A Targeted Mutation Strategy for Increasing Greybox Fuzz Testing Coverage">
+                <i class="fa fa-chevron-left"></i> FairFuzz: A Targeted Mutation Strategy for Increasing Greybox Fuzz Testing Coverage
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/yannluo.png"
+                alt="罗小米" />
+            
+              <p class="site-author-name" itemprop="name">罗小米</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/ly941122/activities" target="_blank" title="知乎"><i class="fa fa-fw fa-address-card"></i>知乎</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yannluo@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Coverage-based-Greybox-Fuzzing-as-Markov-Chain"><span class="nav-text">Coverage-based Greybox Fuzzing as Markov Chain</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-介绍"><span class="nav-text">1 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-背景"><span class="nav-text">2 背景</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-CGF-Coverage-based-Greybox-Fuzzing"><span class="nav-text">2.1 CGF(Coverage-based Greybox Fuzzing)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-马尔科夫链"><span class="nav-text">2.2 马尔科夫链</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-马尔科夫链模型"><span class="nav-text">3 马尔科夫链模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Coverage-based-Fuzzing-as-Markov-Chain"><span class="nav-text">3.1 Coverage-based Fuzzing as Markov Chain</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-运行实例"><span class="nav-text">3.2 运行实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-基于覆盖的Fuzzers的挑战"><span class="nav-text">3.3 基于覆盖的Fuzzers的挑战</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-改进灰盒fuzzing"><span class="nav-text">4 改进灰盒fuzzing</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-Power-Schedules"><span class="nav-text">4.1 Power Schedules</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-Search-Strategies"><span class="nav-text">4.2 Search Strategies</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-评价：VANILLA（香草？理解为原生的）-VS-BOOSTED-CGF"><span class="nav-text">5 评价：VANILLA（香草？理解为原生的） VS BOOSTED CGF</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-实现：AFLFAST-1-94b"><span class="nav-text">5.1 实现：AFLFAST 1.94b</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-漏洞"><span class="nav-text">5.2 漏洞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-一般结果"><span class="nav-text">5.3 一般结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-Power-Schedules比较"><span class="nav-text">5.4 Power Schedules比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-5-搜索策略的比较"><span class="nav-text">5.5 搜索策略的比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-6-结果总结"><span class="nav-text">5.6 结果总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-基于符号执行的白盒fuzzing-VS-基于覆盖的灰盒fuzzing"><span class="nav-text">6 基于符号执行的白盒fuzzing VS 基于覆盖的灰盒fuzzing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-在AFL-2-33B上部署"><span class="nav-text">7 在AFL 2.33B上部署</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-相关工作"><span class="nav-text">8 相关工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-结论"><span class="nav-text">9 结论</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">罗小米</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
