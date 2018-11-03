@@ -108,28 +108,25 @@
 
 
 
-  <meta name="description" content="github: https://github.com/jwilk/python-afl 入门:  Taking a look at python-afl by Jussi Judin Introduction to Fuzzing in Python with AFL by Alex Gaynor  需要在/etc/environment中添加 12export AFL_I_DONT_CARE_A">
+  <meta name="description" content="calculate_score(struct queue_entry* q)：计算得分（对于输入的fuzz次数） update_bitmap_score(struct queue_entry* q)：当发现一个新路径时，调用这个方法判断这个路径是否比已有路径more “favorable”。这个”favorables”的意图是最小化路径的集合来触发至今已发现到的bitmap的bits save_i">
 <meta name="keywords" content="software testing,fuzz testing">
 <meta property="og:type" content="article">
-<meta property="og:title" content="初试py-afl-fuzz">
-<meta property="og:url" content="http://yoursite.com/2018/09/18/初试py-afl-fuzz/index.html">
+<meta property="og:title" content="一篇毫不负责的afl-fuzz源码学习指北">
+<meta property="og:url" content="http://yoursite.com/2018/11/03/一篇毫不负责的afl-fuzz源码学习指北/index.html">
 <meta property="og:site_name" content="罗小米">
-<meta property="og:description" content="github: https://github.com/jwilk/python-afl 入门:  Taking a look at python-afl by Jussi Judin Introduction to Fuzzing in Python with AFL by Alex Gaynor  需要在/etc/environment中添加 12export AFL_I_DONT_CARE_A">
+<meta property="og:description" content="calculate_score(struct queue_entry* q)：计算得分（对于输入的fuzz次数） update_bitmap_score(struct queue_entry* q)：当发现一个新路径时，调用这个方法判断这个路径是否比已有路径more “favorable”。这个”favorables”的意图是最小化路径的集合来触发至今已发现到的bitmap的bits save_i">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://i.loli.net/2018/09/18/5ba0bca2dae57.png">
-<meta property="og:image" content="https://i.loli.net/2018/09/18/5ba0bca2dcfa5.png">
-<meta property="og:updated_time" content="2018-10-29T06:04:47.126Z">
+<meta property="og:updated_time" content="2018-11-03T05:18:12.919Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="初试py-afl-fuzz">
-<meta name="twitter:description" content="github: https://github.com/jwilk/python-afl 入门:  Taking a look at python-afl by Jussi Judin Introduction to Fuzzing in Python with AFL by Alex Gaynor  需要在/etc/environment中添加 12export AFL_I_DONT_CARE_A">
-<meta name="twitter:image" content="https://i.loli.net/2018/09/18/5ba0bca2dae57.png">
+<meta name="twitter:title" content="一篇毫不负责的afl-fuzz源码学习指北">
+<meta name="twitter:description" content="calculate_score(struct queue_entry* q)：计算得分（对于输入的fuzz次数） update_bitmap_score(struct queue_entry* q)：当发现一个新路径时，调用这个方法判断这个路径是否比已有路径more “favorable”。这个”favorables”的意图是最小化路径的集合来触发至今已发现到的bitmap的bits save_i">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/18/初试py-afl-fuzz/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/11/03/一篇毫不负责的afl-fuzz源码学习指北/"/>
 
 
 
@@ -139,7 +136,7 @@
   };
 </script>
 
-  <title>初试py-afl-fuzz | 罗小米</title>
+  <title>一篇毫不负责的afl-fuzz源码学习指北 | 罗小米</title>
   
 
 
@@ -308,7 +305,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/18/初试py-afl-fuzz/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/03/一篇毫不负责的afl-fuzz源码学习指北/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="罗小米">
@@ -325,7 +322,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">初试py-afl-fuzz
+          <h1 class="post-title" itemprop="name headline">一篇毫不负责的afl-fuzz源码学习指北
               
             
           </h1>
@@ -350,25 +347,9 @@
                 
               
 
-              <time title="创建时间：2018-09-18 17:11:54" itemprop="dateCreated datePublished" datetime="2018-09-18T17:11:54+08:00">2018-09-18</time>
+              <time title="创建时间：2018-11-03 13:18:12" itemprop="dateCreated datePublished" datetime="2018-11-03T13:18:12+08:00">2018-11-03</time>
             
 
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-10-29 14:04:47" itemprop="dateModified" datetime="2018-10-29T14:04:47+08:00">2018-10-29</time>
-              
             
           </span>
 
@@ -384,7 +365,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/碎碎念/" itemprop="url" rel="index"><span itemprop="name">碎碎念</span></a></span>
 
                 
                 
@@ -418,38 +399,59 @@
       
 
       
-        <p>github: <a href="https://github.com/jwilk/python-afl" target="_blank" rel="noopener">https://github.com/jwilk/python-afl</a></p>
-<p>入门:</p>
+        <p><code>calculate_score(struct queue_entry* q)</code>：计算得分（对于输入的fuzz次数）</p>
+<p><code>update_bitmap_score(struct queue_entry* q)</code>：当发现一个新路径时，调用这个方法判断这个路径是否比已有路径<em>more “favorable”</em>。这个”favorables”的意图是最小化路径的集合来触发至今已发现到的bitmap的bits</p>
+<p><code>save_if_interesting(char** argv, void* mem, u32 len, u8 fault)</code>：检查fuzzing期间<code>execve()</code>的结果是否<em>interesting</em>，如果是则保存或把输入放到队列中，返回1，反之返回0</p>
+<h2 id="技术细节"><a href="#技术细节" class="headerlink" title="技术细节"></a>技术细节</h2><p>详见<code>technical_details.txt</code></p>
+<h3 id="4-Culling-the-corpus"><a href="#4-Culling-the-corpus" class="headerlink" title="4 Culling the corpus"></a>4 Culling the corpus</h3><p>算法根据执行延迟和文件大小赋予队列中的每个实体一个得分；然后选择每个tuple得分最低的候选：</p>
+<ol>
+<li>找到下一个没有在<em>temporary working set</em>中的tuple</li>
+<li>定位这个tuple的<em>winning queue entry</em></li>
+<li>在<em>working set</em>中注册该<em>entry</em>中所有的tuples</li>
+<li>如果还有<em>working set</em>中还有遗漏的tuples，则返回1.</li>
+</ol>
+<p>通常用这种方法生成的”favored”种子集合比原来的集合小5-10倍。剩下的”Non-favored”不是直接弃用，而是以一定概率跳过：</p>
 <ul>
-<li><a href="https://barro.github.io/2018/01/taking-a-look-at-python-afl/" target="_blank" rel="noopener">Taking a look at python-afl</a> by Jussi Judin</li>
-<li><a href="https://alexgaynor.net/2015/apr/13/introduction-to-fuzzing-in-python-with-afl/" target="_blank" rel="noopener">Introduction to Fuzzing in Python with AFL</a> by Alex Gaynor</li>
+<li>如果有新的，<em>yet-to-be-fuzzed</em>的种子在队列中，那么<em>non-favored entries</em>以99%概率跳过该种子</li>
+<li>若没有新的<ul>
+<li>若当前<em>non-favored</em>之前fuzz过，则95%的概率跳过该种子</li>
+<li>否则，以75%的概率跳过该种子</li>
 </ul>
-<p>需要在<code>/etc/environment</code>中添加</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1</span><br><span class="line">export PYTHON_AFL_PERSISTENT=1</span><br></pre></td></tr></table></figure>
-<p>保证正常使用, 第一个是啥忘记了, 第二个是确认开启使用持久模式. （第一个想起来了！是要执行<code>sudo bash -c &#39;echo core &gt;/proc/sys/kernel/core_pattern&#39;</code>）</p>
-<p>最简单的用法是<code>py-afl-fuzz -i input_dir/ -o results_dir/ -- python3 script.py</code>.</p>
-<p>使用<code>-C</code>选项就可以实现不用生成种子输入开始随机fuzzing了，不过需要在<code>input_dir/</code>下生成一个只有一个空格的文件<code>input0.txt</code>.</p>
-<p>其中, <code>inputs_dir</code>目录中给定的输入用例集合要尽可能<strong>小</strong>, 而且<strong>有趣</strong>, 这里有趣是指每个输入都应该能代表一类输入, 而非类似. </p>
-<p><code>results_dir</code>目录结构如下:</p>
-<blockquote>
-<p>results/<br>├── crashes/<br>├── fuzz_bitmap<br>├── fuzzer_stats<br>├── hangs/<br>├── plot_data<br>└── queue/</p>
-</blockquote>
-<p><code>crashes</code>目录保存fuzz so far得到的所有craches.</p>
-<p><code>plot_data</code>文件中保存fuzz过程中探索到的路径, unique crash的个数和最大深度的变化.</p>
-<p>给个例子, 文件<code>hack.py</code>中有如下代码:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hack</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> a == <span class="number">234</span> <span class="keyword">and</span> b == <span class="number">102</span>:</span><br><span class="line">        <span class="keyword">raise</span> Exception()</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
-<p>我们想通过fuzz使其抛出异常, 即找到输入为<code>a=234, b=102</code>的情况.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> afl, os, sys, hack</span><br><span class="line"></span><br><span class="line">afl.init()</span><br><span class="line"></span><br><span class="line">sys.stdin.seek(<span class="number">0</span>)</span><br><span class="line">in_str = sys.stdin.read()</span><br><span class="line">a, b = in_str.strip().split()</span><br><span class="line">a = int(a)</span><br><span class="line">b = int(b)</span><br><span class="line">hack.hack(a, b)</span><br><span class="line"></span><br><span class="line">os._exit(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-<p><code>inputs/</code>中预给的输入文件<code>input0.txt</code>如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 2</span><br></pre></td></tr></table></figure>
-<p><a href="https://i.loli.net/2018/09/18/5ba0bca2dae57.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/18/5ba0bca2dae57.png" alt="fuzz1.png"></a></p>
-<p>发现两个能引发异常的输入, 分别是<code>\B1 2</code>和<code>q 2</code>, 没有找到<code>a=234, b=102</code>. 在有限时间内找到这个corner case很困难, 所以可以在字典中一些常用的可能引发错误的输入, 例如创建一个目录<code>dicts</code>, 创建<code>dict0.dict</code>, 内容为:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">234 102</span><br></pre></td></tr></table></figure>
-<p><a href="https://i.loli.net/2018/09/18/5ba0bca2dcfa5.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/18/5ba0bca2dcfa5.png" alt="fuzz2.png"></a></p>
-<p>很快就引发了第三个unique crash.</p>
-<p>接下来使用同样的方法对<code>pydantic.datetime_parse</code>下的<code>from_unix_seconds</code>方法进行fuzz, 很快找出三个unique crash, 分别是<code>\B1</code>, <code>q</code>, <code>-11111111111111111111</code>. 10分钟后发现第四个unique crash: <code>33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333</code>.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> afl, os, sys, pydantic</span><br><span class="line"></span><br><span class="line">afl.init()</span><br><span class="line"></span><br><span class="line">sys.stdin.seek(<span class="number">0</span>)</span><br><span class="line">t = sys.stdin.read().strip()</span><br><span class="line">t = int(t)</span><br><span class="line">pydantic.datetime_parse.from_unix_seconds(t)</span><br><span class="line"></span><br><span class="line">os._exit(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-<p>还有一种使用<code>afl.loop(N)</code>的用法,<code>N</code>表示每轮测试用例个数, 称为持久模式. 这种用法不用在<code>import</code>后写<code>afl.init()</code>, 最快的持久模式不应该包含可能被之前执行影响而改变的全局的状态. 这种用法可以用于将之前的执行结果重用在当前状态的场景下. </p>
+</li>
+</ul>
+<p>实证证明，这个策略实现了队列循环速度和种子多样性的平衡</p>
+<h3 id="5-剪枝输入"><a href="#5-剪枝输入" class="headerlink" title="5 剪枝输入"></a>5 剪枝输入</h3><p>trim不保证输入剪到最优，而且在精度和<code>execve()</code>数之间找到一个均衡点，保证tracemap的checksum不受影响。</p>
+<p>剪枝算法具体为：</p>
+<ol>
+<li>尝试把大块的数据比特置为0（zero large blocks of data with large stepovers），在之后这可以减少执行的次数</li>
+<li>通过不断减少块大小和步长尝试块删除，二进制搜索风格</li>
+<li>通过统计unique characters进行alphabet normalization和尝试批量替换零值</li>
+<li>最后，尝试在non-zero的字节上进行normalization</li>
+</ol>
+<p>这里zero过程不用0x00，afl-min使用ASCII字符’0’。这样做的原因是修改一般不会干扰文本解析。</p>
+<h3 id="6-Fuzzing策略"><a href="#6-Fuzzing策略" class="headerlink" title="6 Fuzzing策略"></a>6 Fuzzing策略</h3><p>确定性的策略包括：</p>
+<ul>
+<li>位翻转，使用不同的长度和步长<ul>
+<li>翻转单个bit</li>
+<li>一行翻转两个bit </li>
+<li>一行翻转四个bit</li>
+</ul>
+</li>
+<li>加和减一个小整数</li>
+<li>插入一个有趣的整数（0，1，INT_MAX等）</li>
+</ul>
+<p>使用这些确定性变异原因是non-crashing和crashing输入间可能只有微小的差距</p>
+<p>非确定性的步骤包括stacked位翻转，插入，删除，算数（加/减）和不同测试用例的拼接</p>
+<h3 id="8-crashes去重"><a href="#8-crashes去重" class="headerlink" title="8 crashes去重"></a>8 crashes去重</h3><p>仅仅查看faulting address可能导致完全不相关的两个issue聚类到一起了，因为fault发生在同一个公共的哭函数中（比如<code>strcmp</code>，<code>strcpy</code>等）</p>
+<p>在AFL中，认为crash是unique的当下面任意一个条件成立：</p>
+<ol>
+<li>crash trace包含了一个之前没有出现过的tuple</li>
+<li>crash遗漏了一个之前经常出现的tuple</li>
+</ol>
+<h3 id="9-调查crashes"><a href="#9-调查crashes" class="headerlink" title="9 调查crashes"></a>9 调查crashes</h3><p>afl-fuzz提供<code>crash exploration mode</code>对已知错误的测试输入进行fuzz</p>
+<p>与普通的<code>queue entries</code>不同，crashing inputs不会trim，他们会保持原状方便与parent比较（non-crashing entry）。</p>
+<p>参考文献：<a href="https://lcamtuf.blogspot.com/2014/11/afl-fuzz-crash-exploration-mode.html" target="_blank" rel="noopener"><a href="https://lcamtuf.blogspot.com/2014/11/afl-fuzz-crash-exploration-mode.html" target="_blank" rel="noopener">afl-fuzz: crash exploration mode</a></a></p>
+<p><code>crash exploration mode</code>下，可以让程序接收一个crashing test case，afl-fuzz从crashing的种子出发开始跑。然后程序就会看在保持程序crash的状态下能运行多远。让程序停止产生crash的变异会被排除。</p>
 
       
     </div>
@@ -485,8 +487,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/12/Using-Natural-Language-Processing-to-Automatically-Detect-Self-Admitted-Technical-Debt/" rel="next" title="Using Natural Language Processing to Automatically Detect Self-Admitted Technical Debt">
-                <i class="fa fa-chevron-left"></i> Using Natural Language Processing to Automatically Detect Self-Admitted Technical Debt
+              <a href="/2018/11/01/Coverage-based-Greybox-Fuzzing-as-Markov-Chain/" rel="next" title="Coverage-based Greybox Fuzzing as Markov Chain">
+                <i class="fa fa-chevron-left"></i> Coverage-based Greybox Fuzzing as Markov Chain
               </a>
             
           </div>
@@ -494,10 +496,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/22/所有正整数之和为-1-12的证明/" rel="prev" title="所有正整数之和为-1/12的证明">
-                所有正整数之和为-1/12的证明 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -542,8 +540,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -658,6 +665,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#技术细节"><span class="nav-text">技术细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Culling-the-corpus"><span class="nav-text">4 Culling the corpus</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-剪枝输入"><span class="nav-text">5 剪枝输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-Fuzzing策略"><span class="nav-text">6 Fuzzing策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-crashes去重"><span class="nav-text">8 crashes去重</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-调查crashes"><span class="nav-text">9 调查crashes</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -803,7 +826,65 @@
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
 </script>
@@ -822,41 +903,7 @@
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->
 
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-  
-
-  
-
-  
-  
-
-  
-  
-
+    
   
 
 
