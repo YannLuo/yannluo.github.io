@@ -109,7 +109,7 @@
 
 
   <meta name="description" content="PerfFuzz: Automatically Generating Pathological Inputs1 介绍已有的检测性能问题的研究大多数假设已有一定规模的输入。这些输入来源包括：  人工编写的性能测试 benchmark 在使用过程中常用的输入 用户遇到的触发性能问题的输入  往往这些输入引发的问题已经发现或修复，不能发现新的性能问题。 Pathological inputs：造成最坏算">
-<meta name="keywords" content="fuzz testing,software testing">
+<meta name="keywords" content="software testing,fuzz testing">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PerfFuzz: Automatically Generating Pathological Inputs">
 <meta property="og:url" content="http://yoursite.com/2018/10/22/PerfFuzz-Automatically-Generating-Pathological-Inputs/index.html">
@@ -118,7 +118,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://i.loli.net/2018/10/20/5bcad116eb701.png">
 <meta property="og:image" content="https://i.loli.net/2018/10/20/5bcad37db30c7.png">
-<meta property="og:updated_time" content="2018-11-01T14:10:02.823Z">
+<meta property="og:updated_time" content="2018-11-12T11:13:43.791Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PerfFuzz: Automatically Generating Pathological Inputs">
 <meta name="twitter:description" content="PerfFuzz: Automatically Generating Pathological Inputs1 介绍已有的检测性能问题的研究大多数假设已有一定规模的输入。这些输入来源包括：  人工编写的性能测试 benchmark 在使用过程中常用的输入 用户遇到的触发性能问题的输入  往往这些输入引发的问题已经发现或修复，不能发现新的性能问题。 Pathological inputs：造成最坏算">
@@ -367,7 +367,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-11-01 22:10:02" itemprop="dateModified" datetime="2018-11-01T22:10:02+08:00">2018-11-01</time>
+                <time title="修改时间：2018-11-12 19:13:43" itemprop="dateModified" datetime="2018-11-12T19:13:43+08:00">2018-11-12</time>
               
             
           </span>
@@ -476,7 +476,14 @@ FUZZPROB_t(i)=1\ if\ favored_t(i)\ else\ \alpha</script><p>$\alpha$默认为0.01
 max.\ path\ length = max_{i\in \mathcal{I_t}}\sum_{e\in \mathcal{E}}\mathit{perfmap}_i(e)</script><p><strong>Definition 8.</strong> <em>maximum hot spot</em>是控制流图的边中执行次数最多的边的执行数：</p>
 <script type="math/tex; mode=display">
 max.\ hot\ spot = max_{i\in\mathcal{I_t}}max_{e\in\mathcal{E}}\mathit{perfmap}_i(e)</script><h2 id="4-实现"><a href="#4-实现" class="headerlink" title="4 实现"></a>4 实现</h2><p>上面说的差不多了</p>
-<h2 id="5-评价"><a href="#5-评价" class="headerlink" title="5 评价"></a>5 评价</h2><h3 id="5-1-与SlowFuzz比较"><a href="#5-1-与SlowFuzz比较" class="headerlink" title="5.1 与SlowFuzz比较"></a>5.1 与SlowFuzz比较</h3><h3 id="5-2-与基于覆盖率的fuzzing进行比较"><a href="#5-2-与基于覆盖率的fuzzing进行比较" class="headerlink" title="5.2 与基于覆盖率的fuzzing进行比较"></a>5.2 与基于覆盖率的fuzzing进行比较</h3><p>这里使用AFL作为baseline</p>
+<h2 id="5-评价"><a href="#5-评价" class="headerlink" title="5 评价"></a>5 评价</h2><p>选择的benchmarks：</p>
+<ol>
+<li>libpng</li>
+<li>libjpeg-tubo</li>
+<li>zlib</li>
+<li>libxml2</li>
+</ol>
+<h3 id="5-1-与SlowFuzz比较"><a href="#5-1-与SlowFuzz比较" class="headerlink" title="5.1 与SlowFuzz比较"></a>5.1 与SlowFuzz比较</h3><h3 id="5-2-与基于覆盖率的fuzzing进行比较"><a href="#5-2-与基于覆盖率的fuzzing进行比较" class="headerlink" title="5.2 与基于覆盖率的fuzzing进行比较"></a>5.2 与基于覆盖率的fuzzing进行比较</h3><p>这里使用AFL作为baseline</p>
 <h3 id="5-3-Case-Studies"><a href="#5-3-Case-Studies" class="headerlink" title="5.3 Case Studies"></a>5.3 Case Studies</h3><h2 id="6-效度威胁"><a href="#6-效度威胁" class="headerlink" title="6 效度威胁"></a>6 效度威胁</h2><p><strong>PERFFUZZ</strong>依赖于启发式的方法产生输入来完成测试目的，这也是和其他算法模型的输入生成技术相似的。</p>
 <p>这里使用CFG边的执行次数而非总体执行时间衡量计算复杂度。</p>
 <p>这个方法解决了在非凸性能空间上陷入局部最大的问题。</p>
@@ -500,9 +507,9 @@ max.\ hot\ spot = max_{i\in\mathcal{I_t}}max_{e\in\mathcal{E}}\mathit{perfmap}_i
       
         <div class="post-tags">
           
-            <a href="/tags/fuzz-testing/" rel="tag"># fuzz testing</a>
-          
             <a href="/tags/software-testing/" rel="tag"># software testing</a>
+          
+            <a href="/tags/fuzz-testing/" rel="tag"># fuzz testing</a>
           
         </div>
       
