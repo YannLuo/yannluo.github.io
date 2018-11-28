@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="1 介绍PUT: program under test（待测程序） 模糊测试分类方法：  根据PUT的结构知识如何应用分类 白盒：白盒fuzzers常常使用重量级的程序分析，例如符号执行 灰盒 黑盒   根据测试用例如何生成分类 基于生成：一开始没有测试用例，从已有知识构建结构化或符合语法的测试输入(比如：XML) 基于变异：从已有的测试用例上根据生成策略生成新的测试用例    本文专注于灰盒基于">
+<meta name="keywords" content="fuzz testing,software testing">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Steelix: Program-State Based Binary Fuzzing">
+<meta property="og:url" content="http://yoursite.com/2018/11/28/Steelix-Program-State-Based-Binary-Fuzzing/index.html">
+<meta property="og:site_name" content="罗小米">
+<meta property="og:description" content="1 介绍PUT: program under test（待测程序） 模糊测试分类方法：  根据PUT的结构知识如何应用分类 白盒：白盒fuzzers常常使用重量级的程序分析，例如符号执行 灰盒 黑盒   根据测试用例如何生成分类 基于生成：一开始没有测试用例，从已有知识构建结构化或符合语法的测试输入(比如：XML) 基于变异：从已有的测试用例上根据生成策略生成新的测试用例    本文专注于灰盒基于">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2018/11/27/5bfd0ccb31363.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/27/5bfd2c6298c4e.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/28/5bfe769104f6b.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/28/5bfe80797b76b.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/28/5bfe825b61b4f.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/28/5bfe093bf40c1.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/28/5bfe8c033f0d3.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/28/5bfe8f6ca2a0a.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/28/5bfe2cc2189a5.png">
+<meta property="og:image" content="https://i.loli.net/2018/11/28/5bfe2f23367f2.png">
+<meta property="og:updated_time" content="2018-11-28T12:57:55.175Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Steelix: Program-State Based Binary Fuzzing">
+<meta name="twitter:description" content="1 介绍PUT: program under test（待测程序） 模糊测试分类方法：  根据PUT的结构知识如何应用分类 白盒：白盒fuzzers常常使用重量级的程序分析，例如符号执行 灰盒 黑盒   根据测试用例如何生成分类 基于生成：一开始没有测试用例，从已有知识构建结构化或符合语法的测试输入(比如：XML) 基于变异：从已有的测试用例上根据生成策略生成新的测试用例    本文专注于灰盒基于">
+<meta name="twitter:image" content="https://i.loli.net/2018/11/27/5bfd0ccb31363.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/28/Steelix-Program-State-Based-Binary-Fuzzing/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Steelix: Program-State Based Binary Fuzzing | 罗小米</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">罗小米</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-关于我">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于我</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/28/Steelix-Program-State-Based-Binary-Fuzzing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="罗小米">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/yannluo.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="罗小米">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Steelix: Program-State Based Binary Fuzzing
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-11-28 20:57:09 / 修改时间：20:57:55" itemprop="dateCreated datePublished" datetime="2018-11-28T20:57:09+08:00">2018-11-28</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/paper/" itemprop="url" rel="index"><span itemprop="name">paper</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1 介绍"></a>1 介绍</h1><p>PUT: program under test（待测程序）</p>
+<p>模糊测试分类方法：</p>
+<ol>
+<li>根据PUT的结构知识如何应用分类<ul>
+<li>白盒：白盒fuzzers常常使用重量级的程序分析，例如符号执行</li>
+<li>灰盒</li>
+<li>黑盒</li>
+</ul>
+</li>
+<li>根据测试用例如何生成分类<ul>
+<li>基于生成：一开始没有测试用例，从已有知识构建结构化或符合语法的测试输入(比如：XML)</li>
+<li>基于变异：从已有的测试用例上根据生成策略生成新的测试用例</li>
+</ul>
+</li>
+</ol>
+<p>本文专注于灰盒基于变异的fuzzing。一个最成功的技术就是基于覆盖的fuzzing，使用轻量级的插桩提取覆盖信息来确定哪些测试用例需要保留下来。如果输入出发了一个新的基本块，那么它就被认为是”interesting”被保留下来；否则就被弃用。基于覆盖的fuzzers通过增量方式探索PUT的执行路径。</p>
+<p>但是基于覆盖的fuzzing渗透能力有限，很难执行到被<em>magic bytes</em>比较保护的路径。</p>
+<p>benchmarks选用LAVA-M，DARPA CGC和五个实际程序。<em>Steelix</em> 在LAVA-M中的三个二进制程序上的表现远好于 <em>VUzzer</em>和 <em>AFL-lafintel</em>，平均找到的bug多了三倍。覆盖的行数平均多了10%+。发现了一个CVE和九个新bug。其中三个没有被<em>AFL-dyninst</em>发现。</p>
+<p>本文贡献：</p>
+<ol>
+<li>提出了一个基于程序状态的二进制fuzzing方法来执行被<em>magic bytes</em>保护的路径，在可接受的执行速度代价下</li>
+<li>提出轻量级的静态分析和二进制插桩收集覆盖和比较信息作为动态的反馈来指导变异</li>
+<li>实现了<em>Steelix</em>并评价效果</li>
+<li>找到一个CVE和九个新bug</li>
+</ol>
+<h1 id="2-总览"><a href="#2-总览" class="headerlink" title="2 总览"></a>2 总览</h1><h2 id="2-1-动机样例"><a href="#2-1-动机样例" class="headerlink" title="2.1 动机样例"></a>2.1 动机样例</h2><p><img src="https://i.loli.net/2018/11/27/5bfd0ccb31363.png" alt="QQ截图20181127172206.png"></p>
+<p>上面的例子中(a)最多需要变异$2^{4<em>8}$次，而(b)最多只需要变异$4</em>2^8$次。</p>
+<p>假如上述(b)中的输入有1000字节，但是<em>magic bytes</em>只有其中4个字节，AFL也很难执行到这条路径因为不知道定位在哪里而不能很有效率地进行变异。</p>
+<h2 id="2-2-方法总览"><a href="#2-2-方法总览" class="headerlink" title="2.2 方法总览"></a>2.2 方法总览</h2><p>本文方法有两个假设：</p>
+<ol>
+<li>PUT的源代码不一定能够得到，在二进制级别工作，可以在开源和闭源程序上都适用</li>
+<li>汇编代码中的比较操作数丢失了类型信息，整数、浮点数或者字符串/缓冲都编程了字节的比较，更明确直接</li>
+</ol>
+<p><img src="https://i.loli.net/2018/11/27/5bfd2c6298c4e.png" alt="QQ截图20181127193631.png"></p>
+<p>上图给出了<em>Steelix</em>的三个主要构件：<em>static analysis</em>，<em>binary instrumentation</em>，<em>the fuzzing loop</em></p>
+<p>首先接收二进制程序作为输入然后反汇编，对汇编代码基于几条规则过滤不敢兴趣的比较，提取感兴趣的比较和基本块信息，告诉插桩工具哪里要插桩和插啥桩。</p>
+<p>然后静态提取出来的信息会和二进制程序一起，传入插装工具。这个二进制插桩工具主要关注两点：</p>
+<ol>
+<li>记录比较的信息，记录在共享内存里，有空间限制（64KB）</li>
+<li>插桩程序得到比较操作数的值，然后在fuzzing过程中生成比较信息</li>
+</ol>
+<p>最后就是进入fuzzing loop，在fuzz过程中会得到覆盖和比较过程的反馈信息，推导出magic bytes的位置信息。覆盖，比较过程和位置信息会有目的地指导变异，比如选择合适的变异操作。</p>
+<h1 id="3-方法"><a href="#3-方法" class="headerlink" title="3 方法"></a>3 方法</h1><h2 id="3-1-静态分析"><a href="#3-1-静态分析" class="headerlink" title="3.1 静态分析"></a>3.1 静态分析</h2><h3 id="3-1-1-比较插桩"><a href="#3-1-1-比较插桩" class="headerlink" title="3.1.1 比较插桩"></a>3.1.1 比较插桩</h3><p>这里对x86 32-bit汇编插桩，在x86里面的比较可以用cmp/test指令或函数调用。</p>
+<p><code>test ebx, ebx</code>会检验<code>ebx</code>的值是否为0，若是就把<em>Zero Flag</em>置为1。</p>
+<p>cmp就是比较两个操作数，比如<code>cmp dword ptr [ebp-4], 9</code>就会在[ebp-4]为9时将ZF置为1。</p>
+<p>这个比较的值可以是1，2，4字节。</p>
+<h3 id="3-1-2-过滤不感兴趣的比较"><a href="#3-1-2-过滤不感兴趣的比较" class="headerlink" title="3.1.2 过滤不感兴趣的比较"></a>3.1.2 过滤不感兴趣的比较</h3><p>感兴趣的cmp/test插桩是哪些操作数对于Steelix来说有意义的。接下来就给出一些不感兴趣插桩的规则：</p>
+<ul>
+<li>单字节比较不插桩。这种比较可以简单地通过已有变异方法实现</li>
+<li>函数返回的插桩不插桩</li>
+</ul>
+<h3 id="3-1-3-抽取比较信息"><a href="#3-1-3-抽取比较信息" class="headerlink" title="3.1.3 抽取比较信息"></a>3.1.3 抽取比较信息</h3><p>在过滤不感兴趣的比较之后，Steelix通过静态分析扫描汇编生成两个列表的比较信息</p>
+<p>第一个列表保存感兴趣的cmp和test插桩。列表里的实体结构如下：<code>instruction_address: operand1_info: operand2_info</code></p>
+<p>第二个列表保存<code>strcmp</code>，<code>strncmp</code>或者<code>memcmp</code>函数调用的信息。每个实体保存结构如下：<code>function_call_instruction_address: functinon_name</code></p>
+<h2 id="3-2-二进制插桩"><a href="#3-2-二进制插桩" class="headerlink" title="3.2 二进制插桩"></a>3.2 二进制插桩</h2><h3 id="3-2-1-比较过程"><a href="#3-2-1-比较过程" class="headerlink" title="3.2.1 比较过程"></a>3.2.1 比较过程</h3><p>比较信息，和覆盖信息都记录在共享内存中，大小限制为64KB。定义比较过程（comparison progress）为多少个连续字节，一共有多少个字节的信息等信息。</p>
+<p><img src="https://i.loli.net/2018/11/28/5bfe769104f6b.png" alt="QQ截图20181128190540.png"></p>
+<p>举个栗子，上图四字节的比较有16个不同的状态，根据定义，使用$1\rightarrow 2\rightarrow 6\rightarrow 12\rightarrow 16$和$1\rightarrow 5\rightarrow 11\rightarrow 15\rightarrow16$来表示比较过程</p>
+<p>使用者两条路径的原因是可以确切地知道fuzzer应该变异那个字节</p>
+<h3 id="3-2-2-插桩机制"><a href="#3-2-2-插桩机制" class="headerlink" title="3.2.2 插桩机制"></a>3.2.2 插桩机制</h3><ul>
+<li>首先，比较操作数的实际值在运行时提取出来，对于一个寄存器操作数，它的值可以直接通过寄存器名获取。对于内存应用操作数，计算内存地址然后可以获取。</li>
+<li>然后，操作数用来生成比较过程信息</li>
+<li>最后，fuzzer通过共享内存获取比较信息</li>
+</ul>
+<p>最后，插桩帮助fuzzer保留可以触发程序状态改变的输入，允许fuzzer一个字节一个字节地匹配magic bytes。再举个栗子，有一个n字节的比较，如果完整地匹配n个字节，那么搜索空间是$2^{8<em>n}$，但是如果一个字节一个字节地匹配，那么复杂度就降到了$n</em>2^8$。</p>
+<h2 id="3-3-Fuzzing-loop"><a href="#3-3-Fuzzing-loop" class="headerlink" title="3.3 Fuzzing loop"></a>3.3 Fuzzing loop</h2><p>为了得到magic bytes的位置信息，一个可行的方法是使用污染分析</p>
+<p><img src="https://i.loli.net/2018/11/28/5bfe80797b76b.png" alt="QQ截图20181128194800.png"></p>
+<p>本文中使用插桩的反馈信息定位magic bytes。在Steelix中，在fuzzer变异之后，如果插桩反馈在匹配magic bytes上有了新的进展，那么就会保留新的测试用例，同时也会保留变异字节的位置信息。当fuzzer尝试变异新的测试输入时，就会尝试临近的两个字节。</p>
+<p><img src="https://i.loli.net/2018/11/28/5bfe825b61b4f.png" alt="QQ截图20181128195558.png"></p>
+<p>上图给了一个简单的例子。忽然看懂了。。这个对于magic bytes有个启发式的假设就是这些magic bytes常常在输入中聚在一块儿。但是有可能magic bytes的比较使用了输入的不同部分，在这种情况下，Steelix在LEM（local exhaustive mutations）以后就不会有新的progress了，Steelix会保留intermediate step input并进行变异，而不是把这些输入移出队列</p>
+<h1 id="4-实现和评价"><a href="#4-实现和评价" class="headerlink" title="4 实现和评价"></a>4 实现和评价</h1><p><a href="https://sites.google.com/site/steelix2017/" target="_blank" rel="noopener">Steelix</a>使用Python，C和C艹实现，静态分析的实现使用了<a href="https://github.com/idapython/src" target="_blank" rel="noopener">IDAPython</a>，二进制插桩实现使用了<a href="http://www.dyninst.org/dyninst" target="_blank" rel="noopener">Dyninst</a>，所有实验结果都在<a href="https://sites.google.com/site/steelix2017/" target="_blank" rel="noopener">网页</a>上可获取。</p>
+<h2 id="4-1-评价设置"><a href="#4-1-评价设置" class="headerlink" title="4.1 评价设置"></a>4.1 评价设置</h2><p><strong>评价数据集。</strong> 使用了广泛使用的benchmarks：LAVA-M和DARPA CGC sample binaries，还有5个实际程序（tiff2pdf，tiffcp，pngfix，gzip和tcpdump）。</p>
+<p><strong>State-of-the-art工具。</strong> 实验选择了三种比较工具：AFL-dyninst，VUzzer和AFL-lafintel</p>
+<ul>
+<li>AFL只在提供了源码的程序上有效（shocked。。）</li>
+<li>VUzzer是最近发布的fuzzer，它解决了magic bytes比较的问题</li>
+<li>AFL-lafintel也需要PUT的源代码</li>
+</ul>
+<p><strong>研究问题。</strong>然后就是设计了三个研究问题：</p>
+<ul>
+<li>RQ1：Steelix的bug检测能力如何？</li>
+<li>RQ2：Steelix的代码覆盖率如何？</li>
+<li>RQ3：Steelix在fuzzing loop中的负载如何？</li>
+</ul>
+<h2 id="4-2-LAVA-M数据集上的结果（RQ1）"><a href="#4-2-LAVA-M数据集上的结果（RQ1）" class="headerlink" title="4.2 LAVA-M数据集上的结果（RQ1）"></a>4.2 LAVA-M数据集上的结果（RQ1）</h2><p><img src="https://i.loli.net/2018/11/28/5bfe093bf40c1.png" alt="QQ截图20181128111904.png"></p>
+<p>上表报告了这些工具在LAVA-M数据集上发现的bug数。可以看出Steelix性能远好于SES和AFL-dyninst（发现0个bug，没写在表中）。在3个项目上比FUZZER，VUzzer和AFL-lafintel的效果好。这样的结果解释如下：</p>
+<ul>
+<li>许多注入的bug都被magic bytes比较保护。然后统计了一下通过局部彻底的变异直接找到的bug数，报告在Steelix这一列的括号里。然后发现局部彻底的变异找到了46%的bug。这说明比较过程指导的局部彻底变异能够很好地生成能够通过magic  bytes保护的语句</li>
+<li>和VUzzer比较，Steelix平衡执行速度和渗透能力。Steelix平均比VUzzer多执行了645倍的测试用例，Steelix能够执行更多的测试用例。另一方面Steelix可以处理任意操作数类型的cmp/test指令，而VUzzer只能处理立即数的。80%的比较包含立即数，也就是说VUzzer遗漏了20%的比较</li>
+<li>与AFL-lafintel相比，Steelix有magic bytes的位置信息，而AFL-lafintel不知道哪里变异测试输入。而且Steelix过滤了不感兴趣的比较。AFL-lafintel在<code>who</code>上插桩了99,866个，但是AFL的共享内存只有65,536个实体，阻碍了AFL-lafintel检测PUT的覆盖率变化，Steelix只需要插桩4,833个比较过程和6,385个基本块，用到大概25,000个共享内存实体。</li>
+</ul>
+<p>然后还可以发现Steelix在<code>uniq</code>上与VUzzer和AFL-lafintel相比效果差。和VUzzer相比，Steelix使用的变异操作对于<code>uniq</code>的测试输入（输入是包含ASCII字符串的文本文件）太细粒度了。Steelix中在字节级别上彻底的变异能能够很快地在文件上有很大的变化。VUzzer使用遗传算法进行交叉变异来生成新的测试用例，这允许在<code>uniq</code>中快速地大幅度改变字符串。和AFL-lafintel比较，本文的插桩是通过二进制重写来添加，比AFL-lafintel的在编译时插桩慢。在5个小时的实验时间里，AFL-lafintel执行了32.6m个测试，而AFL-dyninst和Steelix只执行了5.3m和4.5m个测试。尽管依赖于源代码，速度的优势能够让AFL-lafintel在5小时的时间段内在<code>uniq</code>程序上找到更多bug。</p>
+<h2 id="4-3-CGC-Sample-Binaries上的结果（RQ1）"><a href="#4-3-CGC-Sample-Binaries上的结果（RQ1）" class="headerlink" title="4.3 CGC Sample Binaries上的结果（RQ1）"></a>4.3 CGC Sample Binaries上的结果（RQ1）</h2><p>运行Steelix和AFL-dyninst三小时，下表展示了实验的总体结果，Steelix比AFL-dyninst多找一个。</p>
+<p><img src="https://i.loli.net/2018/11/28/5bfe8c033f0d3.png" alt="QQ截图20181128203713.png"></p>
+<p>两个fuzzer都没找到YAN0100002，这个bug只在输入能够导致程序进行百万次浮点运算时触发，这bug不是magic bytes相关的。</p>
+<p>KPRCA00001这个bug，如果给定的输入可以触发encoding函数，则AFL-dyninst和Steelix都可以在8分钟时找到bug。但是，如果初始化输入不触发encoding函数，那么AFL-dyninst很难在3小时时间内发现这个bug，但是Steelix可以在10分钟时发现这个bug。</p>
+<p>从这个实验结果中可知，给定好的初始化输入，AFL-dyninst和Steelix都能有效的发现bug，但是当初始化输入不是很理想的时候，Steelix由于有更强的渗透能力，所以更可能找到bug。</p>
+<h2 id="4-4-真实程序上的结果"><a href="#4-4-真实程序上的结果" class="headerlink" title="4.4 真实程序上的结果"></a>4.4 真实程序上的结果</h2><h3 id="4-4-1-Crash和Bug分析"><a href="#4-4-1-Crash和Bug分析" class="headerlink" title="4.4.1 Crash和Bug分析"></a>4.4.1 Crash和Bug分析</h3><p>发现了10个之前未知的Bug，其中一个被确认为CVE</p>
+<h3 id="4-4-2-覆盖率分析"><a href="#4-4-2-覆盖率分析" class="headerlink" title="4.4.2 覆盖率分析"></a>4.4.2 覆盖率分析</h3><p><img src="https://i.loli.net/2018/11/28/5bfe8f6ca2a0a.png" alt="QQ截图20181128205050.png"></p>
+<p>结果如上表，总体上来说，Steelix比AFL-dyninst在parsing工具（pngfix，tcpdump，tiffcp）上在代码行覆盖，函数覆盖和分支覆盖上提升了12.7%，9.7%和11.4%。tiff2pdf和gzip相对来说改进较少，这是因为parser程序经常包含很多magic bytes比较，Steelix能够比较好的渗透解决这些magic bytes</p>
+<h2 id="4-5-代价评价（RQ3）"><a href="#4-5-代价评价（RQ3）" class="headerlink" title="4.5 代价评价（RQ3）"></a>4.5 代价评价（RQ3）</h2><p><img src="https://i.loli.net/2018/11/28/5bfe2cc2189a5.png" alt="QQ截图20181128135025.png"></p>
+<p>AFL-dyninst插桩了每一个基本块（BB），Steelix插桩了基本块和比较。Steelix大概多了40%的插桩。</p>
+<p><img src="https://i.loli.net/2018/11/28/5bfe2f23367f2.png" alt="QQ截图20181128140058.png"></p>
+<p>然后比较执行测试用例的数目，可以看出Steelix比AFL-dyninst执行稍慢。</p>
+<p>多了40%的插桩数，只导致了11.5%执行测试用例数的减少，但是能覆盖更多的代码和找到更多bug。这个代价是比较小而且可接受的。</p>
+<h2 id="4-6-讨论"><a href="#4-6-讨论" class="headerlink" title="4.6 讨论"></a>4.6 讨论</h2><p>主要说明Steelix也不能完全有效处理所有magic bytes的比较，也不能代替符号执行和污染分析。但是在提供了较为轻量级的解决方案。</p>
+<h1 id="5-相关工作"><a href="#5-相关工作" class="headerlink" title="5 相关工作"></a>5 相关工作</h1><h2 id="5-1-基于符号执行的方法"><a href="#5-1-基于符号执行的方法" class="headerlink" title="5.1 基于符号执行的方法"></a>5.1 基于符号执行的方法</h2><h2 id="5-2-基于污染分析的方法"><a href="#5-2-基于污染分析的方法" class="headerlink" title="5.2 基于污染分析的方法"></a>5.2 基于污染分析的方法</h2><h2 id="5-3-fuzzing改进"><a href="#5-3-fuzzing改进" class="headerlink" title="5.3 fuzzing改进"></a>5.3 fuzzing改进</h2><ul>
+<li><p>种子选择算法和fuzzing调度策略来最大化bug检测能力</p>
+</li>
+<li><p>AFLFast集中关注<em>low-frequency paths</em></p>
+</li>
+<li>skyfire利用已有用例的知识生成高度结构化的输入</li>
+<li>还有工作在机器码上变异，而不是在已有规整的输入上（？）</li>
+<li>AFL-lafintel使用LLVM IR级别的程序表达形式把magic bytes比较转化到嵌套的one-byte比较。这样的转换可以帮助fuzzer在比较表达式上改进。AFL-lafintel在源代码级别上工作，Steelix直接在二进制级别上工作。AFL-lafintel不能得到magic bytes的定位，限制了它的性能。</li>
+</ul>
+<h1 id="6-结论"><a href="#6-结论" class="headerlink" title="6 结论"></a>6 结论</h1><ul>
+<li>提出了基于程序状态的二进制fuzzing方法 — Steelix</li>
+<li>程序状态不仅包含覆盖信息，还包含了比较过程的信息，可以通过轻量级的静态分析和二进制插桩得到</li>
+<li>在比较过程的指导下，Steelix可以渗透这些magic bytes比较，执行的代价在较低的层次</li>
+<li>最后实现了Steelix的原型并进行评价，发现大大改进了它检测bug和代码覆盖的能力</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/fuzz-testing/" rel="tag"># fuzz testing</a>
+          
+            <a href="/tags/software-testing/" rel="tag"># software testing</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/07/Angora-Efficient-Fuzzing-by-Principled-Search/" rel="next" title="Angora: Efficient Fuzzing by Principled Search">
+                <i class="fa fa-chevron-left"></i> Angora: Efficient Fuzzing by Principled Search
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/yannluo.png"
+                alt="罗小米" />
+            
+              <p class="site-author-name" itemprop="name">罗小米</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">22</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/ly941122/activities" target="_blank" title="知乎"><i class="fa fa-fw fa-address-card"></i>知乎</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yannluo@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-介绍"><span class="nav-text">1 介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-总览"><span class="nav-text">2 总览</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-动机样例"><span class="nav-text">2.1 动机样例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-方法总览"><span class="nav-text">2.2 方法总览</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-方法"><span class="nav-text">3 方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-静态分析"><span class="nav-text">3.1 静态分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-1-比较插桩"><span class="nav-text">3.1.1 比较插桩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-2-过滤不感兴趣的比较"><span class="nav-text">3.1.2 过滤不感兴趣的比较</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-3-抽取比较信息"><span class="nav-text">3.1.3 抽取比较信息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-二进制插桩"><span class="nav-text">3.2 二进制插桩</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-1-比较过程"><span class="nav-text">3.2.1 比较过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-2-插桩机制"><span class="nav-text">3.2.2 插桩机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Fuzzing-loop"><span class="nav-text">3.3 Fuzzing loop</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-实现和评价"><span class="nav-text">4 实现和评价</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-评价设置"><span class="nav-text">4.1 评价设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-LAVA-M数据集上的结果（RQ1）"><span class="nav-text">4.2 LAVA-M数据集上的结果（RQ1）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-CGC-Sample-Binaries上的结果（RQ1）"><span class="nav-text">4.3 CGC Sample Binaries上的结果（RQ1）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-真实程序上的结果"><span class="nav-text">4.4 真实程序上的结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-1-Crash和Bug分析"><span class="nav-text">4.4.1 Crash和Bug分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-2-覆盖率分析"><span class="nav-text">4.4.2 覆盖率分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-代价评价（RQ3）"><span class="nav-text">4.5 代价评价（RQ3）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6-讨论"><span class="nav-text">4.6 讨论</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-相关工作"><span class="nav-text">5 相关工作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-基于符号执行的方法"><span class="nav-text">5.1 基于符号执行的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-基于污染分析的方法"><span class="nav-text">5.2 基于污染分析的方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-fuzzing改进"><span class="nav-text">5.3 fuzzing改进</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-结论"><span class="nav-text">6 结论</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">罗小米</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
