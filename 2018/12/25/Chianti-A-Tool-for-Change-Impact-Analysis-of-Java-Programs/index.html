@@ -108,28 +108,26 @@
 
 
 
-  <meta name="description" content="github: https://github.com/jwilk/python-afl 入门:  Taking a look at python-afl by Jussi Judin Introduction to Fuzzing in Python with AFL by Alex Gaynor  需要在/etc/environment中添加 12export AFL_I_DONT_CARE_A">
-<meta name="keywords" content="fuzz testing,software testing">
+  <meta name="description" content="1. 介绍change impact analysis可以在以下三个方面帮助开发者：  帮助开发者在不同编辑上进行实验，观察受影响的代码段，用这些信息确定选择哪个编辑和如何设置参数 通过排除确定不被给定改变影响的测试用例，减少运行回归测试需要的时间和人力 通过给定一个安全的近似给定受测试失败影响的修改范围，减少debug需要的时间和人力  本文给定的回归测试方法假设有一个回归测试集$\mathca">
 <meta property="og:type" content="article">
-<meta property="og:title" content="初试py-afl-fuzz">
-<meta property="og:url" content="http://yoursite.com/2018/09/18/初试py-afl-fuzz/index.html">
+<meta property="og:title" content="Chianti: A Tool for Change Impact Analysis of Java Programs">
+<meta property="og:url" content="http://yoursite.com/2018/12/25/Chianti-A-Tool-for-Change-Impact-Analysis-of-Java-Programs/index.html">
 <meta property="og:site_name" content="罗小米">
-<meta property="og:description" content="github: https://github.com/jwilk/python-afl 入门:  Taking a look at python-afl by Jussi Judin Introduction to Fuzzing in Python with AFL by Alex Gaynor  需要在/etc/environment中添加 12export AFL_I_DONT_CARE_A">
+<meta property="og:description" content="1. 介绍change impact analysis可以在以下三个方面帮助开发者：  帮助开发者在不同编辑上进行实验，观察受影响的代码段，用这些信息确定选择哪个编辑和如何设置参数 通过排除确定不被给定改变影响的测试用例，减少运行回归测试需要的时间和人力 通过给定一个安全的近似给定受测试失败影响的修改范围，减少debug需要的时间和人力  本文给定的回归测试方法假设有一个回归测试集$\mathca">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://i.loli.net/2018/09/18/5ba0bca2dae57.png">
-<meta property="og:image" content="https://i.loli.net/2018/09/18/5ba0bca2dcfa5.png">
-<meta property="og:updated_time" content="2018-10-29T06:04:47.126Z">
+<meta property="og:image" content="https://i.loli.net/2018/12/24/5c20750e98d09.png">
+<meta property="og:updated_time" content="2018-12-25T05:40:31.080Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="初试py-afl-fuzz">
-<meta name="twitter:description" content="github: https://github.com/jwilk/python-afl 入门:  Taking a look at python-afl by Jussi Judin Introduction to Fuzzing in Python with AFL by Alex Gaynor  需要在/etc/environment中添加 12export AFL_I_DONT_CARE_A">
-<meta name="twitter:image" content="https://i.loli.net/2018/09/18/5ba0bca2dae57.png">
+<meta name="twitter:title" content="Chianti: A Tool for Change Impact Analysis of Java Programs">
+<meta name="twitter:description" content="1. 介绍change impact analysis可以在以下三个方面帮助开发者：  帮助开发者在不同编辑上进行实验，观察受影响的代码段，用这些信息确定选择哪个编辑和如何设置参数 通过排除确定不被给定改变影响的测试用例，减少运行回归测试需要的时间和人力 通过给定一个安全的近似给定受测试失败影响的修改范围，减少debug需要的时间和人力  本文给定的回归测试方法假设有一个回归测试集$\mathca">
+<meta name="twitter:image" content="https://i.loli.net/2018/12/24/5c20750e98d09.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/18/初试py-afl-fuzz/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/12/25/Chianti-A-Tool-for-Change-Impact-Analysis-of-Java-Programs/"/>
 
 
 
@@ -139,7 +137,7 @@
   };
 </script>
 
-  <title>初试py-afl-fuzz | 罗小米</title>
+  <title>Chianti: A Tool for Change Impact Analysis of Java Programs | 罗小米</title>
   
 
 
@@ -308,7 +306,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/18/初试py-afl-fuzz/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/25/Chianti-A-Tool-for-Change-Impact-Analysis-of-Java-Programs/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="罗小米">
@@ -325,7 +323,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">初试py-afl-fuzz
+          <h1 class="post-title" itemprop="name headline">Chianti: A Tool for Change Impact Analysis of Java Programs
               
             
           </h1>
@@ -350,46 +348,12 @@
                 
               
 
-              <time title="创建时间：2018-09-18 17:11:54" itemprop="dateCreated datePublished" datetime="2018-09-18T17:11:54+08:00">2018-09-18</time>
+              <time title="创建时间：2018-12-25 13:40:31" itemprop="dateCreated datePublished" datetime="2018-12-25T13:40:31+08:00">2018-12-25</time>
             
 
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-10-29 14:04:47" itemprop="dateModified" datetime="2018-10-29T14:04:47+08:00">2018-10-29</time>
-              
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/tools/" itemprop="url" rel="index"><span itemprop="name">tools</span></a></span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -418,38 +382,42 @@
       
 
       
-        <p>github: <a href="https://github.com/jwilk/python-afl" target="_blank" rel="noopener">https://github.com/jwilk/python-afl</a></p>
-<p>入门:</p>
+        <h1 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1. 介绍"></a>1. 介绍</h1><p><strong><em>change impact analysis</em></strong>可以在以下三个方面帮助开发者：</p>
+<ol>
+<li>帮助开发者在不同编辑上进行实验，观察受影响的代码段，用这些信息确定选择哪个编辑和如何设置参数</li>
+<li>通过排除确定不被给定改变影响的测试用例，减少运行回归测试需要的时间和人力</li>
+<li>通过给定一个安全的近似给定受测试失败影响的修改范围，减少debug需要的时间和人力</li>
+</ol>
+<p>本文给定的回归测试方法假设有一个回归测试集$\mathcal{T}$，<strong><em>change impact analysis</em></strong>包含如下步骤：</p>
+<ol>
+<li>源代码的编辑包含了一系列相互关联的原子修改$\mathcal{A}$，粒度达到方法级别</li>
+<li>然后对$\mathcal{T}$中的每个测试用例构建调用图，本文中使用动态执行测试用例的方法构建调用图</li>
+<li>给定一个回归测试的集合$\mathcal{T}$，确定一个子集$\mathcal{T’}$可能被改变$\mathcal{A}$影响，</li>
+<li>对于每个测试$t_i\in\mathcal{T’}$，通过分析可以得到原子修改$A$的子集$\mathcal{A’}$可能影响测试$t_i$的行为</li>
+</ol>
+<p>本文工作与之前的动态改变影响分析的工作不同的地方在于之前的方法确定受给定改变集合的程序中方法的子集。与之相反，我们的工作是给定测试，把影响这些测试的修改找出来。另外，本文的方法把代码编辑拆分成一系列语义合理，相互关联的“原子改变”，可以用来生成中间程序版本。</p>
+<p>本文贡献：</p>
+<ol>
+<li>示范了基本<strong><em>change impact analysis framework</em></strong>的用法(<a href="https://www.franktip.org/pubs/paste2001.pdf" target="_blank" rel="noopener">Change Impact Analysis for Object-Oriented Programs</a>)</li>
+<li>扩展了上文提到的技术来处理Java语言，包括匿名类和重载</li>
+<li>通过39组版本间的改变影响分析，发现平均52%的测试会受到影响；对于每个可能被影响的测试，平均3.95%的原子改变会影响到它们</li>
+</ol>
+<h1 id="2-方法概述"><a href="#2-方法概述" class="headerlink" title="2. 方法概述"></a>2. 方法概述</h1><p>本文中的变化影响分析依赖于计算<em>atomic changes</em>，这些变化在语义层面上捕获所有源代码的修改。目前<em>atomic changes</em>还停留在相对粗粒度的程度，包括添加类（AC），删除类（DC），添加方法（AM），删除方法（DM），改变方法（CM），增加域（AF），删除域（DF）和查找（如X.m()）修改（LC）。</p>
+<p>同时也计算原子改变之间的句法依赖。一个原子改变$A_1$依赖于另一个原子改变$A_2$若$A_1$在没有进行$A_2$操作的前提下修改了源程序后在句法上出现了错误。</p>
+<h1 id="4-原型"><a href="#4-原型" class="headerlink" title="4. 原型"></a>4. 原型</h1><p><em>Chianti</em>已经在eclipse环境中实现插件，该插件在概念上拆分为3个功能模块。一个模块负责从两个版本间导出原子改变，这个通过项目两个版本的抽象语法树比较实现。第二个部分读取测试调用图，计算受影响的测试及其影响的改变。第三部分管理允许用户可视化查看改变影响分析的信息的视图。</p>
+<p><img src="https://i.loli.net/2018/12/24/5c20750e98d09.png" alt="QQ截图20181224135606.png"></p>
+<p>当分析结果可用时，Eclipse workbench会产生一系列视图：</p>
 <ul>
-<li><a href="https://barro.github.io/2018/01/taking-a-look-at-python-afl/" target="_blank" rel="noopener">Taking a look at python-afl</a> by Jussi Judin</li>
-<li><a href="https://alexgaynor.net/2015/apr/13/introduction-to-fuzzing-in-python-with-afl/" target="_blank" rel="noopener">Introduction to Fuzzing in Python with AFL</a> by Alex Gaynor</li>
+<li><em>affecting changes</em>视图，每个受影响的测试都会显示关联的changes，</li>
+<li><em>automic-changes-by-category</em>视图，显示通过类别进行分组的不同的原子改变</li>
 </ul>
-<p>需要在<code>/etc/environment</code>中添加</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export AFL_I_DONT_CARE_ABOUT_MISSING_CRASHES=1</span><br><span class="line">export PYTHON_AFL_PERSISTENT=1</span><br></pre></td></tr></table></figure>
-<p>保证正常使用, 第一个是啥忘记了, 第二个是确认开启使用持久模式. （第一个想起来了！是要执行<code>sudo bash -c &#39;echo core &gt;/proc/sys/kernel/core_pattern&#39;</code>）</p>
-<p>最简单的用法是<code>py-afl-fuzz -i input_dir/ -o results_dir/ -- python3 script.py</code>.</p>
-<p>使用<code>-C</code>选项就可以实现不用生成种子输入开始随机fuzzing了，不过需要在<code>input_dir/</code>下生成一个只有一个空格的文件<code>input0.txt</code>.</p>
-<p>其中, <code>inputs_dir</code>目录中给定的输入用例集合要尽可能<strong>小</strong>, 而且<strong>有趣</strong>, 这里有趣是指每个输入都应该能代表一类输入, 而非类似. </p>
-<p><code>results_dir</code>目录结构如下:</p>
-<blockquote>
-<p>results/<br>├── crashes/<br>├── fuzz_bitmap<br>├── fuzzer_stats<br>├── hangs/<br>├── plot_data<br>└── queue/</p>
-</blockquote>
-<p><code>crashes</code>目录保存fuzz so far得到的所有craches.</p>
-<p><code>plot_data</code>文件中保存fuzz过程中探索到的路径, unique crash的个数和最大深度的变化.</p>
-<p>给个例子, 文件<code>hack.py</code>中有如下代码:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hack</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> a == <span class="number">234</span> <span class="keyword">and</span> b == <span class="number">102</span>:</span><br><span class="line">        <span class="keyword">raise</span> Exception()</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span></span><br></pre></td></tr></table></figure>
-<p>我们想通过fuzz使其抛出异常, 即找到输入为<code>a=234, b=102</code>的情况.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> afl, os, sys, hack</span><br><span class="line"></span><br><span class="line">afl.init()</span><br><span class="line"></span><br><span class="line">sys.stdin.seek(<span class="number">0</span>)</span><br><span class="line">in_str = sys.stdin.read()</span><br><span class="line">a, b = in_str.strip().split()</span><br><span class="line">a = int(a)</span><br><span class="line">b = int(b)</span><br><span class="line">hack.hack(a, b)</span><br><span class="line"></span><br><span class="line">os._exit(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-<p><code>inputs/</code>中预给的输入文件<code>input0.txt</code>如下:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 2</span><br></pre></td></tr></table></figure>
-<p><a href="https://i.loli.net/2018/09/18/5ba0bca2dae57.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/18/5ba0bca2dae57.png" alt="fuzz1.png"></a></p>
-<p>发现两个能引发异常的输入, 分别是<code>\B1 2</code>和<code>q 2</code>, 没有找到<code>a=234, b=102</code>. 在有限时间内找到这个corner case很困难, 所以可以在字典中一些常用的可能引发错误的输入, 例如创建一个目录<code>dicts</code>, 创建<code>dict0.dict</code>, 内容为:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">234 102</span><br></pre></td></tr></table></figure>
-<p><a href="https://i.loli.net/2018/09/18/5ba0bca2dcfa5.png" target="_blank" rel="noopener"><img src="https://i.loli.net/2018/09/18/5ba0bca2dcfa5.png" alt="fuzz2.png"></a></p>
-<p>很快就引发了第三个unique crash.</p>
-<p>接下来使用同样的方法对<code>pydantic.datetime_parse</code>下的<code>from_unix_seconds</code>方法进行fuzz, 很快找出三个unique crash, 分别是<code>\B1</code>, <code>q</code>, <code>-11111111111111111111</code>. 10分钟后发现第四个unique crash: <code>33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333</code>.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> afl, os, sys, pydantic</span><br><span class="line"></span><br><span class="line">afl.init()</span><br><span class="line"></span><br><span class="line">sys.stdin.seek(<span class="number">0</span>)</span><br><span class="line">t = sys.stdin.read().strip()</span><br><span class="line">t = int(t)</span><br><span class="line">pydantic.datetime_parse.from_unix_seconds(t)</span><br><span class="line"></span><br><span class="line">os._exit(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-<p>还有一种使用<code>afl.loop(N)</code>的用法,<code>N</code>表示每轮测试用例个数, 称为持久模式. 这种用法不用在<code>import</code>后写<code>afl.init()</code>, 最快的持久模式不应该包含可能被之前执行影响而改变的全局的状态. 这种用法可以用于将之前的执行结果重用在当前状态的场景下. </p>
+<h1 id="6-相关工作"><a href="#6-相关工作" class="headerlink" title="6. 相关工作"></a>6. 相关工作</h1><h2 id="6-2-回归测试选择"><a href="#6-2-回归测试选择" class="headerlink" title="6.2 回归测试选择"></a>6.2 回归测试选择</h2><p>选择回归测试的目的是约减软件变更之后必须测试的测试用例。</p>
+<p><em>TestTube</em>使用了模块级别的覆盖，<em>DejaVu</em>使用了语句级别的覆盖</p>
+<p>Bates et al.提出基于程序依赖图和程序切片的细粒度程序覆盖方法，为理解变更的影响提供帮助</p>
+<p>本文变更影响分析和之前工作不同的是本文工作分析受影响的测试不需要在两个版本的程序上执行测试的信息</p>
+<p>Regression test selection is <strong><em>safe</em></strong>：所有可能暴露错误的测试都保证会被选择到</p>
+<p>本文提出的发现受影响的测试用例方法也是<strong><em>safe</em></strong>的，因为它保证能识别可能暴露fault的测试（？？？）。本文方法将编辑划分为一系列的原子变更，然后通过结点和变将影响传递到测试。</p>
+<h1 id="7-结论和未来工作"><a href="#7-结论和未来工作" class="headerlink" title="7. 结论和未来工作"></a>7. 结论和未来工作</h1><p>实验结果表明，平均而言，受影响的测试集合在所有测试可能的测试中占了将近52%，并且对于每个受影响的测试，影响它的变更只有很少的部分（3.95%）。这些发现说明我们的变更影响分析方法对于程序理解和debug是有效的方法</p>
 
       
     </div>
@@ -468,14 +436,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/fuzz-testing/" rel="tag"># fuzz testing</a>
-          
-            <a href="/tags/software-testing/" rel="tag"># software testing</a>
-          
-        </div>
-      
 
       
       
@@ -485,8 +445,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/12/Using-Natural-Language-Processing-to-Automatically-Detect-Self-Admitted-Technical-Debt/" rel="next" title="Using Natural Language Processing to Automatically Detect Self-Admitted Technical Debt">
-                <i class="fa fa-chevron-left"></i> Using Natural Language Processing to Automatically Detect Self-Admitted Technical Debt
+              <a href="/2018/11/29/Optimizing-Seed-Selection-for-Fuzzing/" rel="next" title="Optimizing Seed Selection for Fuzzing">
+                <i class="fa fa-chevron-left"></i> Optimizing Seed Selection for Fuzzing
               </a>
             
           </div>
@@ -494,10 +454,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/22/所有正整数之和为-1-12的证明/" rel="prev" title="所有正整数之和为-1/12的证明">
-                所有正整数之和为-1/12的证明 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -542,8 +498,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -658,6 +623,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-介绍"><span class="nav-text">1. 介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-方法概述"><span class="nav-text">2. 方法概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-原型"><span class="nav-text">4. 原型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-相关工作"><span class="nav-text">6. 相关工作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-回归测试选择"><span class="nav-text">6.2 回归测试选择</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-结论和未来工作"><span class="nav-text">7. 结论和未来工作</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
