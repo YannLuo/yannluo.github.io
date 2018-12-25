@@ -109,6 +109,7 @@
 
 
   <meta name="description" content="1. 介绍变更影响分析（change impact analysis）提供了对一系列程序变更的语义影响的反馈。 这篇文章针对面向对象编程语言进行分析，小的变更会有意想不到的结果：如，向现有类添加方法会影响整个程序虚拟方法的调用 本文的方法：  将源代码的变更映射到一组原子变更（使用类、方法、域和它们的相互关系作为变更的原子单元） 此外还确定了这些原子变更的偏序关系，这些变更间的偏序关系保证程序句法">
+<meta name="keywords" content="program analysis">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Change Impact Analysis for Object-Oriented Programs">
 <meta property="og:url" content="http://yoursite.com/2018/12/25/Change-Impact-Analysis-for-Object-Oriented-Programs/index.html">
@@ -117,7 +118,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://i.loli.net/2018/12/25/5c21d692a2025.png">
 <meta property="og:image" content="https://i.loli.net/2018/12/25/5c21f01e13ceb.png">
-<meta property="og:updated_time" content="2018-12-25T11:47:20.976Z">
+<meta property="og:updated_time" content="2018-12-25T11:47:53.538Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Change Impact Analysis for Object-Oriented Programs">
 <meta name="twitter:description" content="1. 介绍变更影响分析（change impact analysis）提供了对一系列程序变更的语义影响的反馈。 这篇文章针对面向对象编程语言进行分析，小的变更会有意想不到的结果：如，向现有类添加方法会影响整个程序虚拟方法的调用 本文的方法：  将源代码的变更映射到一组原子变更（使用类、方法、域和它们的相互关系作为变更的原子单元） 此外还确定了这些原子变更的偏序关系，这些变更间的偏序关系保证程序句法">
@@ -349,7 +350,7 @@
                 
               
 
-              <time title="创建时间：2018-12-25 13:42:15 / 修改时间：19:47:20" itemprop="dateCreated datePublished" datetime="2018-12-25T13:42:15+08:00">2018-12-25</time>
+              <time title="创建时间：2018-12-25 13:42:15 / 修改时间：19:47:53" itemprop="dateCreated datePublished" datetime="2018-12-25T13:42:15+08:00">2018-12-25</time>
             
 
             
@@ -359,6 +360,24 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/paper/" itemprop="url" rel="index"><span itemprop="name">paper</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -463,6 +482,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/program-analysis/" rel="tag"># program analysis</a>
+          
+        </div>
       
 
       
@@ -814,7 +839,65 @@
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
 </script>
@@ -833,41 +916,7 @@
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->
 
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-  
-
-  
-
-  
-  
-
-  
-  
-
+    
   
 
 
