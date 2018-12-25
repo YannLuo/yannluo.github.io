@@ -109,6 +109,7 @@
 
 
   <meta name="description" content="1. 介绍change impact analysis可以在以下三个方面帮助开发者：  帮助开发者在不同编辑上进行实验，观察受影响的代码段，用这些信息确定选择哪个编辑和如何设置参数 通过排除确定不被给定改变影响的测试用例，减少运行回归测试需要的时间和人力 通过给定一个安全的近似给定受测试失败影响的修改范围，减少debug需要的时间和人力  本文给定的回归测试方法假设有一个回归测试集$\mathca">
+<meta name="keywords" content="program analysis">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Chianti: A Tool for Change Impact Analysis of Java Programs">
 <meta property="og:url" content="http://yoursite.com/2018/12/25/Chianti-A-Tool-for-Change-Impact-Analysis-of-Java-Programs/index.html">
@@ -116,7 +117,7 @@
 <meta property="og:description" content="1. 介绍change impact analysis可以在以下三个方面帮助开发者：  帮助开发者在不同编辑上进行实验，观察受影响的代码段，用这些信息确定选择哪个编辑和如何设置参数 通过排除确定不被给定改变影响的测试用例，减少运行回归测试需要的时间和人力 通过给定一个安全的近似给定受测试失败影响的修改范围，减少debug需要的时间和人力  本文给定的回归测试方法假设有一个回归测试集$\mathca">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://i.loli.net/2018/12/24/5c20750e98d09.png">
-<meta property="og:updated_time" content="2018-12-25T05:40:31.080Z">
+<meta property="og:updated_time" content="2018-12-25T05:43:48.722Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chianti: A Tool for Change Impact Analysis of Java Programs">
 <meta name="twitter:description" content="1. 介绍change impact analysis可以在以下三个方面帮助开发者：  帮助开发者在不同编辑上进行实验，观察受影响的代码段，用这些信息确定选择哪个编辑和如何设置参数 通过排除确定不被给定改变影响的测试用例，减少运行回归测试需要的时间和人力 通过给定一个安全的近似给定受测试失败影响的修改范围，减少debug需要的时间和人力  本文给定的回归测试方法假设有一个回归测试集$\mathca">
@@ -348,12 +349,34 @@
                 
               
 
-              <time title="创建时间：2018-12-25 13:40:31" itemprop="dateCreated datePublished" datetime="2018-12-25T13:40:31+08:00">2018-12-25</time>
+              <time title="创建时间：2018-12-25 13:40:31 / 修改时间：13:43:48" itemprop="dateCreated datePublished" datetime="2018-12-25T13:40:31+08:00">2018-12-25</time>
             
 
+            
+              
+
+              
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/paper/" itemprop="url" rel="index"><span itemprop="name">paper</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -435,6 +458,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/program-analysis/" rel="tag"># program analysis</a>
+          
+        </div>
       
 
       
@@ -583,7 +612,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">7</span>
+                      
+                    
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -784,7 +815,65 @@
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
 </script>
@@ -803,41 +892,7 @@
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->
 
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-  
-
-  
-
-  
-  
-
-  
-  
-
+    
   
 
 
