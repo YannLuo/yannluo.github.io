@@ -108,25 +108,27 @@
 
 
 
-  <meta name="description" content="构造辅助公式 $T_1 = 1 - 1 + 1 - 1 + \dots + 1 - 1$ 和 $T_2 = 1 - 2 + 3 - 4 + \dots$.  T_1 = 1 - 1 + 1 - 1 + \dots \\ T_2 = 1 - 2 + 3 - 4 + \dots \\ T = \sum_i^n i = 1 + 2 + 3 + \dots显然, $T_1$的值求得为0.  \begin{">
-<meta name="keywords" content="Hello World">
+  <meta name="description" content="1. 介绍变更影响分析（change impact analysis）提供了对一系列程序变更的语义影响的反馈。 这篇文章针对面向对象编程语言进行分析，小的变更会有意想不到的结果：如，向现有类添加方法会影响整个程序虚拟方法的调用 本文的方法：  将源代码的变更映射到一组原子变更（使用类、方法、域和它们的相互关系作为变更的原子单元） 此外还确定了这些原子变更的偏序关系，这些变更间的偏序关系保证程序句法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="所有正整数之和为-1&#x2F;12的证明">
-<meta property="og:url" content="http://yoursite.com/2018/09/22/所有正整数之和为-1-12的证明/index.html">
+<meta property="og:title" content="Change Impact Analysis for Object-Oriented Programs">
+<meta property="og:url" content="http://yoursite.com/2018/12/25/Change-Impact-Analysis-for-Object-Oriented-Programs/index.html">
 <meta property="og:site_name" content="罗小米">
-<meta property="og:description" content="构造辅助公式 $T_1 = 1 - 1 + 1 - 1 + \dots + 1 - 1$ 和 $T_2 = 1 - 2 + 3 - 4 + \dots$.  T_1 = 1 - 1 + 1 - 1 + \dots \\ T_2 = 1 - 2 + 3 - 4 + \dots \\ T = \sum_i^n i = 1 + 2 + 3 + \dots显然, $T_1$的值求得为0.  \begin{">
+<meta property="og:description" content="1. 介绍变更影响分析（change impact analysis）提供了对一系列程序变更的语义影响的反馈。 这篇文章针对面向对象编程语言进行分析，小的变更会有意想不到的结果：如，向现有类添加方法会影响整个程序虚拟方法的调用 本文的方法：  将源代码的变更映射到一组原子变更（使用类、方法、域和它们的相互关系作为变更的原子单元） 此外还确定了这些原子变更的偏序关系，这些变更间的偏序关系保证程序句法">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-09-22T06:04:54.108Z">
+<meta property="og:image" content="https://i.loli.net/2018/12/25/5c21d692a2025.png">
+<meta property="og:image" content="https://i.loli.net/2018/12/25/5c21f01e13ceb.png">
+<meta property="og:updated_time" content="2018-12-25T11:47:20.976Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="所有正整数之和为-1&#x2F;12的证明">
-<meta name="twitter:description" content="构造辅助公式 $T_1 = 1 - 1 + 1 - 1 + \dots + 1 - 1$ 和 $T_2 = 1 - 2 + 3 - 4 + \dots$.  T_1 = 1 - 1 + 1 - 1 + \dots \\ T_2 = 1 - 2 + 3 - 4 + \dots \\ T = \sum_i^n i = 1 + 2 + 3 + \dots显然, $T_1$的值求得为0.  \begin{">
+<meta name="twitter:title" content="Change Impact Analysis for Object-Oriented Programs">
+<meta name="twitter:description" content="1. 介绍变更影响分析（change impact analysis）提供了对一系列程序变更的语义影响的反馈。 这篇文章针对面向对象编程语言进行分析，小的变更会有意想不到的结果：如，向现有类添加方法会影响整个程序虚拟方法的调用 本文的方法：  将源代码的变更映射到一组原子变更（使用类、方法、域和它们的相互关系作为变更的原子单元） 此外还确定了这些原子变更的偏序关系，这些变更间的偏序关系保证程序句法">
+<meta name="twitter:image" content="https://i.loli.net/2018/12/25/5c21d692a2025.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/22/所有正整数之和为-1-12的证明/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/12/25/Change-Impact-Analysis-for-Object-Oriented-Programs/"/>
 
 
 
@@ -136,7 +138,7 @@
   };
 </script>
 
-  <title>所有正整数之和为-1/12的证明 | 罗小米</title>
+  <title>Change Impact Analysis for Object-Oriented Programs | 罗小米</title>
   
 
 
@@ -305,7 +307,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/22/所有正整数之和为-1-12的证明/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/25/Change-Impact-Analysis-for-Object-Oriented-Programs/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="罗小米">
@@ -322,7 +324,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">所有正整数之和为-1/12的证明
+          <h1 class="post-title" itemprop="name headline">Change Impact Analysis for Object-Oriented Programs
               
             
           </h1>
@@ -347,7 +349,7 @@
                 
               
 
-              <time title="创建时间：2018-09-22 13:56:56 / 修改时间：14:04:54" itemprop="dateCreated datePublished" datetime="2018-09-22T13:56:56+08:00">2018-09-22</time>
+              <time title="创建时间：2018-12-25 13:42:15 / 修改时间：19:47:20" itemprop="dateCreated datePublished" datetime="2018-12-25T13:42:15+08:00">2018-12-25</time>
             
 
             
@@ -357,24 +359,6 @@
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Hello-World/" itemprop="url" rel="index"><span itemprop="name">Hello World</span></a></span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -403,42 +387,65 @@
       
 
       
-        <p>构造辅助公式 $T_1 = 1 - 1 + 1 - 1 + \dots + 1 - 1$ 和 $T_2 = 1 - 2 + 3 - 4 + \dots$.</p>
+        <h1 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1. 介绍"></a>1. 介绍</h1><p>变更影响分析（<em>change impact analysis</em>）提供了对一系列程序变更的语义影响的反馈。</p>
+<p>这篇文章针对面向对象编程语言进行分析，小的变更会有意想不到的结果：如，向现有类添加方法会影响整个程序虚拟方法的调用</p>
+<p>本文的方法：</p>
+<ol>
+<li>将源代码的变更映射到一组原子变更（使用类、方法、域和它们的相互关系作为变更的原子单元）</li>
+<li>此外还确定了这些原子变更的偏序关系，这些变更间的偏序关系保证程序句法合法</li>
+<li>给定一系列原子变更$\mathcal{A}$和给定的测试驱动集合$\mathcal{T}$，执行程序的部分功能</li>
+</ol>
+<p>静态分析来确定：</p>
+<ul>
+<li>测试驱动$\mathcal{T}$中挑选被变更$\mathcal{A}$影响子集$\mathcal{T’}$用于回归测试</li>
+<li>变更集合$\mathcal{A}$的子集$\mathcal{A’}$可能影响$\mathcal{T}$中的某些测试驱动$\mathcal{t}$。这允许开发者忽略不被测试$\mathcal{t}$失败影响的变更</li>
+<li>变更$\mathcal{A}$的子集可能不影响任何测试用例，这些变更可以立即纳入</li>
+<li>覆盖率信息可以作为创建新测试用例的基础</li>
+</ul>
+<h1 id="2-动机样例"><a href="#2-动机样例" class="headerlink" title="2. 动机样例"></a>2. 动机样例</h1><p>贴了一页论文（-_-|||，太长不看）</p>
+<p>该样例包含5个类：Course, Person, Professor, Student和University</p>
+<p>然后有3个测试驱动：</p>
+<ul>
+<li>TestA：找到特定教授打印TA教授的课</li>
+<li>TestB：打印大学所有人员</li>
+<li>TestC：找到特定学生打印其学分</li>
+</ul>
+<p>然后就是说了三个方面的对于代码的变更</p>
+<h1 id="3-变更"><a href="#3-变更" class="headerlink" title="3. 变更"></a>3. 变更</h1><p>规定源程序为$P$，修改后的程序为$\mathcal{P’}$，他们都语法正确且可编译。</p>
+<h2 id="3-1-原子变更"><a href="#3-1-原子变更" class="headerlink" title="3.1 原子变更"></a>3.1 原子变更</h2><p>方法的一个关键是将源代码的编辑转换为一组原子变化</p>
+<p><img src="https://i.loli.net/2018/12/25/5c21d692a2025.png" alt="QQ截图20181225150436.png"></p>
+<p>这些原子变更有两个重要特征：</p>
+<ol>
+<li>粒度与分析内容相符合，也就是说，如果用了更细粒度的原子变更概念，分析也不会产生更精确的结果</li>
+<li>任何源代码的编辑可以分解为唯一的原子变更集合</li>
+</ol>
+<p><strong>CM</strong>捕获对方法体的任意改变，包括：</p>
+<ol>
+<li>在之前的抽象方法中添加方法体</li>
+<li>从非抽象方法中删除方法体，让它抽象</li>
+<li>方法体中任何语句级别的变更</li>
+</ol>
+<p><strong>LC</strong>类别对影响动态dispatch行为的源代码变更进行抽象，它可能由添加或删除方法，添加或删除集成关系导致。</p>
+<p><em>change impact analysis</em> 会忽略某些类型的源代码级别的变更，这些变更除了控制可见性外没有语义影响，如修改类/方法/域的修饰符，增删注释和增删import语句。</p>
+<h2 id="3-2-影响方法dispatch的变更"><a href="#3-2-影响方法dispatch的变更" class="headerlink" title="3.2 影响方法dispatch的变更"></a>3.2 影响方法dispatch的变更</h2><p>方法dispatch可能受多种编辑影响，我们使用$lookup$形式化方法dispatch过程。$lookup$ 接受两个参数：运行时类型和静态方法调用，返回通过virtual dispatch机制调用的方法定义</p>
+<h2 id="3-3-对原子变更排序"><a href="#3-3-对原子变更排序" class="headerlink" title="3.3 对原子变更排序"></a>3.3 对原子变更排序</h2><p>变更可能收到语法和语义上的其他变化。本文仅考虑必须满足的语法依赖性以保证可编译。语法依赖的例子有不能扩展未定义的类，或调用为定义的方法。语义依赖的例子是新增方法$m$仅在存在被调用的方法$m’$的改编版本时才表现出正确的行为。</p>
+<p>使用原子变更上的偏序关系$\prec$表示语法依赖（同时也定义了传递闭包$\preceq^<em>$），$\prec$定义了$\mathcal{A}$的</em>consistent*子集$\mathcal{A’}$，使得$\mathcal{A’}$应用到$P$的结果是合法的程序$P’’$。</p>
+<p>$\mathcal{A’}$是consistent满足的条件：</p>
 <script type="math/tex; mode=display">
-T_1 = 1 - 1 + 1 - 1 + \dots \\
-T_2 = 1 - 2 + 3 - 4 + \dots \\
-T = \sum_i^n i = 1 + 2 + 3 + \dots</script><p>显然, $T_1$的值求得为0.</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-1 - T_1 &= 1 - (1 - 1 + 1 - 1 + \dots) \\
-&= 1 - 1 + 1 - 1 + \dots \\
-&= T_1\\
-\\
-2T_1 &= 1 \\
-T_1 &= \frac{1}{2}
-\end{aligned}</script><p>接下来, 计算$T_2 + T_2$, 将第二个$T_2$向后移一位.</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-T_2 + T_2 &= 1 - 2 + 3 - 4 + \dots + (n-1) - n + \\
-          &\ \ \ \ \ \ \ \ \ \ \ \ 1 - 2 + 3 - 4 + \dots + (n-1) - n \\
-          &= 1 - (2 - 1) + (3 - 2) - (4 - 3) + \dots \\
-          &= 1 - 1 + 1 - 1 + \dots \\
-          &= T_1 \\
-\\
-2T_2 &= \frac{1}{2} \\
-T_2 &= \frac{1}{4}
-\end{aligned}</script><p>最后计算$T - T_2$:</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-T - T_2 &= 1 + 2 + 3 + \dots \\
-& - (1 - 2 + 3 - 4 + \dots) \\
-&= 4 + 8 + 12 + 16 + \dots \\
-&= 4(1 + 2 + 3 + \dots) \\
-&= 4T \\
-\\
-3T &= -T_2 \\
-T &= -\frac{1}{12}
-\end{aligned}</script><p>由此证得, $1 + 2 + 3 + \dots = -\frac{1}{12} $.</p>
+\forall a'\in A\text{ such that }a'\preceq^*a, a\in A'\Rightarrow a'\in A'</script><p>计算这些东西需要确定原子变更中引用的程序片段的语法要求</p>
+<h2 id="3-4-导出原子变更"><a href="#3-4-导出原子变更" class="headerlink" title="3.4 导出原子变更"></a>3.4 导出原子变更</h2><p>将源代码编辑分解为原子变更是很简单直接的，文章由于篇幅原因只通过一个例子展示过程</p>
+<h1 id="4-变更影响分析"><a href="#4-变更影响分析" class="headerlink" title="4. 变更影响分析"></a>4. 变更影响分析</h1><p>程序$P$有一些列测试驱动$\mathcal{T}=t_1, \dots, t_n$，$Nodes(P, t_i)$表示程序$P$执行测试驱动$t_i$经过的方法结点，$Edges(P,t_i)$为调用关系。方法间的调用关系可以形式化地表示为：$A.m\rightarrow_CB.n$，表示$A.m$通过类型$C$对象的方法$n$调用了方法$B.m$</p>
+<p><img src="https://i.loli.net/2018/12/25/5c21f01e13ceb.png" alt="QQ截图20181225165339.png"></p>
+<p>$\mathit{AffectedTests(\mathcal{T}, \mathcal{A})}$和$\mathit{AffectedChanges(\mathcal{t}, \mathcal{A})}$可以用来回归测试和故障定位，具体方法如下：</p>
+<ul>
+<li>任何不在$\mathit{AffectedTests(\mathcal{T}, \mathcal{A})}$中的测试驱动在$\mathcal{A}$前后必定产生相同执行结果，所以只需要重新运行$\mathit{AffectedTests}$中受影响的测试驱动就行</li>
+<li>$\mathit{AffectedChanges(\mathcal{t}, \mathcal{A})}$可以识别没有影响任何测试驱动的改变，这些改变可以安全的包含（纳入）。有时候这样的改变也是暗示缺少了测试用例</li>
+<li>$\mathit{AffectedChanges(\mathcal{t}, \mathcal{A})}$可以在测试失败时提供有用的信息</li>
+</ul>
+<h1 id="7-未来工作"><a href="#7-未来工作" class="headerlink" title="7. 未来工作"></a>7. 未来工作</h1><ol>
+<li>从源代码编辑中导出原子变化</li>
+<li>计算原子变更间的序</li>
+</ol>
 
       
     </div>
@@ -457,12 +464,6 @@ T &= -\frac{1}{12}
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Hello-World/" rel="tag"># Hello World</a>
-          
-        </div>
-      
 
       
       
@@ -472,8 +473,8 @@ T &= -\frac{1}{12}
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/18/初试py-afl-fuzz/" rel="next" title="初试py-afl-fuzz">
-                <i class="fa fa-chevron-left"></i> 初试py-afl-fuzz
+              <a href="/2018/12/25/Chianti-A-Tool-for-Change-Impact-Analysis-of-Java-Programs/" rel="next" title="Chianti: A Tool for Change Impact Analysis of Java Programs">
+                <i class="fa fa-chevron-left"></i> Chianti: A Tool for Change Impact Analysis of Java Programs
               </a>
             
           </div>
@@ -481,10 +482,6 @@ T &= -\frac{1}{12}
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/26/Fuzzing-a-survey/" rel="prev" title="Fuzzing - a survey">
-                Fuzzing - a survey <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -529,8 +526,17 @@ T &= -\frac{1}{12}
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -647,6 +653,22 @@ T &= -\frac{1}{12}
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-介绍"><span class="nav-text">1. 介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-动机样例"><span class="nav-text">2. 动机样例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-变更"><span class="nav-text">3. 变更</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-原子变更"><span class="nav-text">3.1 原子变更</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-影响方法dispatch的变更"><span class="nav-text">3.2 影响方法dispatch的变更</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-对原子变更排序"><span class="nav-text">3.3 对原子变更排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-导出原子变更"><span class="nav-text">3.4 导出原子变更</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-变更影响分析"><span class="nav-text">4. 变更影响分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-未来工作"><span class="nav-text">7. 未来工作</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -792,65 +814,7 @@ T &= -\frac{1}{12}
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
-
-
-
-  
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-  
-
-  
-
-  
-  
-
-  
-  
-
-  
-    
-      <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-        processEscapes: true,
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-      },
-      TeX: {equationNumbers: { autoNumber: "AMS" }}
-    });
-</script>
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-      var all = MathJax.Hub.getAllJax(), i;
-        for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-    });
-</script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
 </script>
@@ -869,7 +833,41 @@ T &= -\frac{1}{12}
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->
 
-    
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
   
 
 
