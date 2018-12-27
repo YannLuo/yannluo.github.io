@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="摘要本文基于动态分析框架Jalangi实现了轻量级的变更感知动态程序分析工具，并使用DLint和JITProf工具中的46个检测器进行评估，结果表明总体分析时间平均减少了40%，大概31%的commit能减少80% 1. 介绍大多在通用分析框架上实现的动态分析，比如Valgrind和Jalangi，强大但重量级。通常这种分析有很大的运行时开销。大型回归测试套件的项目在动态语言中很常见，静态检测很稀">
+<meta name="keywords" content="program analysis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Change-aware Dynamic Program Analysis for JavaScript">
+<meta property="og:url" content="http://yoursite.com/2018/12/27/Change-aware-Dynamic-Program-Analysis-for-JavaScript/index.html">
+<meta property="og:site_name" content="罗小米">
+<meta property="og:description" content="摘要本文基于动态分析框架Jalangi实现了轻量级的变更感知动态程序分析工具，并使用DLint和JITProf工具中的46个检测器进行评估，结果表明总体分析时间平均减少了40%，大概31%的commit能减少80% 1. 介绍大多在通用分析框架上实现的动态分析，比如Valgrind和Jalangi，强大但重量级。通常这种分析有很大的运行时开销。大型回归测试套件的项目在动态语言中很常见，静态检测很稀">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2018/12/26/5c232f21e6792.png">
+<meta property="og:image" content="https://i.loli.net/2018/12/26/5c237bbd338c3.png">
+<meta property="og:updated_time" content="2018-12-27T06:36:10.498Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Change-aware Dynamic Program Analysis for JavaScript">
+<meta name="twitter:description" content="摘要本文基于动态分析框架Jalangi实现了轻量级的变更感知动态程序分析工具，并使用DLint和JITProf工具中的46个检测器进行评估，结果表明总体分析时间平均减少了40%，大概31%的commit能减少80% 1. 介绍大多在通用分析框架上实现的动态分析，比如Valgrind和Jalangi，强大但重量级。通常这种分析有很大的运行时开销。大型回归测试套件的项目在动态语言中很常见，静态检测很稀">
+<meta name="twitter:image" content="https://i.loli.net/2018/12/26/5c232f21e6792.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/27/Change-aware-Dynamic-Program-Analysis-for-JavaScript/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Change-aware Dynamic Program Analysis for JavaScript | 罗小米</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">罗小米</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-关于我">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于我</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/27/Change-aware-Dynamic-Program-Analysis-for-JavaScript/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="罗小米">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/yannluo.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="罗小米">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Change-aware Dynamic Program Analysis for JavaScript
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-27 14:35:51 / 修改时间：14:36:10" itemprop="dateCreated datePublished" datetime="2018-12-27T14:35:51+08:00">2018-12-27</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/paper/" itemprop="url" rel="index"><span itemprop="name">paper</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>本文基于动态分析框架<code>Jalangi</code>实现了轻量级的变更感知动态程序分析工具，并使用<code>DLint</code>和<code>JITProf</code>工具中的46个检测器进行评估，结果表明总体分析时间平均减少了40%，大概31%的commit能减少80%</p>
+<h1 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1. 介绍"></a>1. 介绍</h1><p>大多在通用分析框架上实现的动态分析，比如Valgrind和Jalangi，强大但重量级。通常这种分析有很大的运行时开销。大型回归测试套件的项目在动态语言中很常见，静态检测很稀疏且可能会有遗漏。例如，使用JavaScript的两种动态分析工具<code>DLint</code>和<code>JITProf</code>运行<code>underscore.js</code>库的回归测试套件需要5分钟，如果不进行分析只需要5秒</p>
+<p><img src="https://i.loli.net/2018/12/26/5c232f21e6792.png" alt="QQ截图20181226153440.png"></p>
+<p>给了个例子，测试调用<code>a</code>, <code>b</code>, <code>e</code>，变更后的动态分析会执行所有代码，但是大多代码不受变更影响，所欲不用重新分析未受影响的代码</p>
+<p>减少动态分析开销的现有方法有抽样：</p>
+<ol>
+<li>以特定的方式对执行进行抽样，例如基于代码位置的执行频率进行采样</li>
+<li>将检测开销分配给多个用户</li>
+</ol>
+<p>作为一种补充减少动态分析开销的技术，回归测试可以减少执行测试的数量，从而减少整体分析时间。回归测试选择部分解决了已有的问题，但是也有缺点：即使在约减了测试用例的数量后，分析可以也会考虑未受变更影响的代码，例如上例中调用<code>b</code>会触发对<code>d</code>的动态分析，但是<code>d</code>不受更改的影响</p>
+<p>本文解决减少运行动态分析的时间的问题，这些动态分析在之前版本的分析代码中已经应用过。本文提出了<em>change-aware dynamic analysis（变更感知的动态分析）</em>，缩写为CADA，这个方法将一类动态分析转化为变更感知分析。关键思想是通过关注受代码变更影响的函数约减动态分析的代码位置数。在运行时进入函数时，只有这个函数受到影响才对其进行分析，在实际中发现，大多代码只影响一小部分函数，使CADA能避免分析大多数函数</p>
+<p>要查找更改影响的函数，轻量级的变更影响分析会根据读写操作确定函数之间的依赖关系并产生函数依赖图。从特定变更修改的函数为起点，将影响传播到所有可能受影响的函数</p>
+<p>对于上图的示例，<code>a</code>已更改，并且由于这个更改，函数<code>c</code>也受到影响</p>
+<p>为了评估CADA方法，应用这个方法到七个流行的JavaScript项目的历史版本，不使用本文的方法进行变更分析需要平均需要133秒（commit之间）。CADA平均减少了40%的分析时间，其中31%的commit至少减少了80%的分析时间。CADA和非变化感知分析比较，它不会遗漏针对动态分析报告的任何警告</p>
+<p>本文贡献：</p>
+<ul>
+<li>将普通的动态分析转换为变更感知动态分析而不需要修改分析本身</li>
+<li>JavaScript的一种轻量级的静态变更影响分析。分析可以帮助做其他很多事，比如帮助开发者了解变更潜在的影响和测试用例的优先级</li>
+<li>实证证据表明方法大大减少了使用重量级动态分析的时间，变得易于使用</li>
+</ul>
+<h1 id="2-问题陈述"><a href="#2-问题陈述" class="headerlink" title="2. 问题陈述"></a>2. 问题陈述</h1><p>给定程序$P$和输入$I$，动态分析$A$产生一系列警告$A(P, I) = \mathcal{W}$，每个警告都是一个pair，包含代码位置$l\in\mathcal{L}$和描述$d\in\mathcal{D}$，也就是说$\mathcal{W}=\mathcal{L}\times\mathcal{D}$，举个例子，图1中的警告可以表示为$(line\ 22$,”$NaN\ created$”$)$。</p>
+<p>本文重点关注动态分析，识别特定警告，通过一组局部受限的代码位置寻找触发运行时事件的原因。我们将次称为局部受限动态分析（locally confined dynamic analysis）。这类动态分析不包括分析整个程序跟踪值的分析，比如信息流分析和全程序依赖分析</p>
+<p><strong>局部受限动态分析</strong>和本文所做的<strong>变更感知分析</strong>的区别（个人理解）：</p>
+<ul>
+<li><strong>局部受限动态分析</strong>侧重动态分析框架，没有过去版本分析的信息，也就没有过去版本生成调用图的信息，运行测试用例该怎么跑就怎么跑，没有对路径的剪枝</li>
+<li><strong>变更感知分析</strong>更侧重根据变更所影响的函数调用图约减测试的函数，达到减少时间开销的目的</li>
+</ul>
+<p>在开发过程中，程序通过变更演化，另$P, P’, P’’$表示程序的不同版本。我们工作目标是对开发过程中出现的每个新版本应用动态分析，以便开发人员能够立即对最近更改引起的任何警告做出反应。对于从$P$到$P’$的变化，假设有一个映射$\mu:\mathcal{W}\rightarrow\mathcal{W’}$表示这个变更导致的警告的变化。</p>
+<p>有三种警告：</p>
+<ul>
+<li>老警告在新版本中保留下来：$\mathcal{W}_{old}=\{w’\in\mathcal{W’}|\exists w\in\mathcal{W}\text{ so that }\mu(w)=w’\}$</li>
+<li>引入新警告：$\mathcal{W}_{new}=\{w’\in\mathcal{W’}|\nexists w\in \mathcal{W}\text{ so that }\mu(w)=w’\}$</li>
+<li>老警告被修复：$\mathcal{W}_{fixed}=\{w\in\mathcal{W}|\nexists w’\in \mathcal{W’}\text{ so that }\mu(w)=w’\}$</li>
+</ul>
+<p>一个简单但是计算代价大的方法是在每个版本上计算这样一组警告：</p>
+<script type="math/tex; mode=display">
+A(P, I)=\mathcal{W},\ A(P', I) = \mathcal{W'}</script><p>本文要解决的就是如何减少局部受限动态分析的时间，在之前的版本已经分析过之后。也就是说是要提出一种变更感知的分析方法$A_{CA}$，满足以下两个属性：</p>
+<script type="math/tex; mode=display">
+\mathcal{W'}_{CA}=\mathcal{W}_{old}\cup\mathcal{\mathcal{W}_{new}}\ where\ A_{CA}(P,P',I)=\mathcal{W}'_{CA}\\
+time(A_{CA}(P',P,I))\lt time(A(P',I))</script><p>与完整分析相比，第一个条件保证不会遗漏新警告和保留下的警告，第二个条件保证时间开销减少</p>
+<h1 id="3-方法"><a href="#3-方法" class="headerlink" title="3. 方法"></a>3. 方法</h1><p><img src="https://i.loli.net/2018/12/26/5c237bbd338c3.png" alt="QQ截图20181226210138.png"></p>
+<p>为了解决这个问题，提出了CADA，这种方法将局部受限的动态分析转化为变更感知分析。该方法的核心是静态变更影响分析。在给定程序的两个版本下，确定可能手变更影响的代码位置集合。变更影响分析包括三个步骤：</p>
+<ol>
+<li>CADA分析两个版本之间的差异，以确定修改后的代码位置集合，这一步纯粹是语法上的，没有推断变化的影响</li>
+<li>对修改程序进行依赖分析提取出代码位置之间的依赖关系图</li>
+<li>CADA通过依赖图传播代码位置修改的信息，计算所有受变更影响的代码位置</li>
+<li>最后将受影响的代码位置集合提供给动态分析，动态分析分析修改的程序，关注受影响的代码</li>
+</ol>
+<p>一个重要的设计决策时确定在哪个级别的粒度上计算变更影响和动态分析的代码位置。三个可能的选择是：文件级别，函数级别，语句级别。文件级别的方法将每个源代码文件确定是否有任何代码受到更改，然后对受影响文件的所有代码进行动态分析，这个粒度的分析缺点在于单个文件可能包含大量代码，因此该方法可能分析不必分析的大量代码</p>
+<p>语句级别的方法计算所有语句间的依赖关系，然后进分析受变更影响的语句。尽管这种分析在三个选择中是最精确的，但是考虑到计算成本，放弃这个方案。CADA最终的目的是减少时间开销，精确计算所有语句级别的依赖关系可能需要花费大量时间处理复杂的程序</p>
+<p>为了平衡精度和计算成本，CADA计算函数级别的依赖关系，也就是说，静态变更影响分析确定哪些函数收到了变化影响，而动态分析仅选择性地分析受影响的函数</p>
+<h2 id="A-Change-Identification-变更识别"><a href="#A-Change-Identification-变更识别" class="headerlink" title="A. Change Identification(变更识别)"></a>A. <em>Change Identification</em>(变更识别)</h2><p>CADA的第一步就是比较原始程序和修改后的程序，以确定语法修改的函数集。首先，该方法使用diff计算修改后的程序那些行被修改。这些行还包括新添的行。接下来，该方法吧变更的程序转化为AST并用dfs的方法遍历AST。遍历期间，CADA访问到代表函数的所有节点，跟踪每个函数开始和结束的代码位置，最后，在遍历程序的所有文件的AST之后，方法将每个修改的行匹配到改行对应的最内层的函数，并且报告具有至少一个更改行的函数作为变更的函数</p>
+<p>对于给的例子，第4行识别为修改的行，遍历完后函数<code>a</code>被识别为改变的函数</p>
+<h2 id="B-Dependence-Analysis（依赖分析）"><a href="#B-Dependence-Analysis（依赖分析）" class="headerlink" title="B. Dependence Analysis（依赖分析）"></a>B. <em>Dependence Analysis</em>（依赖分析）</h2><p>为了计算受影响的函数，首先要计算函数间的依赖图：</p>
+<p><strong>定义1 （函数依赖图）</strong> ：函数依赖图是一个有向图$G_{dep}=(\mathcal{N}, \mathcal{E})$。其中每个节点$f\in\mathcal{N}$表示函数，$(f_1, f_2)\in\mathcal{E}$表示函数$f_2$依赖于$f_1$，即$f_1$影响了$f_2$</p>
+<p>CADA考虑函数依赖图的两种依赖关系：</p>
+<ol>
+<li>定义-使用依赖关系，表示函数读取可能在另一个函数中定义的值</li>
+<li>调用依赖关系，表示一个函数可能被另一个函数调用</li>
+</ol>
+<p>这两种依赖图式表示为$G_{DU}$和$G_C$，总体的调用图是两个图的并</p>
+<ol>
+<li><p>定义-使用依赖：建立在程序内，流不敏感分析代码位置间的读写关系，具体地，给定一组代码位置$\mathcal{L}$，分析提取出定义-使用二元组$(d, u)$，其中$d,u\in\mathcal{L}$，$d$写入了可能被$u$写入的值</p>
+<p>CADA通过两个映射获取定义-使用分析的结果。第一个是映射$\mathit{usesOf}:\mathcal{L}\mapsto 2^{\mathcal{L}}$，从一个代码位置映射到一组可能读取这个值的代码位置。第二个映射是$\mathit{defsOf}:\mathcal{L}\mapsto 2^{\mathcal{L}}$，从一个代码位置映射到一组可能定义了这个值的代码位置</p>
+<p>为了计算程序的函数级别的定义-使用依赖，CADA遍历程序所有把值写入内存的代码位置，对于这样的位置$d\in\mathcal{L}$，可以分析计算读取该值的位置$\mathit{useOf(d)}$。接下来使用辅助映射$\mathit{fctOf}:\mathcal{L}\mapsto \mathcal{F}$将这些位置映射到函数，最后分析在图$G_{DU}$上加入函数级别的表示定义-使用的边，对于每个$u\in\mathit{usesOf(d)}$，都有一条$\mathit{(fctOf(d), fctOf(u))}$边</p>
+</li>
+<li><p>调用依赖：对于每个被函数$f_{caller}$调用的函数$f_{callee}$，分析会创建两种依赖边。首先，增加了一个$(f_{caller},f_{callee})$因为$f_{caller}$上的改动会影响$f_{callee}$的调用；其次，还会加一条$(f_{callee},f_{caller})$边，当且仅当$f_{callee}$返回值给$f_{caller}$。为了解析函数调用，CADA通过$\mathit{defsOf}$查询函数定义位置</p>
+</li>
+<li><p>有效地计算依赖：本文使用静态分析构建依赖关系。静态分析得到精确的结果是不可能的，同时也为了考虑到时间开销，分析不对with结构，eval动态加载的代码，动态计算的属性名和getter与setter的副作用进行处理</p>
+</li>
+</ol>
+<p>分析将程序转换为AST并遍历三次AST计算依赖。前两次遍历计算定义-使用二元组，得到$\mathit{defsOf}$和$\mathit{usesOf}$映射</p>
+<p>基于这俩映射，第三次遍历计算函数级别的定义-使用关系</p>
+<h2 id="C-Change-Propagation（变更传播）"><a href="#C-Change-Propagation（变更传播）" class="headerlink" title="C. Change Propagation（变更传播）"></a>C. <em>Change Propagation</em>（变更传播）</h2><p>基于函数依赖图，CADA通过图传播源代码变更的影响。首先，该方法标记所有已更改的函数，然后再函数依赖图中通过以来便计算标记节点的传递闭包。最终标记了源代码变更直接或间接影响的所有节点。CADA将与标记的节点对应相关的函数标记为<em>impacted functions</em></p>
+<h2 id="D-Targeted-Dynamic-Analysis（有导向的动态分析）"><a href="#D-Targeted-Dynamic-Analysis（有导向的动态分析）" class="headerlink" title="D. Targeted Dynamic Analysis（有导向的动态分析）"></a>D. <em>Targeted Dynamic Analysis</em>（有导向的动态分析）</h2><p>CADA在执行分析的程序进入函数时，会检查是否需要分析该函数。若该函数不受变更影响，则不对函数体进行分析，即，变更感知方法避免了此函数的分析开销</p>
+<p>函数级别选择分析代码有以下优点：</p>
+<ul>
+<li>每个功能在执行前检查是否分析</li>
+</ul>
+<p>更细粒度的选择分析，比如在个体表达式的级别，将有更多检查，但是每次检查都会产生额外的运行时开销，所以过于细粒度的选择分析会破坏选择分析特定代码位置的目的</p>
+<h2 id="E-Reporting-Warnings（报告警告）"><a href="#E-Reporting-Warnings（报告警告）" class="headerlink" title="E. Reporting Warnings（报告警告）"></a>E. <em>Reporting Warnings</em>（报告警告）</h2><p>使用有导向的动态分析进行变更后版本程序的分析后，CADA报告所有检测到的以及在之前版本发现到的警告。为了在版本之间进行映射，本文使用Unix “diff”工具从之前版本映射到更改后的版本。但是先前版本的警告可能是不正确的，因为变更可能修复了警告。为了减少/避免这种误报，我们仅映射先前检测到的警告，这些警告在未受变更影响的函数中。这些警告没有通过变更修复，所以他们从之前版本开始传播是正确的。相比之下，受影响的函数的所有警告都通过动态分析来检测，不必从先前的警告中映射它们</p>
+<h1 id="4-实现"><a href="#4-实现" class="headerlink" title="4. 实现"></a>4. 实现</h1><p>实现CADA用于动态分析JavaScript代码</p>
+<p>静态变更影响分析工具基于<code>Esprima</code>（用于语法分析）和<code>Tern</code>（用于计算定义-使用信息）。静态分析的输出是在动态分析时需要分析的函数列表。选择动态分析在<code>Jalangi</code>上实现。它支持通过生成每个函数体上的两个变体进行函数级别上的选择分析：一个是原有代码，另一个是插桩后的代码。然后<a href="https://github.com/drill89/Change-aware-Dynamic-Analysis" target="_blank" rel="noopener">项目开源</a></p>
+<h1 id="7-结论"><a href="#7-结论" class="headerlink" title="7. 结论"></a>7. 结论</h1><p>本文展示了变更感知分析，可能极大地约减运行时动态分析的开销，通过关注受代码改变影响的位置</p>
+<p>我们在46个动态检测器上检测7个广泛使用的JavaScript项目源码来评价CADA。我们的结果显示平均减少40%的分析时间，其中31%的commit减少至少80%的时间</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/program-analysis/" rel="tag"># program analysis</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/25/Change-Impact-Analysis-for-Object-Oriented-Programs/" rel="next" title="Change Impact Analysis for Object-Oriented Programs">
+                <i class="fa fa-chevron-left"></i> Change Impact Analysis for Object-Oriented Programs
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/yannluo.png"
+                alt="罗小米" />
+            
+              <p class="site-author-name" itemprop="name">罗小米</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">26</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/ly941122/activities" target="_blank" title="知乎"><i class="fa fa-fw fa-address-card"></i>知乎</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yannluo@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要"><span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-介绍"><span class="nav-text">1. 介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-问题陈述"><span class="nav-text">2. 问题陈述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-方法"><span class="nav-text">3. 方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#A-Change-Identification-变更识别"><span class="nav-text">A. Change Identification(变更识别)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#B-Dependence-Analysis（依赖分析）"><span class="nav-text">B. Dependence Analysis（依赖分析）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-Change-Propagation（变更传播）"><span class="nav-text">C. Change Propagation（变更传播）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#D-Targeted-Dynamic-Analysis（有导向的动态分析）"><span class="nav-text">D. Targeted Dynamic Analysis（有导向的动态分析）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#E-Reporting-Warnings（报告警告）"><span class="nav-text">E. Reporting Warnings（报告警告）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-实现"><span class="nav-text">4. 实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-结论"><span class="nav-text">7. 结论</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">罗小米</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
