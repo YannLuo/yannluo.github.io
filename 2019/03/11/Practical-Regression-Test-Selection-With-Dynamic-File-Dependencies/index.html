@@ -108,25 +108,31 @@
 
 
 
-  <meta name="description" content="read_testcases  nl_cnt是统计inputs目录下的目录数，然后从这些目录中读取测试用例加入  cull_queue  这个函数好像也没看懂是啥。。 先把队列中的实体favored全置为0 然后。。。 好像是精简输入数目  calculate_score  计算得分（对于输入的fuzz次数）  run_target  执行目标应用，监控timeouts。返回状态信息，调用的程序会">
-<meta name="keywords" content="fuzz testing,software testing">
+  <meta name="description" content="Practical Regression Test Selection With Dynamic File Dependencies摘要提出一个新的，轻量级的回归测试选择（RTS）方法——EKSTAZI。这个方法跟踪文件相关测试上的动态依赖。在32个开源项目共615个版本上进行测试。结果显示EKSTAZI方法平均减少32%的测试时间，其中长时间运行的测试时间与全部测试相比减少了54%。 1. 介绍">
+<meta name="keywords" content="software testing,regression test">
 <meta property="og:type" content="article">
-<meta property="og:title" content="一篇毫不负责的afl-fuzz源码学习指北">
-<meta property="og:url" content="http://yoursite.com/2018/11/03/一篇毫不负责的afl-fuzz源码学习指北/index.html">
+<meta property="og:title" content="Practical Regression Test Selection With Dynamic File Dependencies">
+<meta property="og:url" content="http://yoursite.com/2019/03/11/Practical-Regression-Test-Selection-With-Dynamic-File-Dependencies/index.html">
 <meta property="og:site_name" content="罗小米">
-<meta property="og:description" content="read_testcases  nl_cnt是统计inputs目录下的目录数，然后从这些目录中读取测试用例加入  cull_queue  这个函数好像也没看懂是啥。。 先把队列中的实体favored全置为0 然后。。。 好像是精简输入数目  calculate_score  计算得分（对于输入的fuzz次数）  run_target  执行目标应用，监控timeouts。返回状态信息，调用的程序会">
+<meta property="og:description" content="Practical Regression Test Selection With Dynamic File Dependencies摘要提出一个新的，轻量级的回归测试选择（RTS）方法——EKSTAZI。这个方法跟踪文件相关测试上的动态依赖。在32个开源项目共615个版本上进行测试。结果显示EKSTAZI方法平均减少32%的测试时间，其中长时间运行的测试时间与全部测试相比减少了54%。 1. 介绍">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-11-12T14:24:42.024Z">
+<meta property="og:image" content="https://i.loli.net/2019/03/11/5c85ef1d1970f.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/11/5c85ef1d46ace.png">
+<meta property="og:image" content="c:/Users/ly/AppData/Roaming/Typora/typora-user-images/1552284959130.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/11/5c86061396288.png">
+<meta property="og:image" content="https://i.loli.net/2019/03/11/5c8607050c7db.png">
+<meta property="og:updated_time" content="2019-03-11T07:16:44.179Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="一篇毫不负责的afl-fuzz源码学习指北">
-<meta name="twitter:description" content="read_testcases  nl_cnt是统计inputs目录下的目录数，然后从这些目录中读取测试用例加入  cull_queue  这个函数好像也没看懂是啥。。 先把队列中的实体favored全置为0 然后。。。 好像是精简输入数目  calculate_score  计算得分（对于输入的fuzz次数）  run_target  执行目标应用，监控timeouts。返回状态信息，调用的程序会">
+<meta name="twitter:title" content="Practical Regression Test Selection With Dynamic File Dependencies">
+<meta name="twitter:description" content="Practical Regression Test Selection With Dynamic File Dependencies摘要提出一个新的，轻量级的回归测试选择（RTS）方法——EKSTAZI。这个方法跟踪文件相关测试上的动态依赖。在32个开源项目共615个版本上进行测试。结果显示EKSTAZI方法平均减少32%的测试时间，其中长时间运行的测试时间与全部测试相比减少了54%。 1. 介绍">
+<meta name="twitter:image" content="https://i.loli.net/2019/03/11/5c85ef1d1970f.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/11/03/一篇毫不负责的afl-fuzz源码学习指北/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/03/11/Practical-Regression-Test-Selection-With-Dynamic-File-Dependencies/"/>
 
 
 
@@ -136,7 +142,7 @@
   };
 </script>
 
-  <title>一篇毫不负责的afl-fuzz源码学习指北 | 罗小米</title>
+  <title>Practical Regression Test Selection With Dynamic File Dependencies | 罗小米</title>
   
 
 
@@ -305,7 +311,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/03/一篇毫不负责的afl-fuzz源码学习指北/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/11/Practical-Regression-Test-Selection-With-Dynamic-File-Dependencies/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="罗小米">
@@ -322,7 +328,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">一篇毫不负责的afl-fuzz源码学习指北
+          <h1 class="post-title" itemprop="name headline">Practical Regression Test Selection With Dynamic File Dependencies
               
             
           </h1>
@@ -347,25 +353,9 @@
                 
               
 
-              <time title="创建时间：2018-11-03 13:18:12" itemprop="dateCreated datePublished" datetime="2018-11-03T13:18:12+08:00">2018-11-03</time>
+              <time title="创建时间：2019-03-11 15:16:44" itemprop="dateCreated datePublished" datetime="2019-03-11T15:16:44+08:00">2019-03-11</time>
             
 
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-11-12 22:24:42" itemprop="dateModified" datetime="2018-11-12T22:24:42+08:00">2018-11-12</time>
-              
             
           </span>
 
@@ -381,7 +371,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/碎碎念/" itemprop="url" rel="index"><span itemprop="name">碎碎念</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/paper/" itemprop="url" rel="index"><span itemprop="name">paper</span></a></span>
 
                 
                 
@@ -415,89 +405,71 @@
       
 
       
-        <p><code>read_testcases</code></p>
-<blockquote>
-<p><code>nl_cnt</code>是统计<code>inputs</code>目录下的目录数，然后从这些目录中读取测试用例加入</p>
-</blockquote>
-<p><code>cull_queue</code></p>
-<blockquote>
-<p>这个函数好像也没看懂是啥。。</p>
-<p>先把队列中的实体favored全置为0</p>
-<p>然后。。。</p>
-<p>好像是精简输入数目</p>
-</blockquote>
-<p><code>calculate_score</code></p>
-<blockquote>
-<p>计算得分（对于输入的fuzz次数）</p>
-</blockquote>
-<p><code>run_target</code></p>
-<blockquote>
-<p>执行目标应用，监控timeouts。返回状态信息，调用的程序会更新<code>trace_bits[]</code></p>
-</blockquote>
-<p><code>calibrate_case</code></p>
-<blockquote>
-<p>从函数名直接翻译是校准用例。函数注释说的是：<br>校准一个新的测试用例，在处理输入字典时尽早警告有关测试用例的问题；并且在发现新路径时检测变量行为等。</p>
-<p>这个函数里面调用了<code>update_bitmap_score</code></p>
-<p>虽然看完我还是不知道是干啥的</p>
-</blockquote>
-<p><code>update_bitmap_score</code></p>
-<blockquote>
-<p>当发现一个新路径时，调用这个方法判断这个路径是否比已有路径<em>more “favorable”</em>。这个”favorables”的意图是最小化路径的集合来触发至今已发现到的bitmap的bits</p>
-</blockquote>
-<p><code>save_if_interesting</code></p>
-<blockquote>
-<p>检查fuzzing期间<code>execve()</code>的结果是否<em>interesting</em>，如果是则保存或把输入放到队列中，返回1，反之返回0</p>
-</blockquote>
-<h2 id="技术细节"><a href="#技术细节" class="headerlink" title="技术细节"></a>技术细节</h2><p>详见<code>technical_details.txt</code></p>
-<h3 id="4-Culling-the-corpus"><a href="#4-Culling-the-corpus" class="headerlink" title="4 Culling the corpus"></a>4 Culling the corpus</h3><p>算法根据执行延迟和文件大小赋予队列中的每个实体一个得分；然后选择每个tuple得分最低的候选：</p>
+        <h1 id="Practical-Regression-Test-Selection-With-Dynamic-File-Dependencies"><a href="#Practical-Regression-Test-Selection-With-Dynamic-File-Dependencies" class="headerlink" title="Practical Regression Test Selection With Dynamic File Dependencies"></a>Practical Regression Test Selection With Dynamic File Dependencies</h1><h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>提出一个新的，轻量级的回归测试选择（RTS）方法——EKSTAZI。这个方法跟踪文件相关测试上的动态依赖。在32个开源项目共615个版本上进行测试。结果显示EKSTAZI方法平均减少32%的测试时间，其中长时间运行的测试时间与全部测试相比减少了54%。</p>
+<h2 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1. 介绍"></a>1. 介绍</h2><p>已有研究表明回归测试可以最多减少80%的测试预算和最多50%的维护成本。</p>
+<p>一个典型的RTS技术一般分为三个阶段：</p>
 <ol>
-<li>找到下一个没有在<em>temporary working set</em>中的tuple</li>
-<li>定位这个tuple的<em>winning queue entry</em></li>
-<li>在<em>working set</em>中注册该<em>entry</em>中所有的tuples</li>
-<li>如果还有<em>working set</em>中还有遗漏的tuples，则返回1.</li>
+<li>$\mathcal{analysis(A)}$：选择要运行的测试</li>
+<li>$\mathcal{execution(E)}​$：执行测试用例</li>
+<li>$\mathcal{collection(C)}​$：收集当前版本的信息以便分析下个版本</li>
 </ol>
-<p>通常用这种方法生成的”favored”种子集合比原来的集合小5-10倍。剩下的”Non-favored”不是直接弃用，而是以一定概率跳过：</p>
-<ul>
-<li>如果有新的，<em>yet-to-be-fuzzed</em>的种子在队列中，那么<em>non-favored entries</em>以99%概率跳过该种子</li>
-<li>若没有新的<ul>
-<li>若当前<em>non-favored</em>之前fuzz过，则95%的概率跳过该种子</li>
-<li>否则，以75%的概率跳过该种子</li>
-</ul>
-</li>
-</ul>
-<p>实证证明，这个策略实现了队列循环速度和种子多样性的平衡</p>
-<h3 id="5-剪枝输入"><a href="#5-剪枝输入" class="headerlink" title="5 剪枝输入"></a>5 剪枝输入</h3><p>trim不保证输入剪到最优，而且在精度和<code>execve()</code>数之间找到一个均衡点，保证tracemap的checksum不受影响。</p>
-<p>剪枝算法具体为：</p>
+<p>已有的评价RTS技术的指标基于选择的测试的数量：$\mathcal{E}$阶段的执行时间，有些只分析$\mathcal{A}$和$\mathcal{E}$阶段的时间。</p>
+<p>EKSTAZI基于文件依赖进行分析（本文之前给的例子貌似是基于系统进行回归测试，里面给的一个例子是YouTube依赖于Guava，所以当Guava中任何东西修改后，YouTube的所有测试都会跑，这是基于一个生态系统的回归测试）。之前的工作基于类依赖和外部资源依赖。EKSTAZI和刚刚提到的细粒度的RTS技术不同的是，它不依赖于和版本控制系统集成（version-control systems，VCS）。</p>
+<p>EKSTAZI计算每个测试入口（测试方法或测试类）依赖于哪些文件，如果一个测试依赖的文件没有修改那么它就不用再新版本上执行。</p>
+<p>最后在32个Java项目的615个版本上进行评价，这也是RTS研究中最大的实验。</p>
+<h2 id="2-栗子"><a href="#2-栗子" class="headerlink" title="2. 栗子"></a>2. 栗子</h2><p>selection granularity（选择粒度）：跟踪测试用例执行轨迹和测试用例选择的粒度</p>
+<p>dependency granularity（依赖粒度）：变更所影响的级别</p>
+<p>EKSTAZI使用类作为依赖粒度，方法或类作为选择粒度</p>
+<p>EKSTAZI的粒度选择导致它会最终选出更多的测试用例，即在$\mathcal{E}$阶段时间开销更大，但是在$\mathcal{A}$和$\mathcal{C}$阶段缩短了时间，所以端到端的时间更短。</p>
+<h2 id="3-技术和实现"><a href="#3-技术和实现" class="headerlink" title="3. 技术和实现"></a>3. 技术和实现</h2><h3 id="3-1-分析（-mathcal-A-）阶段"><a href="#3-1-分析（-mathcal-A-）阶段" class="headerlink" title="3.1 分析（$\mathcal{A}$）阶段"></a>3.1 分析（$\mathcal{A}$）阶段</h3><p>对于每个测试实体，先检测所有文件的checksums是否变化（实际上还是要看文件是否变更）。</p>
+<p>对于新增测试用例，如果没有依赖信息，那么全都加进去。</p>
+<h3 id="3-2-执行（-mathcal-E-）阶段"><a href="#3-2-执行（-mathcal-E-）阶段" class="headerlink" title="3.2 执行（$\mathcal{E}$）阶段"></a>3.2 执行（$\mathcal{E}$）阶段</h3><p>两种方式：</p>
 <ol>
-<li>尝试把大块的数据比特置为0（zero large blocks of data with large stepovers），在之后这可以减少执行的次数</li>
-<li>通过不断减少块大小和步长尝试块删除，二进制搜索风格</li>
-<li>通过统计unique characters进行alphabet normalization和尝试批量替换零值</li>
-<li>最后，尝试在non-zero的字节上进行normalization</li>
+<li>紧集成：构建系统找到<strong>所有</strong>测试类然后调用测试框架进行测试，然后再进行$\mathcal{A}​$阶段确认每个测试实体是否需要运行。</li>
 </ol>
-<p>这里zero过程不用0x00，afl-min使用ASCII字符’0’。这样做的原因是修改一般不会干扰文本解析。</p>
-<h3 id="6-Fuzzing策略"><a href="#6-Fuzzing策略" class="headerlink" title="6 Fuzzing策略"></a>6 Fuzzing策略</h3><p>确定性的策略包括：</p>
-<ul>
-<li>位翻转，使用不同的长度和步长<ul>
-<li>翻转单个bit</li>
-<li>一行翻转两个bit </li>
-<li>一行翻转四个bit</li>
-</ul>
-</li>
-<li>加和减一个小整数</li>
-<li>插入一个有趣的整数（0，1，INT_MAX等）</li>
-</ul>
-<p>使用这些确定性变异原因是non-crashing和crashing输入间可能只有微小的差距</p>
-<p>非确定性的步骤包括stacked位翻转，插入，删除，算数（加/减）和不同测试用例的拼接</p>
-<h3 id="8-crashes去重"><a href="#8-crashes去重" class="headerlink" title="8 crashes去重"></a>8 crashes去重</h3><p>仅仅查看faulting address可能导致完全不相关的两个issue聚类到一起了，因为fault发生在同一个公共的哭函数中（比如<code>strcmp</code>，<code>strcpy</code>等）</p>
-<p>在AFL中，认为crash是unique的当下面任意一个条件成立：</p>
+<p><img src="https://i.loli.net/2019/03/11/5c85ef1d1970f.png" alt="QQ截图20190311131517.png"></p>
+<p>具体方法如图，one pass（$\mathcal{A}\mathcal{E}\mathcal{C}$）</p>
 <ol>
-<li>crash trace包含了一个之前没有出现过的tuple</li>
-<li>crash遗漏了一个之前经常出现的tuple</li>
+<li>松集成：首先确定某个测试实体要不要跑，把不要跑的搞一个<code>excludes</code>列表，然后跑测试用例，这样做可以减少运行开销。</li>
 </ol>
-<h3 id="9-调查crashes"><a href="#9-调查crashes" class="headerlink" title="9 调查crashes"></a>9 调查crashes</h3><p>afl-fuzz提供<code>crash exploration mode</code>对已知错误的测试输入进行fuzz</p>
-<p>与普通的<code>queue entries</code>不同，crashing inputs不会trim，他们会保持原状方便与parent比较（non-crashing entry）。</p>
-<p>参考文献：<a href="https://lcamtuf.blogspot.com/2014/11/afl-fuzz-crash-exploration-mode.html" target="_blank" rel="noopener"><a href="https://lcamtuf.blogspot.com/2014/11/afl-fuzz-crash-exploration-mode.html" target="_blank" rel="noopener">afl-fuzz: crash exploration mode</a></a></p>
-<p><code>crash exploration mode</code>下，可以让程序接收一个crashing test case，afl-fuzz从crashing的种子出发开始跑。然后程序就会看在保持程序crash的状态下能运行多远。让程序停止产生crash的变异会被排除。</p>
+<p><img src="https://i.loli.net/2019/03/11/5c85ef1d46ace.png" alt="QQ截图20190311131550.png"></p>
+<p>two pass，（$\mathcal{A}\mathcal{E}$）+（$\mathcal{A}\mathcal{E}\mathcal{C}$），这里第二个$\mathcal{E}$是选择后的测试用例，减少了运行开销。</p>
+<h3 id="3-3-收集（-mathcal-C-）阶段"><a href="#3-3-收集（-mathcal-C-）阶段" class="headerlink" title="3.3 收集（$\mathcal{C}$）阶段"></a>3.3 收集（$\mathcal{C}$）阶段</h3><p>这个阶段创建被执行测试实体的依赖文件。EKSTAZI监控测试的执行，收集测试代码在执行时经过的文件，保存他们相关的依赖文件，目前这个收集采取的策略是只要读或写都属于依赖。如果通过识别没有创建依赖的写操作会更精确。</p>
+<p>收集文件依赖的工作可以使用工具<code>Fabricate</code>和<code>Memoize</code>。但是不是很精确，有以下两个原因：</p>
+<ol>
+<li>当多个实体运行在JVM上时，不能收集到每个实体的依赖</li>
+<li>不能收集到打包在.jar文件中的.class文件层面的依赖</li>
+</ol>
+<p>EKSTAZI提供了API：</p>
+<ol>
+<li><code>entityStarted(String name)</code>：当进入某个测试实体时清空之前的依赖</li>
+<li><code>entityEnded(String name)</code>：在测试结束时保存所有收集到的依赖</li>
+</ol>
+<p><strong>插装的代码点</strong>：</p>
+<ol>
+<li>构造函数开始</li>
+<li>静态生成器开始</li>
+<li>静态方法开始</li>
+<li>获取静态域</li>
+<li>使用<a href="https://blog.csdn.net/zhuochuyu7096/article/details/84206135" target="_blank" rel="noopener">类文字</a>（class literal）</li>
+</ol>
+<p>不对对象实例的方法进行插桩，因为对象的方法调用前，类的构造方法肯定已经调用了，用来捕获类的依赖。</p>
+<h3 id="3-4-依赖格式"><a href="#3-4-依赖格式" class="headerlink" title="3.4 依赖格式"></a>3.4 依赖格式</h3><p><img src="C:\Users\ly\AppData\Roaming\Typora\typora-user-images\1552284959130.png" alt="1552284959130"></p>
+<h3 id="3-5-智能的checksums"><a href="#3-5-智能的checksums" class="headerlink" title="3.5 智能的checksums"></a>3.5 智能的checksums</h3><p>使用checksums的优点：</p>
+<ol>
+<li>在$\mathcal{A}$不用获取老版本源代码（老版本的checksum都已记录下来）</li>
+<li>比较hash值能快</li>
+</ol>
+<p>代价：</p>
+<ol>
+<li>在$\mathcal{A}$和$\mathcal{C}$阶段需要比较checksum检查文件是否变更，增加了分析开销</li>
+</ol>
+<h3 id="3-6-集成到Junit中"><a href="#3-6-集成到Junit中" class="headerlink" title="3.6 集成到Junit中"></a>3.6 集成到Junit中</h3><h2 id="4-评价"><a href="#4-评价" class="headerlink" title="4. 评价"></a>4. 评价</h2><p>32个项目的615个版本，总共4,937,189行源代码</p>
+<p><em>short running</em>：执行时间少于1分钟的测试套件（套件是啥呀。。所有测试用例还是某个测试类还是单个测试用例啊。。搜了一下<a href="https://www.cnblogs.com/xuyatao/p/7156243.html" target="_blank" rel="noopener">参考材料</a>似乎是所有测试用例）</p>
+<h3 id="4-3-结论"><a href="#4-3-结论" class="headerlink" title="4.3 结论"></a>4.3 结论</h3><p><img src="https://i.loli.net/2019/03/11/5c86061396288.png" alt="QQ截图20190311145313.png"></p>
+<p>最后选出来的测试实体比例为所有测试实体的5%~38%，$\mathcal{A}\mathcal{E}\mathcal{C}$时间为runAll时间的9%~138%，平均为68%，$\mathcal{A}\mathcal{E}$为runAll时间的7%~99%，平均为53%。</p>
+<h3 id="4-4-智能的checksums"><a href="#4-4-智能的checksums" class="headerlink" title="4.4 智能的checksums"></a>4.4 智能的checksums</h3><p><img src="https://i.loli.net/2019/03/11/5c8607050c7db.png" alt="QQ截图20190311145801.png"></p>
+<h2 id="8-结论"><a href="#8-结论" class="headerlink" title="8. 结论"></a>8. 结论</h2><p>主要介绍了EKSTAZI技术和实现。在开销上比state-of-the-art的工具更优。EKSTAZI已经集成到一些著名开源项目的主要仓库上，包括Apache Camel, Apache Commons Math和Apache CXF</p>
 
       
     </div>
@@ -518,9 +490,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/fuzz-testing/" rel="tag"># fuzz testing</a>
-          
             <a href="/tags/software-testing/" rel="tag"># software testing</a>
+          
+            <a href="/tags/regression-test/" rel="tag"># regression test</a>
           
         </div>
       
@@ -533,8 +505,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/01/Coverage-based-Greybox-Fuzzing-as-Markov-Chain/" rel="next" title="Coverage-based Greybox Fuzzing as Markov Chain">
-                <i class="fa fa-chevron-left"></i> Coverage-based Greybox Fuzzing as Markov Chain
+              <a href="/2019/03/04/IBM宁波电面/" rel="next" title="IBM宁波电面">
+                <i class="fa fa-chevron-left"></i> IBM宁波电面
               </a>
             
           </div>
@@ -542,10 +514,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/11/07/Angora-Efficient-Fuzzing-by-Principled-Search/" rel="prev" title="Angora: Efficient Fuzzing by Principled Search">
-                Angora: Efficient Fuzzing by Principled Search <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -729,7 +697,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#技术细节"><span class="nav-text">技术细节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Culling-the-corpus"><span class="nav-text">4 Culling the corpus</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-剪枝输入"><span class="nav-text">5 剪枝输入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-Fuzzing策略"><span class="nav-text">6 Fuzzing策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-crashes去重"><span class="nav-text">8 crashes去重</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-调查crashes"><span class="nav-text">9 调查crashes</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Practical-Regression-Test-Selection-With-Dynamic-File-Dependencies"><span class="nav-text">Practical Regression Test Selection With Dynamic File Dependencies</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#摘要"><span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-介绍"><span class="nav-text">1. 介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-栗子"><span class="nav-text">2. 栗子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-技术和实现"><span class="nav-text">3. 技术和实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-分析（-mathcal-A-）阶段"><span class="nav-text">3.1 分析（$\mathcal{A}$）阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-执行（-mathcal-E-）阶段"><span class="nav-text">3.2 执行（$\mathcal{E}$）阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-收集（-mathcal-C-）阶段"><span class="nav-text">3.3 收集（$\mathcal{C}$）阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-依赖格式"><span class="nav-text">3.4 依赖格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-智能的checksums"><span class="nav-text">3.5 智能的checksums</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-集成到Junit中"><span class="nav-text">3.6 集成到Junit中</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-评价"><span class="nav-text">4. 评价</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-结论"><span class="nav-text">4.3 结论</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-智能的checksums"><span class="nav-text">4.4 智能的checksums</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-结论"><span class="nav-text">8. 结论</span></a></li></ol></li></ol></div>
             
 
           </div>
