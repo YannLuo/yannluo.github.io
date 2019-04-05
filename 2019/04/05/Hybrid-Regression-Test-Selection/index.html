@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.3.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.3.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.3.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.3.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.3.0',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="摘要回归测试用例选择（Regression Test Selection, RTS）通过选择和重跑受代码变更测试来减少回归测试开销 文件级别的RTS（FRTS）相比更细粒度的技术（方法级别），开销更小 本文的HyRTS方法结合了方法粒度和文件粒度 实验在32个项目的2707个版本，共计124百万行源码上进行实验 1. 绪论减少回归测试开销的方法：  回归测试用例选择 回归测试用例约减 回归测试用例">
+<meta name="keywords" content="software testing,regression test">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hybrid Regression Test Selection">
+<meta property="og:url" content="http://yoursite.com/2019/04/05/Hybrid-Regression-Test-Selection/index.html">
+<meta property="og:site_name" content="罗小米">
+<meta property="og:description" content="摘要回归测试用例选择（Regression Test Selection, RTS）通过选择和重跑受代码变更测试来减少回归测试开销 文件级别的RTS（FRTS）相比更细粒度的技术（方法级别），开销更小 本文的HyRTS方法结合了方法粒度和文件粒度 实验在32个项目的2707个版本，共计124百万行源码上进行实验 1. 绪论减少回归测试开销的方法：  回归测试用例选择 回归测试用例约减 回归测试用例">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2019/04/05/5ca70bcb1c03d.png">
+<meta property="og:image" content="https://i.loli.net/2019/04/05/5ca70b8f3a962.png">
+<meta property="og:image" content="https://i.loli.net/2019/04/05/5ca7102f0a872.png">
+<meta property="og:image" content="https://i.loli.net/2019/04/05/5ca711205163e.png">
+<meta property="og:updated_time" content="2019-04-05T09:00:58.441Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hybrid Regression Test Selection">
+<meta name="twitter:description" content="摘要回归测试用例选择（Regression Test Selection, RTS）通过选择和重跑受代码变更测试来减少回归测试开销 文件级别的RTS（FRTS）相比更细粒度的技术（方法级别），开销更小 本文的HyRTS方法结合了方法粒度和文件粒度 实验在32个项目的2707个版本，共计124百万行源码上进行实验 1. 绪论减少回归测试开销的方法：  回归测试用例选择 回归测试用例约减 回归测试用例">
+<meta name="twitter:image" content="https://i.loli.net/2019/04/05/5ca70bcb1c03d.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/05/Hybrid-Regression-Test-Selection/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Hybrid Regression Test Selection | 罗小米</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">罗小米</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-关于我">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于我</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/05/Hybrid-Regression-Test-Selection/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="罗小米">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/yannluo.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="罗小米">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Hybrid Regression Test Selection
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-05 17:00:58" itemprop="dateCreated datePublished" datetime="2019-04-05T17:00:58+08:00">2019-04-05</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/paper/" itemprop="url" rel="index"><span itemprop="name">paper</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>回归测试用例选择（Regression Test Selection, RTS）通过选择和重跑受代码变更测试来减少回归测试开销</p>
+<p>文件级别的RTS（FRTS）相比更细粒度的技术（方法级别），开销更小</p>
+<p>本文的HyRTS方法结合了方法粒度和文件粒度</p>
+<p>实验在32个项目的2707个版本，共计124百万行源码上进行实验</p>
+<h1 id="1-绪论"><a href="#1-绪论" class="headerlink" title="1. 绪论"></a>1. 绪论</h1><p>减少回归测试开销的方法：</p>
+<ol>
+<li>回归测试用例选择</li>
+<li>回归测试用例约减</li>
+<li>回归测试用例优先级排序</li>
+</ol>
+<p>典型的RTS技术需要两方面的信息：</p>
+<ol>
+<li>测试依赖信息（测试在执行时可能执行到的程序元素）</li>
+<li>改变的程序中的元素</li>
+</ol>
+<p><strong>safe</strong>的RTS技术会覆盖所有收到影响的测试</p>
+<p>RTS技术分类：<br>根据测试依赖收集方法分：</p>
+<ol>
+<li>动态方法</li>
+<li>静态方法</li>
+</ol>
+<p>根据变更分析的粒度：</p>
+<ol>
+<li>基本块级别</li>
+<li>方法级别</li>
+<li>文件级别</li>
+<li>模块级别</li>
+</ol>
+<p>细粒度的RTS有更少的end-to-end时间（包含RTS时间和实际测试时间）</p>
+<p>文件级别的RTS会比细粒度的RTS选出更多的测试用例，大概两倍</p>
+<h1 id="2-背景和例子"><a href="#2-背景和例子" class="headerlink" title="2. 背景和例子"></a>2. 背景和例子</h1><p><img src="https://i.loli.net/2019/04/05/5ca70bcb1c03d.png" alt="QQ截图20190405160319.png"></p>
+<p>文件级别的开销更小，有以下几个方面的原因：</p>
+<ol>
+<li>收集依赖时，文件级别比方法级别更快</li>
+<li>文件级别的变更可以根据文件的<em>checksums</em>获取</li>
+<li>文件级别的RTS不需要跟踪动态的变更</li>
+</ol>
+<p>例子就不写了。。</p>
+<h1 id="3-技术和实现"><a href="#3-技术和实现" class="headerlink" title="3 技术和实现"></a>3 技术和实现</h1><h2 id="3-1-基础HyRTS"><a href="#3-1-基础HyRTS" class="headerlink" title="3.1 基础HyRTS"></a>3.1 基础HyRTS</h2><p><img src="https://i.loli.net/2019/04/05/5ca70b8f3a962.png" alt="QQ截图20190405160201.png"></p>
+<ol>
+<li>文件级别的分析通过文件变更选择所有受影响的测试用例</li>
+<li>方法级别分析通过方法级别变更挑选受影响的测试用例</li>
+<li>执行期间收集测试依赖用于之后的RTS</li>
+<li>收集阶段收集到的依赖时方法级别的</li>
+<li>在下一个软件版本，方法级别的依赖直接用于方法级别分析</li>
+<li>文件级别的依赖可以从方法级别的依赖中提取出来</li>
+</ol>
+<h3 id="3-1-1-变更计算"><a href="#3-1-1-变更计算" class="headerlink" title="3.1.1 变更计算"></a>3.1.1 变更计算</h3><p>通过<em>checksums</em>检测文件是否改变，通过<em>smart checksums</em>计算二进制文件是否变更</p>
+<p><img src="https://i.loli.net/2019/04/05/5ca7102f0a872.png" alt="QQ截图20190405162158.png"></p>
+<p>具体的算法如上。Lines 5-9， 对于未变更文件，文件中的所有方法级别的checksums直接保存。在文件变更计算时（Line 11），HyRTS计算Table 2中的头四种类型的变更。头三种变更是文件级别的，CF是方法级别的，通过Line 13计算方法级别的变更。</p>
+<p><img src="https://i.loli.net/2019/04/05/5ca711205163e.png" alt="QQ截图20190405162604.png"></p>
+<p>域变更（field changes）不被跟踪，因为所有域变更都会反映到相关方法级别的变更。</p>
+<h3 id="3-1-2-依赖收集"><a href="#3-1-2-依赖收集" class="headerlink" title="3.1.2 依赖收集"></a>3.1.2 依赖收集</h3><p>通过JVM加载时代码插装进行跟踪。重写了<code>ClassVisitor</code>和<code>MethodVisitor</code>记录方法的依赖信息</p>
+<p>本工具进行<strong>测试类级别</strong>的测试用例选择，因为测试方法在实践中很难隔离</p>
+<p>HyRTS用到的所有测试依赖表示为$\mathbb{TD}=\{\mathcal{TD_m}, \mathcal{TD_f}\}$，$\mathcal{TD_m}$表示方法级别的测试依赖，$\mathcal{TD_f}$表示方法级别的测试依赖</p>
+<p>$\mathcal{TD_m}$只在运行时收集，$\mathcal{TD_f}$在离线时从$\mathcal{TD_m}$中导出</p>
+<h3 id="3-1-3-RTS和应用模式"><a href="#3-1-3-RTS和应用模式" class="headerlink" title="3.1.3 RTS和应用模式"></a>3.1.3 RTS和应用模式</h3><p>$\Delta$表示变更信息</p>
+<p>$\mathbb{TD}$表示测试依赖</p>
+<p>那么当前版本需要选择的测试用例为之前版本依赖上被变更覆盖的测试：</p>
+<script type="math/tex; mode=display">
+\mathcal{T_s}=\Delta\Cap\mathbb{TD}=\{\delta_m\cap_m\mathcal{TD_m}\}\cup\{\delta_f\cap_f\mathcal{TD_f}\}</script><h1 id="4-实验"><a href="#4-实验" class="headerlink" title="4. 实验"></a>4. 实验</h1><h2 id="4-2-实验对象"><a href="#4-2-实验对象" class="headerlink" title="4.2 实验对象"></a>4.2 实验对象</h2><p>32个项目的2707个版本，共计124百万行代码</p>
+<h2 id="4-3-实验设置"><a href="#4-3-实验设置" class="headerlink" title="4.3 实验设置"></a>4.3 实验设置</h2><p>RTS度量：</p>
+<ol>
+<li>选择测试用例比例</li>
+<li>端到端的测试时间：从测试用例选择到执行结束</li>
+</ol>
+<h1 id="5-结果分析"><a href="#5-结果分析" class="headerlink" title="5. 结果分析"></a>5. 结果分析</h1><p>HyRTS选择18.35%测试用例，时间开销31.60s；FRTS选择27.18%测试用例，时间开销40.06s</p>
+<h1 id="6-相关工作"><a href="#6-相关工作" class="headerlink" title="6. 相关工作"></a>6. 相关工作</h1><ul>
+<li>动态RTS</li>
+<li>静态RTS</li>
+</ul>
+<h1 id="7-结论"><a href="#7-结论" class="headerlink" title="7. 结论"></a>7. 结论</h1><p>引入更细粒度的基本块级别的分析不会减少时间开销，把实例方法增删转变为文件级别的改变的HyRTS变体，相比于FRTS可以显著提升测试的效率</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/software-testing/" rel="tag"># software testing</a>
+          
+            <a href="/tags/regression-test/" rel="tag"># regression test</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/28/python插桩-sys-settrace/" rel="next" title="python插装--sys.settrace">
+                <i class="fa fa-chevron-left"></i> python插装--sys.settrace
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/yannluo.png"
+                alt="罗小米" />
+            
+              <p class="site-author-name" itemprop="name">罗小米</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">31</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.zhihu.com/people/ly941122/activities" target="_blank" title="知乎"><i class="fa fa-fw fa-address-card"></i>知乎</a>
+                  
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:yannluo@foxmail.com" target="_blank" title="E-Mail"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要"><span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-绪论"><span class="nav-text">1. 绪论</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-背景和例子"><span class="nav-text">2. 背景和例子</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-技术和实现"><span class="nav-text">3 技术和实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-基础HyRTS"><span class="nav-text">3.1 基础HyRTS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-1-变更计算"><span class="nav-text">3.1.1 变更计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-2-依赖收集"><span class="nav-text">3.1.2 依赖收集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-3-RTS和应用模式"><span class="nav-text">3.1.3 RTS和应用模式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-实验"><span class="nav-text">4. 实验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-实验对象"><span class="nav-text">4.2 实验对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-实验设置"><span class="nav-text">4.3 实验设置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-结果分析"><span class="nav-text">5. 结果分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-相关工作"><span class="nav-text">6. 相关工作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-结论"><span class="nav-text">7. 结论</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">罗小米</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a class="theme-link" target="_blank" href="https://theme-next.org">NexT.Pisces</a> v6.3.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+	
+    
+
+    
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.3.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.3.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.3.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.3.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.3.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.3.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+  
+    
+      <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      },
+      TeX: {equationNumbers: { autoNumber: "AMS" }}
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+    
+  
+
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
