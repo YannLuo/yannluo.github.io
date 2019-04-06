@@ -108,25 +108,25 @@
 
 
 
-  <meta name="description" content="构造辅助公式 $T_1 = 1 - 1 + 1 - 1 + \dots + 1 - 1$ 和 $T_2 = 1 - 2 + 3 - 4 + \dots$.  T_1 = 1 - 1 + 1 - 1 + \dots \\ T_2 = 1 - 2 + 3 - 4 + \dots \\ T = \sum_i^n i = 1 + 2 + 3 + \dots显然, $T_1$的值求得为0.  \begin{">
-<meta name="keywords" content="Hello World">
+  <meta name="description" content="摘要RTS：跳过不被代码变更影响的测试用例 近期相关工作开发鲁棒的RTS工具，主要面向特定语言，比如JAVA和C#，不能兼容到大型C语言项目，比如TizenRT，一个轻量级的RTOS-based平台 本文开发工具Selfection，该工具使用objdump和readelf工具从二进制文件中静态构建依赖图和检测修改的代码元素。实验部分使用TizenRT这个项目最新的150个版本，评价指标选取red">
+<meta name="keywords" content="software testing,regression test">
 <meta property="og:type" content="article">
-<meta property="og:title" content="所有正整数之和为-1&#x2F;12的证明">
-<meta property="og:url" content="http://yoursite.com/2018/09/22/所有正整数之和为-1-12的证明/index.html">
+<meta property="og:title" content="Regression test selection for TizenRT">
+<meta property="og:url" content="http://yoursite.com/2019/04/06/Regression-test-selection-for-TizenRT/index.html">
 <meta property="og:site_name" content="罗小米">
-<meta property="og:description" content="构造辅助公式 $T_1 = 1 - 1 + 1 - 1 + \dots + 1 - 1$ 和 $T_2 = 1 - 2 + 3 - 4 + \dots$.  T_1 = 1 - 1 + 1 - 1 + \dots \\ T_2 = 1 - 2 + 3 - 4 + \dots \\ T = \sum_i^n i = 1 + 2 + 3 + \dots显然, $T_1$的值求得为0.  \begin{">
+<meta property="og:description" content="摘要RTS：跳过不被代码变更影响的测试用例 近期相关工作开发鲁棒的RTS工具，主要面向特定语言，比如JAVA和C#，不能兼容到大型C语言项目，比如TizenRT，一个轻量级的RTOS-based平台 本文开发工具Selfection，该工具使用objdump和readelf工具从二进制文件中静态构建依赖图和检测修改的代码元素。实验部分使用TizenRT这个项目最新的150个版本，评价指标选取red">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-09-22T06:04:54.108Z">
+<meta property="og:updated_time" content="2019-04-06T03:18:07.580Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="所有正整数之和为-1&#x2F;12的证明">
-<meta name="twitter:description" content="构造辅助公式 $T_1 = 1 - 1 + 1 - 1 + \dots + 1 - 1$ 和 $T_2 = 1 - 2 + 3 - 4 + \dots$.  T_1 = 1 - 1 + 1 - 1 + \dots \\ T_2 = 1 - 2 + 3 - 4 + \dots \\ T = \sum_i^n i = 1 + 2 + 3 + \dots显然, $T_1$的值求得为0.  \begin{">
+<meta name="twitter:title" content="Regression test selection for TizenRT">
+<meta name="twitter:description" content="摘要RTS：跳过不被代码变更影响的测试用例 近期相关工作开发鲁棒的RTS工具，主要面向特定语言，比如JAVA和C#，不能兼容到大型C语言项目，比如TizenRT，一个轻量级的RTOS-based平台 本文开发工具Selfection，该工具使用objdump和readelf工具从二进制文件中静态构建依赖图和检测修改的代码元素。实验部分使用TizenRT这个项目最新的150个版本，评价指标选取red">
 
 
 
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/09/22/所有正整数之和为-1-12的证明/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/04/06/Regression-test-selection-for-TizenRT/"/>
 
 
 
@@ -136,7 +136,7 @@
   };
 </script>
 
-  <title>所有正整数之和为-1/12的证明 | 罗小米</title>
+  <title>Regression test selection for TizenRT | 罗小米</title>
   
 
 
@@ -305,7 +305,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/22/所有正整数之和为-1-12的证明/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/06/Regression-test-selection-for-TizenRT/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="罗小米">
@@ -322,7 +322,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">所有正整数之和为-1/12的证明
+          <h1 class="post-title" itemprop="name headline">Regression test selection for TizenRT
               
             
           </h1>
@@ -347,13 +347,9 @@
                 
               
 
-              <time title="创建时间：2018-09-22 13:56:56 / 修改时间：14:04:54" itemprop="dateCreated datePublished" datetime="2018-09-22T13:56:56+08:00">2018-09-22</time>
+              <time title="创建时间：2019-04-06 11:18:07" itemprop="dateCreated datePublished" datetime="2019-04-06T11:18:07+08:00">2019-04-06</time>
             
 
-            
-              
-
-              
             
           </span>
 
@@ -369,7 +365,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Hello-World/" itemprop="url" rel="index"><span itemprop="name">Hello World</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/paper/" itemprop="url" rel="index"><span itemprop="name">paper</span></a></span>
 
                 
                 
@@ -403,42 +399,33 @@
       
 
       
-        <p>构造辅助公式 $T_1 = 1 - 1 + 1 - 1 + \dots + 1 - 1$ 和 $T_2 = 1 - 2 + 3 - 4 + \dots$.</p>
-<script type="math/tex; mode=display">
-T_1 = 1 - 1 + 1 - 1 + \dots \\
-T_2 = 1 - 2 + 3 - 4 + \dots \\
-T = \sum_i^n i = 1 + 2 + 3 + \dots</script><p>显然, $T_1$的值求得为0.</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-1 - T_1 &= 1 - (1 - 1 + 1 - 1 + \dots) \\
-&= 1 - 1 + 1 - 1 + \dots \\
-&= T_1\\
-\\
-2T_1 &= 1 \\
-T_1 &= \frac{1}{2}
-\end{aligned}</script><p>接下来, 计算$T_2 + T_2$, 将第二个$T_2$向后移一位.</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-T_2 + T_2 &= 1 - 2 + 3 - 4 + \dots + (n-1) - n + \\
-          &\ \ \ \ \ \ \ \ \ \ \ \ 1 - 2 + 3 - 4 + \dots + (n-1) - n \\
-          &= 1 - (2 - 1) + (3 - 2) - (4 - 3) + \dots \\
-          &= 1 - 1 + 1 - 1 + \dots \\
-          &= T_1 \\
-\\
-2T_2 &= \frac{1}{2} \\
-T_2 &= \frac{1}{4}
-\end{aligned}</script><p>最后计算$T - T_2$:</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-T - T_2 &= 1 + 2 + 3 + \dots \\
-& - (1 - 2 + 3 - 4 + \dots) \\
-&= 4 + 8 + 12 + 16 + \dots \\
-&= 4(1 + 2 + 3 + \dots) \\
-&= 4T \\
-\\
-3T &= -T_2 \\
-T &= -\frac{1}{12}
-\end{aligned}</script><p>由此证得, $1 + 2 + 3 + \dots = -\frac{1}{12} $.</p>
+        <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>RTS：跳过不被代码变更影响的测试用例</p>
+<p>近期相关工作开发鲁棒的RTS工具，主要面向特定语言，比如JAVA和C#，不能兼容到大型C语言项目，比如TizenRT，一个轻量级的RTOS-based平台</p>
+<p>本文开发工具<code>Selfection</code>，该工具使用<code>objdump</code>和<code>readelf</code>工具从二进制文件中静态构建依赖图和检测修改的代码元素。实验部分使用<code>TizenRT</code>这个项目最新的150个版本，评价指标选取<code>reduction in the number of tests</code>（测试用例的约减）和<code>reduction in test execution time</code>（执行时间的约减），和RetestAll相比较。结果显示在模拟器上选择的测试数约减到4.95%，测试时间约减到7.04%，在真实硬件环境中选择测试用例约减到5.74%，测试时间约减到26.82%。</p>
+<h1 id="1-绪论"><a href="#1-绪论" class="headerlink" title="1. 绪论"></a>1. 绪论</h1><p>本文的工作主要解决了当前缺少对于C语言项目的RTS工具的现状</p>
+<p>本文实现工具<code>Selfection</code>，它使用静态分析收集每个测试的依赖关系，在新的版本中，检测修改函数，比较函数的<code>checksum</code>判断函数是否修改，然后传播变更影响。</p>
+<p>实验指标上面说了，采用两种测试环境：</p>
+<ol>
+<li>Qemu模拟器</li>
+<li>真实硬件板</li>
+</ol>
+<h1 id="2-Selfection"><a href="#2-Selfection" class="headerlink" title="2. Selfection"></a>2. <code>Selfection</code></h1><p>包含3个阶段：</p>
+<ol>
+<li>分析</li>
+<li>执行</li>
+<li>收集</li>
+</ol>
+<h2 id="2-1-Phases"><a href="#2-1-Phases" class="headerlink" title="2.1 Phases"></a>2.1 Phases</h2><p><strong>分析阶段（A-Phase）</strong>：该阶段目标是检测受当前变更影响的测试用例。当前实现是使用<code>Adler32</code>算法计算函数的checksum。检测到修改的函数后，在依赖关系上计算传递闭包。</p>
+<p><strong>执行阶段（E-Phase）</strong>：运行选择的测试用例</p>
+<p><strong>收集阶段（C-Phase）</strong>：收集每个测试的依赖关系。</p>
+<h2 id="2-2-设计-实现抉择"><a href="#2-2-设计-实现抉择" class="headerlink" title="2.2 设计/实现抉择"></a>2.2 设计/实现抉择</h2><p><strong>Source vs. binary analysis</strong>：二进制分析更具有一般性，因为任何语言变异得到同样的执行格式。源代码分析要求特定编译器平台。</p>
+<p><strong>Static vs. dynamic analysis</strong>：静态分析对于依赖进行上近似。动态分析时在测试用例执行时动态收集依赖关系。使用静态分析有如下原因：</p>
+<ol>
+<li>动态方法需要代码插装</li>
+<li>动态插装需要额外的内存存储依赖关系</li>
+<li>在硬件板子上收集依赖关系会引入额外的挑战和开销</li>
+</ol>
+<h1 id="7-结论"><a href="#7-结论" class="headerlink" title="7 结论"></a>7 结论</h1><p>本文实现RTS工具<code>Selfection</code>对C语言项目进行RTS。在<code>TizenRT</code>项目最新的150个版本上进行实验。结果显示，与RetestAll相比，在模拟器上选择的测试数约减到4.95%，测试时间约减到7.04%，在真实硬件环境中选择测试用例约减到5.74%，测试时间约减到26.82%。</p>
 
       
     </div>
@@ -459,7 +446,9 @@ T &= -\frac{1}{12}
       
         <div class="post-tags">
           
-            <a href="/tags/Hello-World/" rel="tag"># Hello World</a>
+            <a href="/tags/software-testing/" rel="tag"># software testing</a>
+          
+            <a href="/tags/regression-test/" rel="tag"># regression test</a>
           
         </div>
       
@@ -472,8 +461,8 @@ T &= -\frac{1}{12}
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/18/初试py-afl-fuzz/" rel="next" title="初试py-afl-fuzz">
-                <i class="fa fa-chevron-left"></i> 初试py-afl-fuzz
+              <a href="/2019/04/05/Hybrid-Regression-Test-Selection/" rel="next" title="Hybrid Regression Test Selection">
+                <i class="fa fa-chevron-left"></i> Hybrid Regression Test Selection
               </a>
             
           </div>
@@ -481,10 +470,6 @@ T &= -\frac{1}{12}
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/26/Fuzzing-a-survey/" rel="prev" title="Fuzzing - a survey">
-                Fuzzing - a survey <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -529,8 +514,17 @@ T &= -\frac{1}{12}
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -649,6 +643,22 @@ T &= -\frac{1}{12}
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要"><span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-绪论"><span class="nav-text">1. 绪论</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Selfection"><span class="nav-text">2. Selfection</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-Phases"><span class="nav-text">2.1 Phases</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-设计-实现抉择"><span class="nav-text">2.2 设计/实现抉择</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-结论"><span class="nav-text">7 结论</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
